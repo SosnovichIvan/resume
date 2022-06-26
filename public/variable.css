@@ -3,13 +3,3 @@
     --primary_text_color: #272421;
     --secondary_text_color: #C4BFBA;
 }
-
-@font-face {
-    font-family: 'IBMPlexMono-Bold';
-    src: local('IBMPlexMono-Bold') url('../fonts/IBMPlexMono-Bold.ttf') format("truetype");
-}
-
-@font-face {
-    font-family: 'IBMPlexMono-BoldItalic';
-    src: local('IBMPlexMono-BoldItalic') url('../fonts/IBMPlexMono-BoldItalic.ttf') format("truetype");
-}
