@@ -62,36 +62,6 @@ export default function ExperiencePage() {
 								))}
 							</ul>
 
-							{job.projects && (
-								<>
-									<h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-										Проекты
-									</h3>
-									<div className="mb-5 grid gap-3 sm:grid-cols-2">
-										{job.projects.map((p) => (
-											<div
-												key={p.name}
-												className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900"
-											>
-												<h4 className="mb-2 font-semibold text-indigo-600 dark:text-indigo-300">
-													{p.name}
-												</h4>
-												<ul className="space-y-1.5">
-													{p.points.map((pt) => (
-														<li
-															key={pt}
-															className="text-xs leading-relaxed text-slate-600 dark:text-slate-300"
-														>
-															· {pt}
-														</li>
-													))}
-												</ul>
-											</div>
-										))}
-									</div>
-								</>
-							)}
-
 							<div className="flex flex-wrap gap-2">
 								{job.stack.map((s) => (
 									<Badge key={s}>{s}</Badge>

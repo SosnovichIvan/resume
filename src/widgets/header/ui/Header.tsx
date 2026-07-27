@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { profile } from "@/entities/profile/model/data";
 import { Badge, Icon } from "@/shared/ui";
 import { ThemeToggle } from "@/widgets/theme-toggle/ui/ThemeToggle";
@@ -10,9 +11,11 @@ export function Header() {
 			</div>
 			<div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
 				<div className="h-40 w-40 shrink-0 overflow-hidden rounded-2xl border-[5px] border-indigo-200 shadow-xl ring-4 ring-indigo-100 dark:border-indigo-500 dark:shadow-indigo-500/40 dark:ring-indigo-900 md:h-48 md:w-48">
-					<img
+					<Image
 						src="/avatar.jpg"
 						alt="Фото Ивана Сосновича"
+						width={192}
+						height={192}
 						className="h-full w-full object-cover"
 					/>
 				</div>
@@ -23,15 +26,15 @@ export function Header() {
 					<p className="mb-4 text-xl text-slate-600 dark:text-slate-300">
 						{profile.position}
 					</p>
-					<div className="flex flex-wrap items-center gap-2">
-						<Badge>
-							<Icon name="map-pin" className="mr-1 h-3.5 w-3.5" />
-							{profile.location}
-						</Badge>
-						{profile.highlights.map((h) => (
-							<Badge key={h}>{h}</Badge>
-						))}
-					</div>
+					<p className="mb-3 text-sm text-slate-500 dark:text-slate-400">
+					<Icon name="map-pin" className="mr-1 inline h-3.5 w-3.5" />
+					{profile.location}
+				</p>
+				<div className="flex flex-wrap items-center gap-2">
+					{profile.highlights.map((h) => (
+						<Badge key={h}>{h}</Badge>
+					))}
+				</div>
 				</div>
 			</div>
 		</header>

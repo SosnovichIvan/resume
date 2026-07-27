@@ -1,6 +1,7 @@
 import { profile } from "@/entities/profile/model/data";
 import { experiences } from "@/entities/experience/model/data";
 import { skillCategories } from "@/entities/skill/model/data";
+import { publications } from "@/entities/publication/model/data";
 import { articles } from "@/entities/article/model/data";
 import { projects } from "@/entities/project/model/data";
 import {
@@ -51,7 +52,7 @@ export default function HomePage() {
 										key={c.label}
 										href={c.href}
 										target={c.href.startsWith("http") ? "_blank" : undefined}
-										rel="noopener"
+										rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
 										className="flex items-center gap-3 text-sm text-slate-600 transition-colors hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-300"
 									>
 										<Icon name={c.icon} className="h-4 w-4 shrink-0" />
@@ -105,6 +106,47 @@ export default function HomePage() {
 								))}
 							</div>
 						</Card>
+					</div>
+				</FadeInSection>
+
+				{/* Publications preview */}
+				<FadeInSection delay={0.05}>
+					<div className="mb-10">
+						<SectionHeader
+							icon="book-open"
+							title="Публикации"
+							viewAllHref="/publications"
+							viewAllLabel={`Все публикации (${publications.length})`}
+						/>
+						{publications.slice(0, 1).map((p) => (
+							<a
+								key={p.id}
+								href={p.href}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="group block"
+							>
+								<Card hover className="flex items-center gap-4 p-5">
+									<div
+										className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${p.gradient} text-white`}
+									>
+										<Icon name="book-open" className="h-6 w-6" />
+									</div>
+									<div className="min-w-0 flex-1">
+										<h3 className="font-semibold transition-colors group-hover:text-indigo-600 dark:group-hover:text-indigo-300">
+											{p.title}
+										</h3>
+										<p className="mt-1 truncate text-sm text-slate-500 dark:text-slate-400">
+											{p.description}
+										</p>
+									</div>
+									<Icon
+										name="external-link"
+										className="h-4 w-4 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-600 dark:group-hover:text-indigo-300"
+									/>
+								</Card>
+							</a>
+						))}
 					</div>
 				</FadeInSection>
 
@@ -189,7 +231,7 @@ export default function HomePage() {
 						<a
 							href={lastArticle.href}
 							target="_blank"
-							rel="noopener"
+							rel="noopener noreferrer"
 							className="group block"
 						>
 							<Card hover className="flex items-center gap-4 p-5">
@@ -216,7 +258,7 @@ export default function HomePage() {
 				</FadeInSection>
 
 				<footer className="border-t border-slate-200 pt-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
-					© 2026 Соснович Иван · React · Next.js · FSD · Tailwind
+					© 2026 Соснович Иван
 				</footer>
 			</div>
 		</PageTransition>
