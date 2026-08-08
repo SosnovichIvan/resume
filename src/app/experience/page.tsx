@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { experiences } from "@/entities/experience/model/data";
-import { Badge, Card, Icon, PageTransition } from "@/shared/ui";
+import { Badge, Card, Icon, PageTransition, SkillBadge } from "@/shared/ui";
 import { BackLink } from "@/shared/ui/BackLink";
 
 export const metadata: Metadata = {
@@ -64,7 +64,7 @@ export default function ExperiencePage() {
 
 							<div className="flex flex-wrap gap-2">
 								{job.stack.map((s) => (
-									<Badge key={s}>{s}</Badge>
+									<SkillBadge key={s} skill={s} />
 								))}
 							</div>
 						</Card>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { projects } from "@/entities/project/model/data";
-import { Badge, Card, Icon, PageTransition } from "@/shared/ui";
+import { Card, Icon, PageTransition, SkillBadge } from "@/shared/ui";
 import { BackLink } from "@/shared/ui/BackLink";
 
 export const metadata: Metadata = {
@@ -84,7 +84,7 @@ export default function ProjectsPage() {
 
 							<div className="flex flex-wrap gap-2">
 								{p.stack.map((s) => (
-									<Badge key={s}>{s}</Badge>
+									<SkillBadge key={s} skill={s} />
 								))}
 							</div>
 						</Card>

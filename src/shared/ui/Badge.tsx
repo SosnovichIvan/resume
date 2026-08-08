@@ -6,7 +6,7 @@ interface BadgeProps {
 export function Badge({ children, variant = "accent" }: BadgeProps) {
 	const styles =
 		variant === "accent"
-			? "bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-300"
+			? "bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300"
 			: "bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700";
 	return (
 		<span

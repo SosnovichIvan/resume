@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { skillCategories, education } from "@/entities/skill/model/data";
-import { Badge, Card, Icon, PageTransition } from "@/shared/ui";
+import { Badge, Card, Icon, PageTransition, SkillBadge } from "@/shared/ui";
 import { BackLink } from "@/shared/ui/BackLink";
 
 export const metadata: Metadata = {
@@ -42,9 +42,7 @@ export default function SkillsPage() {
 							</div>
 							<div className="flex flex-wrap gap-2">
 								{cat.skills.map((s) => (
-									<Badge key={s} variant="muted">
-										{s}
-									</Badge>
+									<SkillBadge key={s} skill={s} showLabel />
 								))}
 							</div>
 						</Card>

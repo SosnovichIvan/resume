@@ -1,0 +1,53 @@
+services:
+  resume:
+    build:
+      context: .
+      # Если сайт использует BACKEND/секреты, передавайте их на этапе сборки:
+      # args:
+      #   NEXT_PUBLIC_API_URL: https://api.example.com
+      #   NEXT_PUBLIC_SHARED_SECRET: ${SHARED_SECRET:?}
+    image: resume-site:latest
+    container_name: resume-site
+    restart: unless-stopped
+    init: true # правильная обработка сигналов (graceful shutdown)
+
+    ports:
+      # Хост:Контейнер — на стенде наружу отдаёт только reverse-proxy (см. DEPLOYMENT.md)
+      - "127.0.0.1:3000:3000"
+
+    environment:
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+
+    # Безопасность: корневая ФС только для чтения, без лишних привилегий
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+    # Ограничения ресурсов для защиты стенда
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          memory: 128M
+
+    # Согласовано с HEALTHCHECK в Dockerfile
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+    # Файлы .env исключены из образа (.dockerignore) и подключаются только на рантайме
+    env_file:
+      - path: .env.production
+        required: false

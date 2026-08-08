@@ -124,3 +124,4 @@ go run ./cmd/server
 | Backend | Go 1.23, net/http, crypto/cipher |
 | LLM | OpenAI-compatible API (GPT-4o, Claude, и др.) |
 | Infrastructure | Devcontainers, Vite/Webpack |
+

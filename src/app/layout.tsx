@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Navigation } from "@/widgets/navigation/ui/Navigation";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
 export const metadata: Metadata = {
-	title: "Соснович Иван — Senior Frontend Developer (React, Next.js, NestJS)",
+	title: "Соснович Иван — Fullstack AI Engineer (React, Next.js, NestJS, Go, LLM)",
 	description:
-		"Резюме и портфолио: Senior Frontend Developer, 5+ лет опыта, React, TypeScript, Next.js, NestJS, FSD.",
+		"Резюме и портфолио: Fullstack AI Engineer, 5+ лет опыта, React, TypeScript, Next.js, NestJS, Go, FSD, ИИ-инжиниринг (скилы, субагенты, MCP-серверы).",
 };
 
 const themeScript = `
@@ -30,6 +31,7 @@ export default function RootLayout({
 				<script dangerouslySetInnerHTML={{ __html: themeScript }} />
 			</head>
 			<body className={inter.className}>
+				<Navigation />
 				{children}
 			</body>
 		</html>

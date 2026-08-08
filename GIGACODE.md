@@ -23,13 +23,18 @@ src/
 │   ├── experience/   # /experience — full work history
 │   ├── skills/       # /skills — all skill categories + education
 │   ├── projects/     # /projects — all projects
-│   └── articles/     # /articles — all articles
+│   ├── my-projects/  # /my-projects — personal AI-built projects (pet-projects)
+│   ├── publications/ # /publications — published articles
+│   ├── articles/     # /articles — articles (overlaps with publications)
+│   └── page.tsx      # Home page — previews of all sections
 ├── entities/         # Data models (pure data, no UI components)
 │   ├── profile/
 │   ├── experience/
 │   ├── skill/
 │   ├── article/
-│   └── project/
+│   ├── project/
+│   ├── publication/
+│   └── personal-project/   # Personal/AI-built pet-projects
 ├── widgets/          # Composite UI widgets
 │   ├── header/       # Header with photo, name, badges
 │   ├── theme-toggle/ # Dark/light theme toggle

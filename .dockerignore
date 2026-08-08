@@ -1,15 +1,37 @@
+# Зависимости и артефакты сборки
 node_modules
 .next
 out
+build
+
+# Окружение и секреты — НИКОГДА не отправлять в образ
 .env
-.env.local
-.env.production
-.env.example
+.env.*
+!.env.example
+!.env.production.example
+
+# Логи и ключи
 *.log
 npm-debug.log*
+*.pem
+*.key
+*.crt
+
+# VCS и IDE
 .git
 .gitignore
+.hg
+.svn
+.idea
+.vscode
+
+# Локальная документация/прочее (не входит в рантайм)
 README.md
-tsconfig.json
-tailwind.config.ts
-postcss.config.mjs
+DEPLOYMENT.md
+Документация
+.dockerignore
+gigastand.md
+
+# Кэши и временные файлы
+.DS_Store
+*.tsbuildinfo
