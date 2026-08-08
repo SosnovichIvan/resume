@@ -20,6 +20,29 @@ body {
   @apply rounded-full bg-slate-300 dark:bg-slate-600;
 }
 
+/* Логотип: буквы SIV — «лесенка» (поочерёдное увеличение/уменьшение) */
+.logo-letter {
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform;
+  animation: logo-ladder 1.9s ease-in-out infinite;
+}
+.logo-letter-1 {
+  animation-delay: 0.24s;
+}
+.logo-letter-2 {
+  animation-delay: 0.48s;
+}
+@keyframes logo-ladder {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.22);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

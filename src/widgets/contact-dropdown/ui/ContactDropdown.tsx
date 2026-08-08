@@ -8,9 +8,15 @@ const contactActions: Record<string, { icon: string; action: (v: string) => void
 	Email: { icon: "mail", action: (v) => window.location.assign(`mailto:${v}`) },
 	Телефон: { icon: "phone", action: (v) => (window.location.href = `tel:${v.replace(/[^\d+]/g, "")}`) },
 	Telegram: { icon: "telegram", action: (v) => window.open(`https://t.me/${v.replace(/^@/, "")}`, "_blank") },
+	GitHub: { icon: "github", action: (v) => window.open(`https://github.com/${v}`, "_blank") },
 };
 
-export function ContactDropdown() {
+interface ContactDropdownProps {
+	/** Рендерить кнопку без собственного фона (для встраивания в группу действий). */
+	bare?: boolean;
+}
+
+export function ContactDropdown({ bare = false }: ContactDropdownProps) {
 	const [open, setOpen] = useState(false);
 	const [copied, setCopied] = useState<string | null>(null);
 	const ref = useRef<HTMLDivElement>(null);
@@ -44,11 +50,22 @@ export function ContactDropdown() {
 		<div ref={ref} className="relative">
 			<button
 				onClick={() => setOpen((o) => !o)}
-				className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+				aria-label="Связаться"
+				aria-expanded={open}
+				title="Связаться"
+				className={
+					bare
+						? "flex h-10 w-10 cursor-pointer shrink-0 items-center justify-center text-brand-600 transition-colors hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:text-brand-300 dark:hover:text-brand-200 dark:focus-visible:ring-offset-slate-900"
+						: "inline-flex cursor-pointer items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+				}
 			>
 				<Icon name="send" className="h-4 w-4" />
-				Связаться
-				<Icon name="chevron-down" className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
+				{!bare && (
+					<>
+						<span className="whitespace-nowrap">Связаться</span>
+						<Icon name="chevron-down" className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
+					</>
+				)}
 			</button>
 
 			{open && (
@@ -58,7 +75,7 @@ export function ContactDropdown() {
 							key={c.label}
 							className="flex items-center gap-3 border-b border-slate-100 px-4 py-3 last:border-0 dark:border-slate-700"
 						>
-							<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-300">
+							<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300">
 								<Icon name={c.icon} className="h-4 w-4" />
 							</span>
 							<div className="min-w-0 flex-1">
@@ -66,7 +83,7 @@ export function ContactDropdown() {
 								<button
 									onClick={() => contactActions[c.label]?.action(c.value)}
 									title={c.value}
-									className="block max-w-full cursor-pointer truncate text-sm font-medium text-slate-700 transition-colors hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300"
+									className="block max-w-full cursor-pointer truncate text-sm font-medium text-slate-700 transition-colors hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-slate-200 dark:hover:text-brand-300"
 								>
 									{c.value}
 								</button>
@@ -74,7 +91,7 @@ export function ContactDropdown() {
 							<button
 								onClick={() => copy(c.label, c.value)}
 								aria-label={`Скопировать ${c.label}`}
-								className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-indigo-400 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-indigo-500 dark:hover:text-indigo-300"
+								className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-brand-400 hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:border-slate-700 dark:text-slate-400 dark:hover:border-brand-500 dark:hover:text-brand-300"
 							>
 								<Icon
 									name={copied === c.label ? "check" : "copy"}

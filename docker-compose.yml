@@ -47,6 +47,15 @@ services:
       start_period: 10s
       retries: 3
 
+    # Логирование с ротацией — не даём логам забивать диск на VM.
+    # json-file + max-size/max-file: файлы-логи ротируются по размеру и количеству.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+        tag: "{{.Name}}"
+
     # Файлы .env исключены из образа (.dockerignore) и подключаются только на рантайме
     env_file:
       - path: .env.production

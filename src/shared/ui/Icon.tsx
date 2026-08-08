@@ -88,6 +88,8 @@ const paths: Record<string, React.ReactNode> = {
 	),
 	"chevron-down": <path d="m6 9 6 6 6-6" />,
 	"chevron-up": <path d="m18 15-6-6-6 6" />,
+	menu: <path d="M4 6h16M4 12h16M4 18h16" />,
+	close: <path d="M18 6 6 18M6 6l12 12" />,
 	copy: (
 		<>
 			<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />

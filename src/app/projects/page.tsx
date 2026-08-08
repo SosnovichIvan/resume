@@ -13,7 +13,7 @@ export default function ProjectsPage() {
 			<div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
 				<BackLink />
 				<h1 className="mb-2 flex items-center gap-3 text-3xl font-bold">
-					<span className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-300">
+					<span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300">
 						<Icon name="folder" className="h-6 w-6" />
 					</span>
 					Проекты
@@ -28,7 +28,7 @@ export default function ProjectsPage() {
 							<div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
 								<div>
 									<h2 className="text-xl font-semibold">{p.name}</h2>
-									<p className="text-sm font-medium text-indigo-600 dark:text-indigo-300">
+									<p className="text-sm font-medium text-brand-600 dark:text-brand-300">
 										{p.company}
 									</p>
 								</div>
@@ -38,7 +38,7 @@ export default function ProjectsPage() {
 											href={p.repo}
 											target="_blank"
 											rel="noopener noreferrer"
-											className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+											className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
 										>
 											<Icon name="github" className="h-4 w-4" />
 											Репозиторий
@@ -54,7 +54,7 @@ export default function ProjectsPage() {
 											href={p.host}
 											target="_blank"
 											rel="noopener noreferrer"
-											className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+											className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:border-slate-700 dark:hover:bg-slate-800 dark:focus-visible:ring-offset-slate-900"
 										>
 											<Icon name="external-link" className="h-4 w-4" />
 											Демо
@@ -75,7 +75,7 @@ export default function ProjectsPage() {
 									>
 										<Icon
 											name="check"
-											className="mt-0.5 h-4 w-4 shrink-0 text-green-600 dark:text-green-400"
+											className="mt-0.5 h-4 w-4 shrink-0 text-success-600 dark:text-success-400"
 										/>
 										{d}
 									</li>

@@ -25,7 +25,7 @@ export function SectionHeader({
 			{viewAllHref && (
 				<Link
 					href={viewAllHref}
-					className="group inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-brand-600 transition-colors hover:bg-brand-50 dark:text-brand-300 dark:hover:bg-brand-950"
+					className="group inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-brand-600 transition-colors hover:bg-brand-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:text-brand-300 dark:hover:bg-brand-950 dark:focus-visible:ring-offset-slate-900"
 				>
 					<span className="hidden sm:inline">{viewAllLabel}</span>
 					<span className="sm:hidden">Все</span>

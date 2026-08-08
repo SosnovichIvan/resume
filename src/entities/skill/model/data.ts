@@ -1,7 +1,6 @@
 export interface SkillCategory {
 	id: string;
 	title: string;
-	level: number;
 	skills: string[];
 	description: string;
 }
@@ -10,7 +9,6 @@ export const skillCategories: SkillCategory[] = [
 	{
 		id: "frontend",
 		title: "Frontend",
-		level: 95,
 		description:
 			"Основная специализация: сложные интерфейсы, высоконагруженные списки, формы, real-time данные.",
 		skills: [
@@ -33,7 +31,6 @@ export const skillCategories: SkillCategory[] = [
 	{
 		id: "ai",
 		title: "ИИ-инжиниринг и автоматизация",
-		level: 85,
 		description:
 			"Проектирую агентные системы на базе LLM: автоматизация разработки, безопасная интеграция ИИ в продуктовые и внутренние процессы.",
 		skills: [
@@ -52,7 +49,6 @@ export const skillCategories: SkillCategory[] = [
 	{
 		id: "backend",
 		title: "Backend",
-		level: 85,
 		description:
 			"Проектирование API, авторизация, работа с БД и real-time каналами.",
 		skills: [
@@ -70,14 +66,12 @@ export const skillCategories: SkillCategory[] = [
 	{
 		id: "infra",
 		title: "Сборка и инфраструктура",
-		level: 80,
 		description: "Сборка, контейнеризация и деплой приложений.",
 		skills: ["Webpack", "Vite", "Docker", "Nginx", "npm", "CI/CD"],
 	},
 	{
 		id: "testing",
 		title: "Тестирование и качество",
-		level: 90,
 		description:
 			"Автоматизированное тестирование и инженерные практики качества кода.",
 		skills: [
@@ -94,7 +88,6 @@ export const skillCategories: SkillCategory[] = [
 	{
 		id: "soft",
 		title: "Лидерство и процессы",
-		level: 90,
 		description: "Управление командами разработки и выстраивание процессов.",
 		skills: [
 			"Руководство командой (до 3 чел.)",

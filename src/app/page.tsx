@@ -1,5 +1,4 @@
 import { experiences } from "@/entities/experience/model/data";
-import { skillCategories } from "@/entities/skill/model/data";
 import { publications } from "@/entities/publication/model/data";
 import { projects } from "@/entities/project/model/data";
 import { personalProjects } from "@/entities/personal-project/model/data";
@@ -17,7 +16,6 @@ import { About } from "@/widgets/about/ui/About";
 
 export default function HomePage() {
 	const lastJob = experiences[0];
-	const topSkills = skillCategories.slice(0, 3);
 	const topProjects = projects.slice(0, 2);
 
 	return (
@@ -45,7 +43,7 @@ export default function HomePage() {
 							<div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
 								<div>
 									<h3 className="text-lg font-semibold">{lastJob.position}</h3>
-									<p className="font-medium text-indigo-600 dark:text-indigo-300">
+									<p className="font-medium text-brand-600 dark:text-brand-300">
 										{lastJob.company}
 									</p>
 								</div>
@@ -62,7 +60,7 @@ export default function HomePage() {
 									>
 										<Icon
 											name="check"
-											className="mt-0.5 h-4 w-4 shrink-0 text-green-600 dark:text-green-400"
+											className="mt-0.5 h-4 w-4 shrink-0 text-success-600 dark:text-success-400"
 										/>
 										{a}
 									</li>
@@ -74,41 +72,6 @@ export default function HomePage() {
 								))}
 							</div>
 						</Card>
-					</div>
-				</FadeInSection>
-
-				{/* Skills preview */}
-				<FadeInSection delay={0.05}>
-					<div className="mb-10">
-						<SectionHeader
-							icon="code"
-							title="Навыки"
-							viewAllHref="/skills"
-							viewAllLabel={`Все навыки (${skillCategories.length} категорий)`}
-						/>
-						<div className="grid gap-4 sm:grid-cols-3">
-							{topSkills.map((cat) => (
-								<Card key={cat.id} hover className="p-5">
-									<div className="mb-2 flex items-center justify-between">
-										<h3 className="font-semibold">{cat.title}</h3>
-										<span className="text-sm font-semibold text-indigo-600 dark:text-indigo-300">
-											{cat.level}%
-										</span>
-									</div>
-									<div className="mb-3 h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
-										<div
-											className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-pink-500"
-											style={{ width: `${cat.level}%` }}
-										/>
-									</div>
-									<div className="flex flex-wrap gap-1.5">
-										{cat.skills.map((s) => (
-											<SkillBadge key={s} skill={s} />
-										))}
-									</div>
-								</Card>
-							))}
-						</div>
 					</div>
 				</FadeInSection>
 
@@ -160,18 +123,18 @@ export default function HomePage() {
 												href={p.repo}
 												target="_blank"
 												rel="noopener noreferrer"
-												className="font-semibold transition-colors hover:text-indigo-600 dark:hover:text-indigo-300"
+												className="font-semibold transition-colors hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:hover:text-brand-300 dark:focus-visible:ring-offset-slate-900"
 											>
 												{p.name}
 											</a>
 											{p.id === "resume" && (
-												<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 hidden whitespace-nowrap rounded-lg bg-slate-800 px-2.5 py-1 text-xs text-white group-hover:block dark:bg-slate-700">
+												<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 hidden whitespace-nowrap rounded-lg bg-slate-800 px-2.5 py-1 text-xs text-white group-hover:block group-focus-within:block dark:bg-slate-700">
 													Вы уже здесь — это текущий сайт
 												</span>
 											)}
 										</div>
 										{p.builtByAI && (
-											<div className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-50 to-pink-50 px-2.5 py-1 text-xs font-medium text-indigo-700 dark:from-indigo-950 dark:to-pink-950 dark:text-indigo-300">
+											<div className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700 dark:bg-brand-950 dark:text-brand-300">
 												<Icon name="sparkles" className="h-3.5 w-3.5" />
 												Через ИИ
 											</div>
@@ -209,7 +172,7 @@ export default function HomePage() {
 								href={p.href}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="group block"
+								className="group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
 							>
 								<Card hover className="flex items-center gap-4 p-5">
 									<div
@@ -218,7 +181,7 @@ export default function HomePage() {
 										<Icon name="book-open" className="h-6 w-6" />
 									</div>
 									<div className="min-w-0 flex-1">
-										<h3 className="font-semibold transition-colors group-hover:text-indigo-600 dark:group-hover:text-indigo-300">
+										<h3 className="font-semibold transition-colors group-hover:text-brand-600 dark:group-hover:text-brand-300">
 											{p.title}
 										</h3>
 										<p className="mt-1 truncate text-sm text-slate-500 dark:text-slate-400">
@@ -227,7 +190,7 @@ export default function HomePage() {
 									</div>
 									<Icon
 										name="external-link"
-										className="h-4 w-4 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-600 dark:group-hover:text-indigo-300"
+										className="h-4 w-4 shrink-0 text-slate-400 transition-colors group-hover:text-brand-600 dark:group-hover:text-brand-300"
 									/>
 								</Card>
 							</a>
