@@ -7,8 +7,6 @@ build
 # Окружение и секреты — НИКОГДА не отправлять в образ
 .env
 .env.*
-!.env.example
-!.env.production.example
 
 # Логи и ключи
 *.log
@@ -28,9 +26,8 @@ npm-debug.log*
 # Локальная документация/прочее (не входит в рантайм)
 README.md
 DEPLOYMENT.md
-Документация
 .dockerignore
-gigastand.md
+GIGACODE.md
 
 # Кэши и временные файлы
 .DS_Store

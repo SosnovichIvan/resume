@@ -18,14 +18,7 @@ RUN npm ci
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Переменные, которые Next.js подставляет на этапе сборки (NEXT_PUBLIC_*)
-# ARG — позволяют передать их через --build-arg, не зашивая в образ.
-ARG NEXT_PUBLIC_API_URL=
-ARG NEXT_PUBLIC_SHARED_SECRET=
-
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-    NEXT_PUBLIC_SHARED_SECRET=$NEXT_PUBLIC_SHARED_SECRET \
-    NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

@@ -1,18 +1,11 @@
 export interface ExperienceRole {
 	role: string;
-	/** Нижняя граница опыта (полных лет). */
-	minYears?: number;
-	/** Если указана дата старта в формате «ДД.ММ.ГГГГ», стаж считается автоматически. */
-	startDate?: string;
-	/** Точная метка стажа вместо «N+ лет» (например «1 год»). */
-	label?: string;
 	/** Краткие технологии/навыки направления (видно при свёрнутом состоянии). */
 	summary?: string;
 	/** Бейджи технологий/направлений (рендерятся вместо summary есл есть). */
 	skills?: string[];
 	/** Развёрнутые навыки и достижения (открываются кнопкой «Раскрыть все»). */
 	details?: string[];
-	added: boolean;
 }
 
 export interface Profile {
@@ -32,16 +25,14 @@ export interface Profile {
 
 export const profile: Profile = {
 	name: "Соснович Иван",
-	position: "Fullstack AI Engineer — R&D с уклоном в ИИ-инжиниринг и автоматизацию",
+	position: "Senior Frontend / Fullstack Engineer · AI Engineering & Developer Automation",
 	location: "Красногорск (Московская область) · удалённо",
 	birthDate: "16.01.1987",
 	experienceBlock: {
 		title: "Опыт",
 		roles: [
 			{
-				role: "Fullstack AI Engineer — R&D · ИИ-инжиниринг и автоматизация",
-				minYears: 1,
-				startDate: "20.09.2025",
+				role: "AI Engineering & Developer Automation",
 				summary:
 					"React, Next.js, NestJS, Go, TypeScript · LLM-интеграции, MCP, AI-скилы, субагенты, промпт-инжиниринг",
 				skills: [
@@ -80,11 +71,9 @@ export const profile: Profile = {
 					"Активно применяю ИИ-ассистентов (GigaCode, Copilot, ChatGPT) для кода, ревью, рефакторинга и генерации тестов.",
 					"Проектирую архитектуру приложений на FSD, добиваюсь покрытия тестами 90%+.",
 				],
-				added: true,
 			},
 			{
 				role: "Senior Frontend Developer / Team Lead",
-				minYears: 5,
 				summary:
 					"React, TypeScript, Next.js, FSD · Zustand, TanStack Query, Uplot, ChartJs, WebSockets",
 				skills: [
@@ -109,11 +98,9 @@ export const profile: Profile = {
 					"Формирую техстандарт: стайлгайд, структура проекта, правила code review.",
 					"Покрытие тестами (Jest, Vitest, Cypress) на уровне 90%+.",
 				],
-				added: true,
 			},
 			{
 				role: "Junior Swift Developer",
-				label: "1 год",
 				summary: "Swift · UIKit · встроенные протоколы · кастомные ячейки · работа с API",
 				skills: ["Swift", "UIKit", "Встроенные протоколы", "Кастомные ячейки", "Работа с API"],
 				details: [
@@ -123,7 +110,6 @@ export const profile: Profile = {
 					"Авторизация с разными сервисами.",
 					"Получение данных с платформы ВК.",
 				],
-				added: true,
 			},
 		],
 	},

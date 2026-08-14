@@ -13,7 +13,7 @@ export const personalProjects: PersonalProject[] = [
 		id: "resume",
 		name: "resume",
 		description:
-			"Этот сайт-резюме: персональное портфолио с AI-ассистентом, созданное полностью AI-инструментами без ручного написания кода.",
+			"Этот сайт-резюме: адаптивное персональное портфолио, созданное с использованием AI-инструментов.",
 		details: [
 			"Сгенерирован и свёрстан целиком с использованием ИИ-инструментов (GigaCode) — без ручного написания кода разработчиком",
 			"Next.js 14 (App Router) + Feature-Sliced Design (FSD) + Tailwind CSS + Framer Motion",

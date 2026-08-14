@@ -11,11 +11,6 @@ const securityHeaders = [
 		key: "X-Content-Type-Options",
 		value: "nosniff",
 	},
-	// Блокировка активного контента (скриптов) на неизвестных источниках
-	{
-		key: "X-XSS-Protection",
-		value: "1; mode=block",
-	},
 	// Strict Transport Security — включается только за HTTPS (см. DEPLOYMENT.md)
 	{
 		key: "Strict-Transport-Security",
@@ -30,7 +25,7 @@ const securityHeaders = [
 	{
 		key: "Content-Security-Policy",
 		value:
-			"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.unsplash.com; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+				"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
 	},
 	// Метка permissions: без геолокации, камеры, микрофона
 	{
@@ -41,14 +36,6 @@ const securityHeaders = [
 
 const nextConfig = {
 	output: "standalone",
-	images: {
-		remotePatterns: [
-			{
-				protocol: "https",
-				hostname: "images.unsplash.com",
-			},
-		],
-	},
 	async headers() {
 		return [
 			{

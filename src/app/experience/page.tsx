@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { experiences } from "@/entities/experience/model/data";
-import { education } from "@/entities/skill/model/data";
+import { education } from "@/entities/education/model/data";
 import { Badge, Card, Icon, PageTransition, SkillBadge } from "@/shared/ui";
 import { BackLink } from "@/shared/ui/BackLink";
 

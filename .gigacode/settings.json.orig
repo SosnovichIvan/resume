@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "mcp__webpage-mcp__chrome_get_web_content"
-    ]
-  }
-}

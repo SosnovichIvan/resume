@@ -2,10 +2,6 @@ services:
   resume:
     build:
       context: .
-      # Если сайт использует BACKEND/секреты, передавайте их на этапе сборки:
-      # args:
-      #   NEXT_PUBLIC_API_URL: https://api.example.com
-      #   NEXT_PUBLIC_SHARED_SECRET: ${SHARED_SECRET:?}
     image: resume-site:latest
     container_name: resume-site
     restart: unless-stopped
@@ -55,8 +51,3 @@ services:
         max-size: "10m"
         max-file: "5"
         tag: "{{.Name}}"
-
-    # Файлы .env исключены из образа (.dockerignore) и подключаются только на рантайме
-    env_file:
-      - path: .env.production
-        required: false
