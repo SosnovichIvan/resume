@@ -149,9 +149,13 @@ info "Docker: $(docker --version) | Compose: $(docker compose version --short)"
 if ! command -v caddy >/dev/null 2>&1; then
 	step "Установка Caddy (официальный APT-репозиторий)"
 
-	install -m 0755 -d /etc/apt/keyrings
+	# Файл debian.deb.txt из официального репозитория Caddy ссылается на
+	# /usr/share/keyrings/caddy-stable-archive-keyring.gpg через signed-by.
+	# Ключ должен лежать именно по этому пути, иначе apt не сможет проверить InRelease.
+	install -m 0755 -d /usr/share/keyrings
 	curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/gpg.key |
-		gpg --dearmor --yes -o /etc/apt/keyrings/caddy-stable-archive-keyring.gpg
+		gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+	chmod a+r /usr/share/keyrings/caddy-stable-archive-keyring.gpg
 	curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt \
 		> /etc/apt/sources.list.d/caddy-stable.list
 
