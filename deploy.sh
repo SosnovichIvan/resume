@@ -25,6 +25,7 @@ set -euo pipefail
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 config_file="${DEPLOY_CONFIG:-${script_dir}/deploy.config}"
+deploy_ref="${DEPLOY_REF:-}"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Помощники вывода
@@ -255,11 +256,21 @@ app_dir="/opt/resume-site"
 step "Клонирование репозитория в ${app_dir}"
 
 if [[ -d "${app_dir}/.git" ]]; then
-	warn "Репозиторий уже существует в ${app_dir}. Обновляю (git pull)..."
-	git -C "${app_dir}" pull --ff-only
+	if [[ -n "${deploy_ref}" ]]; then
+		warn "Репозиторий уже существует в ${app_dir}. Переключаю на release ${deploy_ref}..."
+		git -C "${app_dir}" fetch --depth 1 origin "refs/tags/${deploy_ref}"
+		git -C "${app_dir}" checkout --detach FETCH_HEAD
+	else
+		warn "Репозиторий уже существует в ${app_dir}. Обновляю ветку по умолчанию..."
+		git -C "${app_dir}" pull --ff-only
+	fi
 else
 	rm -rf "${app_dir}"
-	git clone --depth 1 "${repo_url}" "${app_dir}"
+	if [[ -n "${deploy_ref}" ]]; then
+		git clone --depth 1 --branch "${deploy_ref}" "${repo_url}" "${app_dir}"
+	else
+		git clone --depth 1 "${repo_url}" "${app_dir}"
+	fi
 fi
 
 if [[ ! -f "${app_dir}/docker-compose.yml" ]]; then

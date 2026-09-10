@@ -2,6 +2,7 @@ import { experiences } from "@/entities/experience/model/data";
 import { publications } from "@/entities/publication/model/data";
 import { projects } from "@/entities/project/model/data";
 import { personalProjects } from "@/entities/personal-project/model/data";
+import { PersonalProjectCard } from "@/entities/personal-project/ui/PersonalProjectCard";
 import {
 	Badge,
 	Card,
@@ -115,44 +116,7 @@ export default function HomePage() {
 							viewAllLabel={`Все свои проекты (${personalProjects.length})`}
 						/>
 						<div className="grid gap-4 md:grid-cols-2">
-							{personalProjects.map((p) => (
-								<Card key={p.id} hover className="flex flex-col p-6">
-									<div className="mb-2 flex items-start justify-between gap-2">
-										<div className="group relative">
-											<a
-												href={p.repo}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="font-semibold transition-colors hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:hover:text-brand-300 dark:focus-visible:ring-offset-slate-900"
-											>
-												{p.name}
-											</a>
-											{p.id === "resume" && (
-												<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 hidden whitespace-nowrap rounded-lg bg-slate-800 px-2.5 py-1 text-xs text-white group-hover:block group-focus-within:block dark:bg-slate-700">
-													Вы уже здесь — это текущий сайт
-												</span>
-											)}
-										</div>
-										{p.builtByAI && (
-											<div className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700 dark:bg-brand-950 dark:text-brand-300">
-												<Icon name="sparkles" className="h-3.5 w-3.5" />
-												Через ИИ
-											</div>
-										)}
-									</div>
-									<p className="mb-4 flex-1 text-sm text-slate-600 dark:text-slate-300">
-										{p.description}
-									</p>
-									<div className="flex flex-wrap gap-1.5">
-										{p.stack.slice(0, 6).map((s) => (
-											<SkillBadge key={s} skill={s} />
-										))}
-										{p.stack.length > 6 && (
-											<Badge>+{p.stack.length - 6}</Badge>
-										)}
-									</div>
-								</Card>
-							))}
+							{personalProjects.map((project) => <PersonalProjectCard key={project.slug} project={project} />)}
 						</div>
 					</div>
 				</FadeInSection>

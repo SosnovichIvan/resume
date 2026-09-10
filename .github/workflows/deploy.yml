@@ -1,0 +1,49 @@
+name: Deploy release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-release-source:
+    name: Verify tag is from main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify tagged commit belongs to main
+        run: |
+          git fetch origin main --tags --force
+          tag_commit="$(git rev-list -n 1 "${GITHUB_REF}")"
+          git merge-base --is-ancestor "${tag_commit}" "origin/main"
+
+  deploy:
+    name: Deploy to VPS
+    needs: verify-release-source
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy tagged release over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script_stop: true
+          script: |
+            set -eu
+            release_dir="/tmp/resume-release-${{ github.run_id }}"
+            config_file="/tmp/resume-deploy-${{ github.run_id }}.config"
+            trap 'rm -rf "${release_dir}" "${config_file}"' EXIT
+            git clone --depth 1 --branch "${{ github.ref_name }}" https://github.com/SosnovichIvan/resume.git "${release_dir}"
+            cat > "${config_file}" <<'EOF'
+            DOMAIN=sosnovich-ivan.ru
+            ACME_EMAIL=isosnovich@yandex.ru
+            REPOSITORY_URL=https://github.com/SosnovichIvan/resume.git
+            EOF
+            DEPLOY_CONFIG="${config_file}" DEPLOY_REF="${{ github.ref_name }}" bash "${release_dir}/deploy.sh"
