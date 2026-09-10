@@ -12,6 +12,23 @@ export interface PersonalProject {
 
 export const personalProjects: PersonalProject[] = [
 	{
+		slug: "agent-skills-lab",
+		name: "Agent Skills Lab",
+		description:
+			"Репозиторий для разработки, версионирования и установки переиспользуемых навыков и инструкций для агентных CLI.",
+		architecture: [
+			"Каталог skills описывает bundled и modular навыки, а catalog.json связывает их с обязательными и выбираемыми reference-профилями.",
+			"Python-установщик выбирает набор навыков и профилей, копирует связанные материалы и регистрирует их в инструкциях агента; при повторной установке сохраняет backup.",
+			"execution-state добавляет управляемое состояние для длинных агентных задач: маршрутизацию, checkpoints, quality contracts и перенос работы между контекстами.",
+			"Тесты проверяют установщик и execution-state; benchmark изолирован от релизной статистики, а raw-результаты не хранятся в репозитории.",
+		],
+		technologies: ["Python", "Markdown", "JSON", "pytest", "Git"],
+		repositoryUrl: "https://github.com/SosnovichIvan/agent-skills-lab",
+		websiteUrl: null,
+		logo: "/projects/agent-skills-lab/logo.svg",
+		screenshots: [],
+	},
+	{
 		slug: "arhdesign",
 		name: "arhDesign",
 		description:

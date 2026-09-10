@@ -55,4 +55,15 @@ describe("portfolio pages", () => {
 			"https://github.com/SosnovichIvan/arhdesign",
 		);
 	});
+
+	it("omits website UI and an empty gallery for a repository-only project", () => {
+		render(<PersonalProjectPage params={{ slug: "agent-skills-lab" }} />);
+		expect(screen.getByRole("heading", { name: "Agent Skills Lab", level: 1 })).toBeVisible();
+		expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
+			"href",
+			"https://github.com/SosnovichIvan/agent-skills-lab",
+		);
+		expect(screen.queryByRole("link", { name: "Открыть сайт" })).not.toBeInTheDocument();
+		expect(screen.queryByRole("heading", { name: "Экраны проекта" })).not.toBeInTheDocument();
+	});
 });
