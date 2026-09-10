@@ -45,11 +45,11 @@ describe("portfolio pages", () => {
 		expect(screen.getByRole("heading", { name: heading, level: 1 })).toBeVisible();
 	});
 
-	it("renders a personal-project detail page with the screenshot carousel", () => {
+	it("renders a personal-project detail page with the screenshot carousel", async () => {
 		expect(generateStaticParams()).toContainEqual({ slug: "arhdesign" });
-		expect(generateMetadata({ params: { slug: "arhdesign" } })).toMatchObject({ title: "arhDesign — Соснович Иван" });
-		expect(generateMetadata({ params: { slug: "missing" } })).toEqual({});
-		render(<PersonalProjectPage params={{ slug: "arhdesign" }} />);
+		expect(await generateMetadata({ params: Promise.resolve({ slug: "arhdesign" }) })).toMatchObject({ title: "arhDesign — Соснович Иван" });
+		expect(await generateMetadata({ params: Promise.resolve({ slug: "missing" }) })).toEqual({});
+		render(await PersonalProjectPage({ params: Promise.resolve({ slug: "arhdesign" }) }));
 		expect(screen.getByRole("heading", { name: "arhDesign", level: 1 })).toBeVisible();
 		expect(screen.getByRole("region", { name: "Галерея: arhDesign" })).toBeVisible();
 		expect(screen.getByText("01 / 05")).toBeVisible();
@@ -59,8 +59,8 @@ describe("portfolio pages", () => {
 		);
 	});
 
-	it("shows benchmark statistics instead of a gallery for a repository-only project", () => {
-		render(<PersonalProjectPage params={{ slug: "agent-skills-lab" }} />);
+	it("shows benchmark statistics instead of a gallery for a repository-only project", async () => {
+		render(await PersonalProjectPage({ params: Promise.resolve({ slug: "agent-skills-lab" }) }));
 		expect(screen.getByRole("heading", { name: "Agent Skills Lab", level: 1 })).toBeVisible();
 		expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
 			"href",
