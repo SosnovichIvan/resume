@@ -55,4 +55,19 @@ describe("portfolio pages", () => {
 			"https://github.com/SosnovichIvan/arhdesign",
 		);
 	});
+
+	it("shows benchmark statistics instead of a gallery for a repository-only project", () => {
+		render(<PersonalProjectPage params={{ slug: "agent-skills-lab" }} />);
+		expect(screen.getByRole("heading", { name: "Agent Skills Lab", level: 1 })).toBeVisible();
+		expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
+			"href",
+			"https://github.com/SosnovichIvan/agent-skills-lab",
+		);
+		expect(screen.queryByRole("link", { name: "Открыть сайт" })).not.toBeInTheDocument();
+		expect(screen.queryByRole("heading", { name: "Экраны проекта" })).not.toBeInTheDocument();
+		expect(screen.getByRole("heading", { name: "Skills с подтверждённой пользой" })).toBeVisible();
+		expect(screen.getByRole("link", { name: "README" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md");
+		expect(screen.getByRole("table", { name: "Статистика Execution State" })).toBeVisible();
+		expect(screen.getByText("0 против 2 296 689")).toBeVisible();
+	});
 });
