@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 
+const isDevelopment = process.env.NODE_ENV === "development";
+const scriptSources = isDevelopment
+	? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+	: "script-src 'self' 'unsafe-inline'";
+
 const securityHeaders = [
 	// Запрет загрузки сайта во фреймах (анти-кликджекинг)
 	{
@@ -25,7 +30,7 @@ const securityHeaders = [
 	{
 		key: "Content-Security-Policy",
 		value:
-				"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+			`default-src 'self'; ${scriptSources}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
 	},
 	// Метка permissions: без геолокации, камеры, микрофона
 	{
@@ -36,6 +41,8 @@ const securityHeaders = [
 
 const nextConfig = {
 	output: "standalone",
+	// Не позволяем параллельному `next build` перезаписать чанки работающего dev-сервера.
+	distDir: isDevelopment ? ".next-dev" : ".next",
 	async headers() {
 		return [
 			{

@@ -1,9 +1,13 @@
+name: resume-site
+
 services:
   resume:
     build:
       context: .
     image: resume-site:latest
     container_name: resume-site
+    labels:
+      ru.sosnovich.resume.managed: "true"
     restart: unless-stopped
     init: true # правильная обработка сигналов (graceful shutdown)
 

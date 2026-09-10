@@ -9,8 +9,9 @@
 #   4. Устанавливает Caddy (reverse-proxy) с автоматическим публичным HTTPS.
 #   5. Читает URL репозитория, домен и ACME email из deploy.config.
 #   6. Клонирует код, настраивает Caddy (домен → 127.0.0.1:3000).
-#   7. Собирает и запускает Docker-образ сайта.
+#   7. Собирает образ в отдельном BuildKit-builder и запускает контейнер.
 #   8. Проверяет здоровье контейнера и доступность сайта по HTTPS.
+#   9. Удаляет старые ресурсы и устаревший build-cache только этого проекта.
 #
 # Использование:
 #   sudo bash deploy.sh
@@ -433,10 +434,29 @@ info "Логи Caddy и Docker ротируются: история за пос�
 step "Сборка и запуск Docker-контейнера сайта"
 cd "${app_dir}"
 
-if docker compose ps >/dev/null 2>&1; then
-	warn "Контейнер уже существует. Пересобираю/перезапускаю..."
+builder_name="resume-site-builder"
+image_name="resume-site:latest"
+old_image_id="$(docker image inspect "${image_name}" --format '{{.Id}}' 2>/dev/null || true)"
+
+# Отдельный builder изолирует кэш проекта от кэша других приложений на VPS.
+# Текущий контейнер продолжает работать, пока новый образ собирается.
+if ! docker buildx inspect "${builder_name}" >/dev/null 2>&1; then
+	info "Создание отдельного BuildKit-builder ${builder_name}."
+	docker buildx create --name "${builder_name}" --driver docker-container >/dev/null
 fi
-docker compose up -d --build
+docker buildx inspect "${builder_name}" --bootstrap >/dev/null
+
+image_revision="${deploy_ref:-manual}"
+docker buildx build \
+	--builder "${builder_name}" \
+	--pull \
+	--load \
+	--label "org.opencontainers.image.revision=${image_revision}" \
+	--tag "${image_name}" \
+	.
+
+# --remove-orphans удаляет только сервисы стабильного Compose-проекта resume-site.
+docker compose up -d --no-build --remove-orphans
 
 info "Ожидание готовности healthcheck контейнера..."
 for i in $(seq 1 30); do
@@ -484,6 +504,42 @@ if [[ ! "${redirect_code}" =~ ^30[18]$ || "${redirect_url}" != https://${domain}
 	exit 1
 fi
 info "HTTP ${redirect_code} корректно перенаправляет на ${redirect_url}."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 8.1 Очистка старых Docker-ресурсов проекта
+# ─────────────────────────────────────────────────────────────────────────────
+# Очистка запускается только после успешных container/HTTPS-проверок. Никакие
+# контейнеры, образы и build-cache других проектов не затрагиваются.
+step "Очистка старых Docker-ресурсов resume-site"
+
+new_image_id="$(docker image inspect "${image_name}" --format '{{.Id}}')"
+if [[ -n "${old_image_id}" && "${old_image_id}" != "${new_image_id}" ]]; then
+	old_image_consumers="$(docker ps -aq --filter "ancestor=${old_image_id}")"
+	if [[ -z "${old_image_consumers}" ]]; then
+		docker image rm "${old_image_id}" >/dev/null 2>&1 || warn "Не удалось удалить предыдущий образ ${old_image_id}."
+	else
+		warn "Предыдущий образ ещё используется контейнером; оставляю его на сервере."
+	fi
+fi
+
+# Удаляем остановленные контейнеры и dangling-образы только с меткой проекта.
+mapfile -t stopped_project_containers < <(
+	docker ps -aq \
+		--filter "label=ru.sosnovich.resume.managed=true" \
+		--filter "status=exited"
+)
+if (( ${#stopped_project_containers[@]} > 0 )); then
+	docker rm "${stopped_project_containers[@]}" >/dev/null
+fi
+docker image prune --force \
+	--filter "label=ru.sosnovich.resume.managed=true" >/dev/null
+
+# Чистим только отдельный builder сайта: неиспользуемый кэш старше 7 дней.
+docker buildx prune \
+	--builder "${builder_name}" \
+	--force \
+	--filter "until=168h" >/dev/null
+info "Старые контейнеры/образы проекта удалены; устаревший кэш ${builder_name} очищен."
 
 certificate_info="$(echo | openssl s_client -connect "${domain}:443" -servername "${domain}" 2>/dev/null | openssl x509 -noout -subject -issuer -dates 2>/dev/null || true)"
 if [[ -n "${certificate_info}" ]]; then

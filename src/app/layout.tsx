@@ -3,9 +3,9 @@ import { Navigation } from "@/widgets/navigation/ui/Navigation";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "Соснович Иван — Senior Frontend / Fullstack Engineer",
+	title: "Соснович Иван — Senior Frontend Engineer / Team Lead · AI Engineering",
 	description:
-		"Senior Frontend / Fullstack Engineer: 5+ лет опыта, React, TypeScript, Next.js, NestJS и Go. AI Engineering, MCP и автоматизация разработки.",
+		"Senior Frontend Engineer и Team Lead: React, TypeScript, frontend-архитектура, производительность и AI-assisted разработка.",
 };
 
 const themeScript = `

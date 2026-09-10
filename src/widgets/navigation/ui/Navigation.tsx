@@ -10,8 +10,8 @@ import { HeaderActions } from "@/widgets/header-actions/ui/HeaderActions";
 const links = [
 	{ href: "/", label: "Главная" },
 	{ href: "/experience", label: "Опыт" },
-	{ href: "/projects", label: "Проекты" },
-	{ href: "/my-projects", label: "Свои проекты" },
+	{ href: "/projects", label: "Коммерческие кейсы" },
+	{ href: "/my-projects", label: "Личные проекты" },
 	{ href: "/publications", label: "Публикации" },
 ];
 
