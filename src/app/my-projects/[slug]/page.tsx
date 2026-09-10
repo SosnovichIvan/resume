@@ -8,12 +8,13 @@ import { BackLink } from "@/shared/ui/BackLink";
 import { ProjectCarousel } from "@/widgets/project-carousel/ui/ProjectCarousel";
 import { ProjectSkillCarousel } from "@/widgets/project-skill-carousel/ui/ProjectSkillCarousel";
 
-interface ProjectPageProps { params: { slug: string }; }
+interface ProjectPageProps { params: Promise<{ slug: string }>; }
 export function generateStaticParams() { return personalProjects.map(({ slug }) => ({ slug })); }
-export function generateMetadata({ params }: ProjectPageProps): Metadata { const project = getPersonalProject(params.slug); return project ? { title: `${project.name} — Соснович Иван`, description: project.description } : {}; }
+export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> { const { slug } = await params; const project = getPersonalProject(slug); return project ? { title: `${project.name} — Соснович Иван`, description: project.description } : {}; }
 
-export default function PersonalProjectPage({ params }: ProjectPageProps) {
-	const project = getPersonalProject(params.slug);
+export default async function PersonalProjectPage({ params }: ProjectPageProps) {
+	const { slug } = await params;
+	const project = getPersonalProject(slug);
 	if (!project) notFound();
 	return <PageTransition><div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
 		<BackLink href="/my-projects" label="К личным проектам" />
