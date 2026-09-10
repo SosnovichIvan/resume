@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import ExperiencePage from "@/app/experience/page";
 import HomePage from "@/app/page";
 import MyProjectsPage from "@/app/my-projects/page";
-import PersonalProjectPage from "@/app/my-projects/[slug]/page";
+import PersonalProjectPage, { generateMetadata, generateStaticParams } from "@/app/my-projects/[slug]/page";
 import ProjectsPage from "@/app/projects/page";
 import PublicationsPage from "@/app/publications/page";
 
@@ -29,16 +29,16 @@ describe("portfolio pages", () => {
 	it("renders the home page sections", () => {
 		render(<HomePage />);
 		expect(screen.getByRole("heading", { name: "Соснович Иван" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Опыт работы" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Проекты" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Свои проекты" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Публикации" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Где я создаю наибольшую ценность" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Ключевые кейсы" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Текущая роль" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Пишу о frontend-архитектуре" })).toBeVisible();
 	});
 
 	it.each([
 		["experience", <ExperiencePage />, "Опыт и образование"],
-		["projects", <ProjectsPage />, "Проекты"],
-		["personal projects", <MyProjectsPage />, "Свои проекты"],
+		["projects", <ProjectsPage />, "Коммерческие кейсы"],
+		["personal projects", <MyProjectsPage />, "Личные проекты"],
 		["publications", <PublicationsPage />, "Публикации"],
 	])("renders the %s page", (_name, page, heading) => {
 		render(page);
@@ -46,6 +46,9 @@ describe("portfolio pages", () => {
 	});
 
 	it("renders a personal-project detail page with the screenshot carousel", () => {
+		expect(generateStaticParams()).toContainEqual({ slug: "arhdesign" });
+		expect(generateMetadata({ params: { slug: "arhdesign" } })).toMatchObject({ title: "arhDesign — Соснович Иван" });
+		expect(generateMetadata({ params: { slug: "missing" } })).toEqual({});
 		render(<PersonalProjectPage params={{ slug: "arhdesign" }} />);
 		expect(screen.getByRole("heading", { name: "arhDesign", level: 1 })).toBeVisible();
 		expect(screen.getByRole("region", { name: "Галерея: arhDesign" })).toBeVisible();
@@ -66,8 +69,10 @@ describe("portfolio pages", () => {
 		expect(screen.queryByRole("link", { name: "Открыть сайт" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("heading", { name: "Экраны проекта" })).not.toBeInTheDocument();
 		expect(screen.getByRole("heading", { name: "Skills с подтверждённой пользой" })).toBeVisible();
-		expect(screen.getByRole("link", { name: "README" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md");
+		expect(screen.getByRole("link", { name: "Методика и README" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md");
 		expect(screen.getByRole("table", { name: "Статистика Execution State" })).toBeVisible();
 		expect(screen.getByText("0 против 2 296 689")).toBeVisible();
+		expect(screen.queryByRole("button", { name: "Предыдущий skill" })).not.toBeInTheDocument();
+		expect(screen.getAllByText("trade-off").length).toBeGreaterThan(0);
 	});
 });

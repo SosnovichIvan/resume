@@ -52,3 +52,27 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+@media print {
+  html {
+    scroll-behavior: auto;
+  }
+  body {
+    background: white !important;
+    color: #0f172a !important;
+    font-size: 11px;
+  }
+  nav,
+  .print-hidden {
+    display: none !important;
+  }
+  main,
+  section,
+  article,
+  [class*="rounded-2xl"] {
+    break-inside: avoid;
+  }
+  [class*="shadow"] {
+    box-shadow: none !important;
+  }
+}

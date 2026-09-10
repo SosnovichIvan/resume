@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: resume-production-deploy
+  cancel-in-progress: false
+
 jobs:
   verify-release-source:
     name: Verify tag is from main
@@ -26,6 +30,7 @@ jobs:
     name: Deploy to VPS
     needs: verify-release-source
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: production
     steps:
       - name: Deploy tagged release over SSH
