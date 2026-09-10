@@ -5,11 +5,12 @@ import { describe, expect, it, vi } from "vitest";
 import ExperiencePage from "@/app/experience/page";
 import HomePage from "@/app/page";
 import MyProjectsPage from "@/app/my-projects/page";
+import PersonalProjectPage from "@/app/my-projects/[slug]/page";
 import ProjectsPage from "@/app/projects/page";
 import PublicationsPage from "@/app/publications/page";
 
 vi.mock("next/image", () => ({
-	default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => createElement("img", props),
+	default: ({ fill: _fill, priority: _priority, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean }) => createElement("img", props),
 }));
 
 vi.mock("framer-motion", () => ({
@@ -42,5 +43,16 @@ describe("portfolio pages", () => {
 	])("renders the %s page", (_name, page, heading) => {
 		render(page);
 		expect(screen.getByRole("heading", { name: heading, level: 1 })).toBeVisible();
+	});
+
+	it("renders a personal-project detail page with the screenshot carousel", () => {
+		render(<PersonalProjectPage params={{ slug: "arhdesign" }} />);
+		expect(screen.getByRole("heading", { name: "arhDesign", level: 1 })).toBeVisible();
+		expect(screen.getByRole("region", { name: "Галерея: arhDesign" })).toBeVisible();
+		expect(screen.getByText("01 / 05")).toBeVisible();
+		expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
+			"href",
+			"https://github.com/SosnovichIvan/arhdesign",
+		);
 	});
 });

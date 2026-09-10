@@ -1,66 +1,36 @@
 export interface PersonalProject {
-	id: string;
+	slug: string;
 	name: string;
 	description: string;
-	details: string[];
-	stack: string[];
-	repo: string;
-	builtByAI: boolean;
+	architecture: string[];
+	technologies: string[];
+	repositoryUrl: string;
+	websiteUrl: string | null;
+	logo: string;
+	screenshots: string[];
 }
 
 export const personalProjects: PersonalProject[] = [
 	{
-		id: "resume",
-		name: "resume",
+		slug: "arhdesign",
+		name: "arhDesign",
 		description:
-			"Этот сайт-резюме: адаптивное персональное портфолио, созданное с использованием AI-инструментов.",
-		details: [
-			"Сгенерирован и свёрстан целиком с использованием ИИ-инструментов (GigaCode) — без ручного написания кода разработчиком",
-			"Next.js 14 (App Router) + Feature-Sliced Design (FSD) + Tailwind CSS + Framer Motion",
-			"Тёмная/светлая тема, анимации, адаптивная вёрстка",
+			"Production-сайт-портфолио архитектора и дизайнера интерьеров Светланы Полисмаковой. Содержит лендинг и страницы проектов, защищённую форму заявок и Telegram-уведомления для администраторов.",
+		architecture: [
+			"Next.js 16-приложение отдаёт публичный сайт: адаптивный интерфейс, каталог и страницы проектов, галерею, темы, SEO и единую модальную форму заявки.",
+			"Go API валидирует и сохраняет заявки, применяет антиспам и cooldown, принимает Telegram webhook и отправляет уведомления подписанным администраторам.",
+			"PostgreSQL хранит заявки, маркеры cooldown и Telegram-подписки; миграции запускаются отдельным контейнером до старта API.",
+			"Caddy обеспечивает HTTPS и маршрутизацию на VPS; Docker Compose изолирует web, API, PostgreSQL и миграции. GitHub Actions публикует релизы по тегам.",
+			"Cloudflare Worker relay доставляет уведомления в Telegram Bot API, не раскрывая токен бота приложению на VPS.",
 		],
-		stack: [
-			"Next.js",
-			"TypeScript",
-			"React",
-			"FSD",
-			"Tailwind CSS",
-			"Framer Motion",
-		],
-		repo: "https://github.com/SosnovichIvan/resume",
-		builtByAI: true,
-	},
-	{
-		id: "my-sport-life",
-		name: "my sport life",
-		description:
-			"Платформа для занятий спортом, правильного питания и контроля веса: трекинг активности, планирование рациона и аналитика прогресса. Спроектирована и реализована полностью средствами ИИ.",
-		details: [
-			"Разработан полностью с помощью ИИ-технологий — от архитектуры и документации до кода и инфраструктуры",
-			"Монорепозиторий: микрофронтенды (ES-модули) + микросервисы на Go (gRPC) + API Gateway",
-			"HTTP/3 (QUIC) на граничном слое Envoy, NATS JetStream, OpenTelemetry/Jaeger",
-			"Полная техническая документация и архитектура в docs/architecture.md",
-		],
-		stack: [
-			"Next.js",
-			"TypeScript",
-			"Tailwind CSS",
-			"Vite",
-			"Radix UI",
-			"Go",
-			"gRPC",
-			"REST",
-			"HTTP/3 (QUIC)",
-			"NATS JetStream",
-			"PostgreSQL",
-			"Redis",
-			"S3",
-			"OpenTelemetry",
-			"Jaeger",
-			"Envoy",
-			"Kubernetes",
-		],
-		repo: "https://github.com/SosnovichIvan/my-sport-life",
-		builtByAI: true,
+		technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Go", "PostgreSQL", "Docker Compose", "Caddy", "Cloudflare Workers", "Telegram Bot API", "GitHub Actions"],
+		repositoryUrl: "https://github.com/SosnovichIvan/arhdesign",
+		websiteUrl: "https://designer-svetlana.ru/",
+		logo: "/projects/arhdesign/logo.svg",
+		screenshots: ["/projects/arhdesign/home-desktop.png", "/projects/arhdesign/home-mobile.png", "/projects/arhdesign/projects-desktop.png", "/projects/arhdesign/project-detail-desktop.png", "/projects/arhdesign/contact-form-desktop.png"],
 	},
 ];
+
+export function getPersonalProject(slug: string): PersonalProject | undefined {
+	return personalProjects.find((project) => project.slug === slug);
+}

@@ -93,3 +93,18 @@ sudo bash deploy.sh
 - security headers присутствуют;
 - порт 3000 доступен только локально;
 - в Git и Docker image нет `.env`, токенов, ключей или сертификатов.
+
+## GitHub Actions: release по тегу
+
+Workflow `.github/workflows/deploy.yml` запускается только для тегов формата `v*`.
+Перед развёртыванием он проверяет, что отмеченный коммит входит в историю `main`, и
+разворачивает на VPS именно этот тег. Для GitHub Actions создайте environment
+`production` и добавьте в него Secrets:
+
+- `VPS_HOST` — IP или имя VPS;
+- `VPS_USERNAME` — SSH-пользователь;
+- `VPS_PASSWORD` — пароль этого пользователя.
+
+Публичные параметры домена и ACME email находятся в workflow и `deploy.config`;
+не помещайте их в secrets. Для релиза после merge в `main` создайте и отправьте тег,
+например: `git tag v1.0.0 && git push origin v1.0.0`.
