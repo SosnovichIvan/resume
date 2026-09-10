@@ -56,7 +56,7 @@ describe("portfolio pages", () => {
 		);
 	});
 
-	it("omits website UI and an empty gallery for a repository-only project", () => {
+	it("shows benchmark statistics instead of a gallery for a repository-only project", () => {
 		render(<PersonalProjectPage params={{ slug: "agent-skills-lab" }} />);
 		expect(screen.getByRole("heading", { name: "Agent Skills Lab", level: 1 })).toBeVisible();
 		expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
@@ -65,5 +65,7 @@ describe("portfolio pages", () => {
 		);
 		expect(screen.queryByRole("link", { name: "Открыть сайт" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("heading", { name: "Экраны проекта" })).not.toBeInTheDocument();
+		expect(screen.getByRole("table", { name: "Статистика: Ключевые результаты candidate против AI-only" })).toBeVisible();
+		expect(screen.getByText("0 против 2 296 689")).toBeVisible();
 	});
 });
