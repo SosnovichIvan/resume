@@ -8,11 +8,12 @@ export interface PersonalProject {
 	websiteUrl: string | null;
 	logo: string;
 	screenshots: string[];
-	statistics?: {
-		title: string;
-		caption?: string;
-		rows: Array<{ metric: string; result: string }>;
-	};
+	benefitSkills?: Array<{
+		name: string;
+		description: string;
+		readmeUrl: string;
+		statistics: { title: string; caption?: string; rows: Array<{ metric: string; result: string }> };
+	}>;
 }
 
 export const personalProjects: PersonalProject[] = [
@@ -32,10 +33,14 @@ export const personalProjects: PersonalProject[] = [
 		websiteUrl: null,
 		logo: "/projects/agent-skills-lab/logo.svg",
 		screenshots: [],
-		statistics: {
-			title: "Ключевые результаты candidate против AI-only",
-			caption: "16 задач",
-			rows: [
+		benefitSkills: [{
+			name: "Execution State",
+			description: "Ведёт компактное проверяемое состояние длинной агентной задачи, снижая повторную передачу истории между контекстами.",
+			readmeUrl: "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md",
+			statistics: {
+				title: "Ключевые результаты candidate против AI-only",
+				caption: "16 задач",
+				rows: [
 				{ metric: "Total tokens", result: "−73,88%" },
 				{ metric: "Output tokens", result: "−59,60%" },
 				{ metric: "Uncached input", result: "−15,82%" },
@@ -43,7 +48,8 @@ export const personalProjects: PersonalProject[] = [
 				{ metric: "Repair tokens", result: "0 против 2 296 689" },
 				{ metric: "Завершено задач", result: "16/16 у candidate и AI-only" },
 			],
-		},
+			},
+		}],
 	},
 	{
 		slug: "arhdesign",

@@ -65,7 +65,9 @@ describe("portfolio pages", () => {
 		);
 		expect(screen.queryByRole("link", { name: "Открыть сайт" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("heading", { name: "Экраны проекта" })).not.toBeInTheDocument();
-		expect(screen.getByRole("table", { name: "Статистика: Ключевые результаты candidate против AI-only" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Skills с подтверждённой пользой" })).toBeVisible();
+		expect(screen.getByRole("link", { name: "README" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md");
+		expect(screen.getByRole("table", { name: "Статистика Execution State" })).toBeVisible();
 		expect(screen.getByText("0 против 2 296 689")).toBeVisible();
 	});
 });
