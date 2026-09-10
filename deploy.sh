@@ -95,6 +95,20 @@ info "Обнаружена система: ${os_name} ${os_codename}"
 # ─────────────────────────────────────────────────────────────────────────────
 step "Обновление пакетной базы и установка базовых утилит"
 export DEBIAN_FRONTEND=noninteractive
+
+# Предыдущий запуск мог успеть добавить репозиторий Caddy, но оборваться до
+# импорта ключа. В таком состоянии первый же apt-get update завершается с
+# NO_PUBKEY и не даёт скрипту дойти до блока восстановления Caddy ниже.
+# Временно отключаем только этот неполный источник; после установки curl и
+# gnupg он будет создан заново с корректным ключом.
+caddy_repo_list="/etc/apt/sources.list.d/caddy-stable.list"
+caddy_repo_backup="${caddy_repo_list}.interrupted"
+caddy_keyring="/usr/share/keyrings/caddy-stable-archive-keyring.gpg"
+if [[ -f "${caddy_repo_list}" && ! -s "${caddy_keyring}" ]]; then
+	warn "Найдена незавершённая настройка репозитория Caddy; восстанавливаю её."
+	mv "${caddy_repo_list}" "${caddy_repo_backup}"
+fi
+
 apt-get update -qq
 apt-get install -y -qq \
 	ca-certificates \
@@ -146,19 +160,22 @@ info "Docker: $(docker --version) | Compose: $(docker compose version --short)"
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. Установка Caddy (reverse-proxy с авто-HTTPS)
 # ─────────────────────────────────────────────────────────────────────────────
+# Обновляем репозиторий и ключ при каждом запуске: это также завершает
+# прерванную настройку, обнаруженную перед первой apt-get update.
+step "Настройка официального APT-репозитория Caddy"
+# Файл debian.deb.txt из официального репозитория Caddy ссылается на
+# /usr/share/keyrings/caddy-stable-archive-keyring.gpg через signed-by.
+# Ключ должен лежать именно по этому пути, иначе apt не сможет проверить InRelease.
+install -m 0755 -d /usr/share/keyrings
+curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/gpg.key |
+	gpg --dearmor --yes -o "${caddy_keyring}"
+chmod a+r "${caddy_keyring}"
+curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt \
+	> "${caddy_repo_list}"
+rm -f "${caddy_repo_backup}"
+
 if ! command -v caddy >/dev/null 2>&1; then
-	step "Установка Caddy (официальный APT-репозиторий)"
-
-	# Файл debian.deb.txt из официального репозитория Caddy ссылается на
-	# /usr/share/keyrings/caddy-stable-archive-keyring.gpg через signed-by.
-	# Ключ должен лежать именно по этому пути, иначе apt не сможет проверить InRelease.
-	install -m 0755 -d /usr/share/keyrings
-	curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/gpg.key |
-		gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-	chmod a+r /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-	curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt \
-		> /etc/apt/sources.list.d/caddy-stable.list
-
+	step "Установка Caddy"
 	apt-get update -qq
 	apt-get install -y -qq caddy > /dev/null
 else
