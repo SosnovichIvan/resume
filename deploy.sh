@@ -307,8 +307,13 @@ caddy_sites_dir="/etc/caddy/sites"
 caddy_site_file="${caddy_sites_dir}/resume-site.caddy"
 step "Настройка Caddy для домена ${domain}"
 
-# Caddy должен иметь возможность создать access.log уже при reload.
+# Caddy должен иметь возможность открыть access.log уже при reload. Файл мог
+# быть создан от root предыдущей попыткой запуска, поэтому выравниваем права
+# отдельно от каталога и не теряем журнал.
 install -d -o caddy -g caddy -m 0750 /var/log/caddy
+touch /var/log/caddy/access.log
+chown caddy:caddy /var/log/caddy/access.log
+chmod 0640 /var/log/caddy/access.log
 
 # Сохраняем существующий Caddyfile и подключаем отдельный фрагмент проекта.
 # Так скрипт не удаляет конфигурацию других сайтов на сервере.
