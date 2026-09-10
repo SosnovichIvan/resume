@@ -8,9 +8,49 @@ export interface PersonalProject {
 	websiteUrl: string | null;
 	logo: string;
 	screenshots: string[];
+	benefitSkills?: Array<{
+		name: string;
+		description: string;
+		readmeUrl: string;
+		statistics: { title: string; caption?: string; rows: Array<{ metric: string; result: string }> };
+	}>;
 }
 
 export const personalProjects: PersonalProject[] = [
+	{
+		slug: "agent-skills-lab",
+		name: "Agent Skills Lab",
+		description:
+			"Репозиторий для разработки, версионирования и установки переиспользуемых навыков и инструкций для агентных CLI.",
+		architecture: [
+			"Каталог skills описывает bundled и modular навыки, а catalog.json связывает их с обязательными и выбираемыми reference-профилями.",
+			"Python-установщик выбирает набор навыков и профилей, копирует связанные материалы и регистрирует их в инструкциях агента; при повторной установке сохраняет backup.",
+			"execution-state добавляет управляемое состояние для длинных агентных задач: маршрутизацию, checkpoints, quality contracts и перенос работы между контекстами.",
+			"Тесты проверяют установщик и execution-state; benchmark изолирован от релизной статистики, а raw-результаты не хранятся в репозитории.",
+		],
+		technologies: ["Python", "Markdown", "JSON", "pytest", "Git"],
+		repositoryUrl: "https://github.com/SosnovichIvan/agent-skills-lab",
+		websiteUrl: null,
+		logo: "/projects/agent-skills-lab/logo.svg",
+		screenshots: [],
+		benefitSkills: [{
+			name: "Execution State",
+			description: "Ведёт компактное проверяемое состояние длинной агентной задачи, снижая повторную передачу истории между контекстами.",
+			readmeUrl: "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md",
+			statistics: {
+				title: "Ключевые результаты candidate против AI-only",
+				caption: "16 задач",
+				rows: [
+				{ metric: "Total tokens", result: "−73,88%" },
+				{ metric: "Output tokens", result: "−59,60%" },
+				{ metric: "Uncached input", result: "−15,82%" },
+				{ metric: "Время выполнения", result: "+76,14%" },
+				{ metric: "Repair tokens", result: "0 против 2 296 689" },
+				{ metric: "Завершено задач", result: "16/16 у candidate и AI-only" },
+			],
+			},
+		}],
+	},
 	{
 		slug: "arhdesign",
 		name: "arhDesign",
