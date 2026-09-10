@@ -3,60 +3,8 @@ import { publications } from "@/entities/publication/model/data";
 import { Card, Icon, PageTransition } from "@/shared/ui";
 import { BackLink } from "@/shared/ui/BackLink";
 
-export const metadata: Metadata = {
-	title: "Публикации — Соснович Иван",
-};
+export const metadata: Metadata = { title: "Публикации — Соснович Иван" };
 
 export default function PublicationsPage() {
-	return (
-		<PageTransition>
-			<div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-				<BackLink />
-				<h1 className="mb-2 flex items-center gap-3 text-3xl font-bold">
-					<span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300">
-						<Icon name="book-open" className="h-6 w-6" />
-					</span>
-					Публикации
-				</h1>
-				<p className="mb-8 text-slate-500 dark:text-slate-400">
-					Статьи и технические публикации
-				</p>
-
-				<div className="space-y-4">
-					{publications.map((p) => (
-						<a
-							key={p.id}
-							href={p.href}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
-						>
-							<Card hover className="flex items-center gap-4 p-5">
-								<div
-									className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${p.gradient} text-white`}
-								>
-									<Icon name="book-open" className="h-6 w-6" />
-								</div>
-								<div className="min-w-0 flex-1">
-									<h2 className="font-semibold transition-colors group-hover:text-brand-600 dark:group-hover:text-brand-300">
-										{p.title}
-									</h2>
-									<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-										{p.description}
-									</p>
-									<p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
-										{p.source}
-									</p>
-								</div>
-								<Icon
-									name="external-link"
-									className="h-4 w-4 shrink-0 text-slate-400 transition-colors group-hover:text-brand-600 dark:group-hover:text-brand-300"
-								/>
-							</Card>
-						</a>
-					))}
-				</div>
-			</div>
-		</PageTransition>
-	);
+	return <PageTransition><div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8"><BackLink /><h1 className="mb-2 flex items-center gap-3 text-3xl font-bold"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300"><Icon name="book-open" className="h-6 w-6" /></span>Публикации</h1><p className="mb-8 max-w-2xl text-slate-500 dark:text-slate-400">Практические материалы о frontend-архитектуре, модульности и внедрении AI в инженерный процесс.</p><div className="grid gap-5 md:grid-cols-2">{publications.map((publication) => <a key={publication.id} href={publication.href} target="_blank" rel="noopener noreferrer" className="group rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"><Card hover className="flex h-full flex-col overflow-hidden p-0"><div className={`relative flex min-h-40 items-end bg-gradient-to-br ${publication.gradient} p-5 text-white`}><Icon name="book-open" className="absolute right-5 top-5 h-8 w-8 opacity-60" /><div><p className="text-xs font-semibold uppercase tracking-wider text-white/80">{publication.topic}</p><p className="mt-2 text-sm text-white/90">{publication.date} · {publication.readTime}</p></div></div><div className="flex flex-1 flex-col p-5"><h2 className="text-lg font-semibold leading-snug transition-colors group-hover:text-brand-600 dark:group-hover:text-brand-300">{publication.title}</h2><p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{publication.takeaway}</p><span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 dark:text-brand-300">Читать на Хабре <Icon name="external-link" className="h-4 w-4" /></span></div></Card></a>)}</div></div></PageTransition>;
 }

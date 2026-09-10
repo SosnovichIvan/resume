@@ -12,6 +12,7 @@ export interface Experience {
 	summary: string;
 	achievements: string[];
 	stack: string[];
+	keyResults: string[];
 }
 
 export const experiences: Experience[] = [
@@ -37,6 +38,7 @@ export const experiences: Experience[] = [
 			"Разработал AI-скил тестирования старого и нового функционала, включая сверку и правку с интеграцией с QA-тестами на Python. Свёл появление новых багов к минимуму и упростил работу тестировщиков",
 		],
 		stack: ["React", "TypeScript", "FSD", "Zustand", "TanStack Query", "Uplot", "ChartJs", "WebSockets", "ES Modules", "REST API", "Jest", "Vitest"],
+		keyResults: ["3 frontend-инженера", "3 проекта: легаси → FSD", "2 мин → 30 сек загрузка"],
 	},
 	{
 		id: "yoko-trade",
@@ -45,9 +47,9 @@ export const experiences: Experience[] = [
 		period: "Октябрь 2022 — Ноябрь 2023",
 		duration: "1 год 2 месяца",
 		summary:
-			"Fullstack-разработка криптотрейдинг-платформы с нуля: от проектирования архитектуры и схемы БД до интеграции с торговыми ботами и платёжными системами.",
+			"Frontend-first разработка криптотрейдинг-платформы. Отвечал за интерфейс и интеграционные контракты; backend-части создавал в AI-assisted процессе с обязательной проверкой сценариев, данных и интеграций.",
 		achievements: [
-			"Fullstack-архитектура: React + NestJS + PostgreSQL + WebSockets с нуля",
+			"Спроектировал взаимодействие React-клиента, NestJS API, PostgreSQL и WebSocket-каналов",
 			"Схемы БД, миграции TypeORM, уровни доступа и система ролей",
 			"Контракты между бэкендом и торговыми ботами через REST + WebSocket",
 			"Интеграция криптоплатежей (USDT, BTC) — вебхуки, верификация",
@@ -56,6 +58,7 @@ export const experiences: Experience[] = [
 			"CI/CD (Docker, GitHub Actions), JWT, защита сокетов",
 		],
 		stack: ["React", "NestJS", "PostgreSQL", "TypeORM", "ChartJs", "JWT", "WebSockets", "Telegram Bot API", "Docker", "GitHub Actions"],
+		keyResults: ["Продукт с нуля", "Real-time интерфейсы", "AI-assisted backend"],
 	},
 	{
 		id: "sber",
@@ -74,6 +77,7 @@ export const experiences: Experience[] = [
 			"Организация структуры проектов по FSD-принципам",
 		],
 		stack: ["React", "Redux Toolkit", "TypeScript", "BFF", "Jest", "Cypress", "REST API", "FSD"],
+		keyResults: ["2 года 6 месяцев", "BFF: данные −2–3 раза", "Покрытие 85%+"],
 	},
 	{
 		id: "standart",
@@ -88,5 +92,6 @@ export const experiences: Experience[] = [
 			"Подготовка и проведение релиза продукта",
 		],
 		stack: ["JavaScript", "CSS"],
+		keyResults: ["Аудит интерфейса", "Подготовка релиза"],
 	},
 ];

@@ -1,6 +1,7 @@
 # Зависимости и артефакты сборки
 node_modules
 .next
+.next-dev
 out
 build
 

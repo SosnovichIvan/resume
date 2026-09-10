@@ -8,27 +8,29 @@ import { Header } from "@/widgets/header/ui/Header";
 import { ThemeToggle } from "@/widgets/theme-toggle/ui/ThemeToggle";
 
 vi.mock("next/image", () => ({
-	default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => createElement("img", props),
+	default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { priority?: boolean }) => {
+		const imageProps = { ...props };
+		delete imageProps.priority;
+		return createElement("img", imageProps);
+	},
 }));
 
 describe("profile widgets", () => {
 	it("renders the new positioning in the header", () => {
 		render(<Header />);
 		expect(screen.getByText("Соснович Иван")).toBeVisible();
-		expect(
-			screen.getByText("Senior Frontend / Fullstack Engineer · AI Engineering & Developer Automation"),
-		).toBeVisible();
+		expect(screen.getByText("Senior Frontend Engineer / Team Lead · AI Engineering")).toBeVisible();
+		expect(screen.queryByRole("link", { name: "Связаться" })).not.toBeInTheDocument();
+		expect(screen.getByText(/доставки backend-частей продукта/)).toBeVisible();
+		expect(screen.queryByText("16.01.1987")).not.toBeInTheDocument();
 		expect(screen.getByAltText("Фото Ивана Сосновича")).toBeVisible();
 	});
 
-	it("expands and collapses role details", async () => {
-		const user = userEvent.setup();
+	it("renders a transparent competence profile", () => {
 		render(<About />);
-		const buttons = screen.getAllByRole("button", { name: "Раскрыть все" });
-		await user.click(buttons[0]);
-		expect(screen.getByText(/Проектирую агентные системы/)).toBeVisible();
-		await user.click(screen.getByRole("button", { name: "Свернуть" }));
-		expect(screen.queryByText(/Проектирую агентные системы/)).not.toBeInTheDocument();
+		expect(screen.getByRole("heading", { name: "Frontend — основная экспертиза" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Backend с поддержкой AI" })).toBeVisible();
+		expect(screen.getByText("AI-assisted")).toBeVisible();
 	});
 
 	it("toggles and persists the theme", async () => {

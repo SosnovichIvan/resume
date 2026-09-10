@@ -5,6 +5,10 @@ export interface Publication {
 	href: string;
 	source: string;
 	gradient: string;
+	date: string;
+	readTime: string;
+	topic: string;
+	takeaway: string;
 }
 
 export const publications: Publication[] = [
@@ -16,6 +20,10 @@ export const publications: Publication[] = [
 		href: "https://habr.com/ru/companies/sberbank/articles/1067496/",
 		source: "habr.com",
 		gradient: "from-emerald-500 to-cyan-600",
+		date: "10 августа 2026",
+		readTime: "11 минут",
+		topic: "Microfrontends · ES Modules",
+		takeaway: "Как выделять независимые frontend-модули без дублирования приложения и жёсткой связи со сборщиком.",
 	},
 	{
 		id: "habr-fsd-msd",
@@ -25,5 +33,9 @@ export const publications: Publication[] = [
 		href: "https://habr.com/ru/companies/sberbank/articles/959400/",
 		source: "habr.com",
 		gradient: "from-blue-500 to-purple-600",
+		date: "27 октября 2025",
+		readTime: "9 минут",
+		topic: "Frontend Architecture · FSD",
+		takeaway: "Как усилить границы бизнес-модулей и упростить отделение частей frontend-монолита.",
 	},
 ];

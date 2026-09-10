@@ -5,3 +5,4 @@ export { SkillBadge } from "./SkillBadge";
 export { Card } from "./Card";
 export { SectionHeader } from "./SectionHeader";
 export { PageTransition, FadeInSection } from "./PageTransition";
+export { PrintResumeButton } from "./PrintResumeButton";

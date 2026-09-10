@@ -9,7 +9,11 @@ export interface Project {
 	host?: string;
 	internal: boolean;
 	experienceId?: string;
+	categories: ProjectCategory[];
+	outcomes: string[];
 }
+
+export type ProjectCategory = "Архитектура" | "Производительность" | "Team Lead" | "AI tooling" | "AI-assisted fullstack";
 
 export const projects: Project[] = [
 	{
@@ -27,7 +31,7 @@ export const projects: Project[] = [
 			"Руководитель команды из 3 фронтенд-инженеров: распределение задач, груминг, архитектурные решения, код-ревью",
 			"Оптимизация высоконагруженных дашбордов с тысячами точек данных и сложными графиками (Uplot, ChartJs) — виртуализация, debounce, мемоизация селекторов",
 			"Ускорил загрузку проекта с 2 минут до 30 секунд на слабых компьютерах",
-			"Ускорил рендер больших списков с 30 секунд до 5",
+			"Ускорил рендер больших списков с 30 секунд до 5 секунд",
 			"Рефакторинг легаси-кода на FSD: устранение циклических зависимостей, разделение монолитных компонентов на слой entities/widgets/pages",
 			"Внедрение микрофронтенд-архитектуры через ES-модули — независимый билд и деплой сервисов",
 			"Формирование техстандарта: стайлгайд, структура проекта, конвенции именования, правила code review",
@@ -38,6 +42,8 @@ export const projects: Project[] = [
 		stack: ["React", "TypeScript", "FSD", "Zustand", "TanStack Query", "Uplot", "ChartJs", "WebSockets", "ES Modules", "REST API", "Jest", "Vitest", "GigaCode", "MCP", "LLM / ИИ-инструменты"],
 		internal: true,
 		experienceId: "sbertech",
+		categories: ["Архитектура", "Производительность", "Team Lead", "AI tooling"],
+		outcomes: ["2 мин → 30 сек загрузка", "30 сек → 5 секунд рендер", "Команда из 3 инженеров"],
 	},
 	{
 		id: "gridcentr",
@@ -55,6 +61,8 @@ export const projects: Project[] = [
 		stack: ["React", "TypeScript", "FSD", "Jest", "Vitest", "REST API"],
 		internal: true,
 		experienceId: "sbertech",
+		categories: ["Архитектура", "Производительность"],
+		outcomes: ["Покрытие тестами >90%", "Легаси → FSD"],
 	},
 	{
 		id: "tsa",
@@ -72,15 +80,17 @@ export const projects: Project[] = [
 		stack: ["React", "TypeScript", "FSD", "REST API", "Jest", "Vitest"],
 		internal: true,
 		experienceId: "sbertech",
+		categories: ["Архитектура", "Team Lead"],
+		outcomes: ["Легаси → FSD", "Покрытие тестами >90%"],
 	},
 	{
 		id: "yoko",
 		name: "Криптотрейдинг-платформа",
 		company: "YOKO-TRADE",
 		description:
-			"Fullstack-платформа для криптотрейдинга: архитектура с нуля, интеграция торговых ботов, платёжные системы, real-time графики.",
+			"Frontend-first разработка криптотрейдинг-платформы: интерфейс, интеграционные контракты, торговые боты, платежи и real-time данные. Backend-части создавались в AI-assisted процессе.",
 		details: [
-			"Спроектировал и реализовал fullstack-архитектуру: React-фронтенд + NestJS бэкенд + PostgreSQL + WebSockets",
+			"Спроектировал взаимодействие React-клиента, NestJS API, PostgreSQL и WebSocket-каналов; backend-реализацию проверял через контракты и пользовательские сценарии",
 			"Разработал схемы БД (PostgreSQL), настроил миграции через TypeORM, уровни доступа и систему ролей",
 			"Сформировал контракты взаимодействия между бэкендом и вспомогательными модулями (торговые боты) через REST API и WebSocket-каналы",
 			"Интегрировал криптовалютные платёжные системы (USDT, BTC) — обработка транзакций, вебхуки, верификация",
@@ -90,9 +100,10 @@ export const projects: Project[] = [
 			"Формировал задачи для DevOps-команды: инфраструктура, мониторинг, алертинг",
 		],
 		stack: ["React", "NestJS", "PostgreSQL", "TypeORM", "ChartJs", "JWT", "WebSockets", "Telegram Bot API", "Docker", "GitHub Actions"],
-		repo: "https://github.com/SosnovichIvan",
-		internal: false,
+		internal: true,
 		experienceId: "yoko-trade",
+		categories: ["AI-assisted fullstack", "Архитектура"],
+		outcomes: ["Продукт с нуля", "Real-time данные", "Платежи и CI/CD"],
 	},
 	{
 		id: "momentum",
@@ -108,6 +119,8 @@ export const projects: Project[] = [
 		stack: ["React", "Redux Toolkit", "TypeScript", "BFF", "REST API", "Jest", "Cypress"],
 		internal: true,
 		experienceId: "sber",
+		categories: ["Архитектура", "Производительность"],
+		outcomes: ["BFF-агрегация", "Данные на клиенте −2–3 раза"],
 	},
 	{
 		id: "reports",
@@ -123,6 +136,8 @@ export const projects: Project[] = [
 		stack: ["React", "Redux", "TypeScript", "Jest", "REST API"],
 		internal: true,
 		experienceId: "sber",
+		categories: ["Производительность"],
+		outcomes: ["Виртуализация дерева", "Многоуровневая UI-логика"],
 	},
 	{
 		id: "sbol",
@@ -138,6 +153,8 @@ export const projects: Project[] = [
 		stack: ["React", "Redux Toolkit", "TypeScript", "REST API", "Jest"],
 		internal: true,
 		experienceId: "sber",
+		categories: ["Архитектура", "Team Lead"],
+		outcomes: ["API-контракты", "Планирование спринтов"],
 	},
 	{
 		id: "efs",
@@ -153,5 +170,7 @@ export const projects: Project[] = [
 		stack: ["React", "Redux Toolkit", "TypeScript", "REST API"],
 		internal: true,
 		experienceId: "sber",
+		categories: ["Архитектура", "Производительность"],
+		outcomes: ["Аудит производительности", "Кросс-командный backlog"],
 	},
 ];

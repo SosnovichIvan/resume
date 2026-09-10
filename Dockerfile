@@ -32,6 +32,10 @@ RUN npm run build
 FROM node:22-alpine AS runner
 WORKDIR /app
 
+LABEL org.opencontainers.image.title="resume-site" \
+      org.opencontainers.image.source="https://github.com/SosnovichIvan/resume" \
+      ru.sosnovich.resume.managed="true"
+
 # Запуск от непривилегированного пользователя (security best practice)
 RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs

@@ -26,7 +26,7 @@ describe("navigation and layout", () => {
 	it("builds the root layout and exposes the updated metadata", () => {
 		const layout = RootLayout({ children: <main>Content</main> });
 		expect(layout.type).toBe("html");
-		expect(metadata.title).toBe("Соснович Иван — Senior Frontend / Fullstack Engineer");
+		expect(metadata.title).toBe("Соснович Иван — Senior Frontend Engineer / Team Lead · AI Engineering");
 	});
 
 	it("renders the animated logo and header actions", async () => {
@@ -54,7 +54,7 @@ describe("navigation and layout", () => {
 		fireEvent.mouseDown(document.body);
 		expect(screen.getByRole("button", { name: "Открыть меню" })).toBeVisible();
 		await user.click(screen.getByRole("button", { name: "Открыть меню" }));
-		const projectLinks = screen.getAllByRole("link", { name: "Проекты" });
+		const projectLinks = screen.getAllByRole("link", { name: "Коммерческие кейсы" });
 		const mobileProjectLink = projectLinks[projectLinks.length - 1];
 		mobileProjectLink.addEventListener("click", (event) => event.preventDefault());
 		await user.click(mobileProjectLink);
