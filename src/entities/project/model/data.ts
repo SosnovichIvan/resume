@@ -47,7 +47,7 @@ export const projects: Project[] = [
 	},
 	{
 		id: "gridcentr",
-		name: "GridCentr",
+		name: "GridCenter",
 		company: "SberTech",
 		description:
 			"Система с адаптивным формированием форм на основе динамической схемы бэкенда. Перевод легаси-кода на FSD.",

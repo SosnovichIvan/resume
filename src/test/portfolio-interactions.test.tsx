@@ -74,12 +74,14 @@ describe("portfolio interactions", () => {
 
 	it("navigates between multiple benefit skills", async () => {
 		const user = userEvent.setup();
-		const skills = ["One", "Two"].map((name) => ({ name, description: `${name} description`, readmeUrl: `https://example.com/${name}`, statistics: { title: name, caption: "2 задачи", rows: [{ metric: "Total tokens", result: "−10%" }] } }));
+		const skills = ["One", "Two"].map((name, index) => ({ name, description: `${name} description`, readmeUrl: `https://example.com/${name}`, highlights: [{ value: `−${index + 1}0%`, label: "total tokens" }], statistics: { title: name, caption: "2 задачи", rows: [{ metric: "Output tokens", result: "−5%" }] } }));
 		render(<ProjectSkillCarousel skills={skills} projectName="Lab" />);
 		await user.click(screen.getByRole("button", { name: "Следующий skill" }));
 		expect(screen.getByRole("heading", { name: "Two" })).toBeVisible();
+		expect(screen.getByRole("group", { name: "Главные достижения Two" })).toHaveTextContent("−20%");
 		await user.click(screen.getByRole("button", { name: "Предыдущий skill" }));
 		expect(screen.getByRole("heading", { name: "One" })).toBeVisible();
+		expect(screen.getByRole("group", { name: "Главные достижения One" })).toHaveTextContent("−10%");
 	});
 
 	it("opens print flow from a direct link and button", async () => {
