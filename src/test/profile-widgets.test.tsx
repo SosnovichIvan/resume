@@ -8,8 +8,9 @@ import { Header } from "@/widgets/header/ui/Header";
 import { ThemeToggle } from "@/widgets/theme-toggle/ui/ThemeToggle";
 
 vi.mock("next/image", () => ({
-	default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { priority?: boolean }) => {
+	default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean }) => {
 		const imageProps = { ...props };
+		delete imageProps.fill;
 		delete imageProps.priority;
 		return createElement("img", imageProps);
 	},
@@ -21,16 +22,17 @@ describe("profile widgets", () => {
 		expect(screen.getByText("Соснович Иван")).toBeVisible();
 		expect(screen.getByText("Senior Frontend Engineer / Team Lead · AI Engineering")).toBeVisible();
 		expect(screen.queryByRole("link", { name: "Связаться" })).not.toBeInTheDocument();
-		expect(screen.getByText(/доставки backend-частей продукта/)).toBeVisible();
+		expect(screen.getByText(/архитектуру продукта с глубокой frontend-экспертизой/)).toBeVisible();
 		expect(screen.queryByText("16.01.1987")).not.toBeInTheDocument();
 		expect(screen.getByAltText("Фото Ивана Сосновича")).toBeVisible();
 	});
 
 	it("renders a transparent competence profile", () => {
 		render(<About />);
-		expect(screen.getByRole("heading", { name: "Frontend — основная экспертиза" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Backend с поддержкой AI" })).toBeVisible();
-		expect(screen.getByText("AI-assisted")).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Архитектура продукта" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Frontend-системы" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "AI-assisted engineering" })).toBeVisible();
+		expect(screen.getByText("AI tooling")).toBeVisible();
 	});
 
 	it("toggles and persists the theme", async () => {

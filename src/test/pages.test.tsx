@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, react/jsx-key */
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { createElement } from "react";
 import { describe, expect, it, vi } from "vitest";
 import ExperiencePage from "@/app/experience/page";
@@ -28,11 +28,14 @@ vi.mock("framer-motion", () => ({
 describe("portfolio pages", () => {
 	it("renders the home page sections", () => {
 		render(<HomePage />);
-		expect(screen.getByRole("heading", { name: "Соснович Иван" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Где я создаю наибольшую ценность" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: /Я нахожу, где интерфейс теряет секунды/ })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Где я приношу наибольшую пользу" })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "Ключевые кейсы" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Текущая роль" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Пишу о frontend-архитектуре" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Как росла зона ответственности" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Пишу о решениях, проверенных на практике" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Давайте обсудим, что мешает продукту развиваться быстрее" })).toBeVisible();
+		expect(screen.getByRole("link", { name: "Открыть проект arhDesign" })).toHaveAttribute("href", "/my-projects/arhdesign");
+		expect(screen.queryByRole("link", { name: "Подробнее" })).not.toBeInTheDocument();
 	});
 
 	it.each([
@@ -70,9 +73,15 @@ describe("portfolio pages", () => {
 		expect(screen.queryByRole("heading", { name: "Экраны проекта" })).not.toBeInTheDocument();
 		expect(screen.getByRole("heading", { name: "Skills с подтверждённой пользой" })).toBeVisible();
 		expect(screen.getByRole("link", { name: "Методика и README" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md");
-		expect(screen.getByRole("table", { name: "Статистика Execution State" })).toBeVisible();
+		const skillRegion = screen.getByRole("region", { name: "Полезные skills: Agent Skills Lab" });
+		expect(within(skillRegion).getByRole("group", { name: "Главные достижения Execution State" })).toBeVisible();
+		expect(within(skillRegion).getByText("−73,88%")).toBeVisible();
+		const statistics = within(skillRegion).getByRole("table", { name: "Статистика Execution State" });
+		expect(statistics).toBeVisible();
+		expect(within(statistics).queryByText("Total tokens")).not.toBeInTheDocument();
+		expect(within(statistics).queryByText("Время выполнения")).not.toBeInTheDocument();
 		expect(screen.getByText("0 против 2 296 689")).toBeVisible();
 		expect(screen.queryByRole("button", { name: "Предыдущий skill" })).not.toBeInTheDocument();
-		expect(screen.getAllByText("trade-off").length).toBeGreaterThan(0);
+		expect(within(skillRegion).getByText(/trade-off по времени/)).toBeVisible();
 	});
 });

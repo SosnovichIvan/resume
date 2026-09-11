@@ -4,10 +4,10 @@ import { ContactDropdown } from "@/widgets/contact-dropdown/ui/ContactDropdown";
 import { ThemeToggle } from "@/widgets/theme-toggle/ui/ThemeToggle";
 
 const containerClass =
-	"flex items-center rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800";
+	"flex items-center rounded-xl border border-surface-border bg-[#fffdf9] shadow-sm dark:border-surface-border-dark dark:bg-surface-card";
 
 const iconButtonClass =
-	"flex h-10 w-10 cursor-pointer shrink-0 items-center justify-center text-slate-600 transition-colors hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:text-slate-300 dark:hover:text-brand-300 dark:focus-visible:ring-offset-slate-900";
+	"focus-ring flex h-11 w-11 cursor-pointer shrink-0 items-center justify-center text-slate-600 transition-colors hover:text-accent-600 dark:text-slate-300 dark:hover:text-brand-300";
 
 export function HeaderActions() {
 	return (

@@ -55,7 +55,7 @@ export function ContactDropdown({ bare = false }: ContactDropdownProps) {
 				title="Связаться"
 				className={
 					bare
-						? "flex h-10 w-10 cursor-pointer shrink-0 items-center justify-center text-brand-600 transition-colors hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:text-brand-300 dark:hover:text-brand-200 dark:focus-visible:ring-offset-slate-900"
+						? "focus-ring flex h-11 w-11 cursor-pointer shrink-0 items-center justify-center text-accent-600 transition-colors hover:text-accent-500 dark:text-brand-300 dark:hover:text-brand-200"
 						: "inline-flex cursor-pointer items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
 				}
 			>
@@ -69,7 +69,7 @@ export function ContactDropdown({ bare = false }: ContactDropdownProps) {
 			</button>
 
 			{open && (
-				<div className="absolute right-0 z-20 mt-2 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-800">
+				<div className="absolute right-0 z-20 mt-2 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-surface-border bg-[#fffdf9] shadow-xl dark:border-surface-border-dark dark:bg-surface-card">
 					{profile.contacts.map((c) => (
 						<div
 							key={c.label}

@@ -65,26 +65,26 @@ export function Navigation() {
 	const close = () => setOpen(false);
 
 	return (
-		<nav className="sticky top-0 z-40 border-b border-surface-border bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
-			<div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+		<nav className="sticky top-0 z-40 border-b border-surface-border bg-[#f3efe7]/90 backdrop-blur-xl dark:border-surface-border-dark dark:bg-surface-dark/90">
+			<div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
 				<Link
 					href="/"
 					aria-label="Соснович Иван — на главную"
-					className="inline-flex items-center text-brand-600 transition-colors hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:text-brand-300 dark:hover:text-brand-200 dark:focus-visible:ring-offset-slate-900"
+					className="focus-ring inline-flex items-center text-accent-600 transition-colors hover:text-accent-500 dark:text-brand-300 dark:hover:text-brand-200"
 				>
 					<Logo />
 				</Link>
 
 				{/* Десктопная навигация (md и выше) */}
-				<ul className="hidden items-center gap-1 md:flex md:flex-wrap md:justify-end">
+				<ul className="hidden items-center gap-1 rounded-xl border border-surface-border bg-[#fffdf9]/70 p-1 md:flex md:flex-wrap md:justify-end dark:border-surface-border-dark dark:bg-surface-card/70">
 					{links.map((link) => (
 						<li key={link.href}>
 							<Link
 								href={link.href}
-								className={`inline-flex items-center whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
+								className={`focus-ring inline-flex min-h-9 items-center whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
 									isActive(link.href, pathname)
-										? "bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300"
-										: "text-ink-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+										? "bg-accent-50 text-accent-600 dark:bg-brand-950 dark:text-brand-300"
+										: "text-ink-600 hover:bg-[#eee8de] dark:text-slate-300 dark:hover:bg-[#192228]"
 								}`}
 							>
 								{link.label}
@@ -103,7 +103,7 @@ export function Navigation() {
 						onClick={() => setOpen((o) => !o)}
 						aria-label={open ? "Закрыть меню" : "Открыть меню"}
 						aria-expanded={open}
-						className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:border-brand-400 hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 md:hidden dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-brand-500 dark:hover:text-brand-300 dark:focus-visible:ring-offset-slate-900"
+						className="focus-ring flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-surface-border bg-[#fffdf9] text-slate-600 transition-colors hover:border-accent-400 hover:text-accent-600 md:hidden dark:border-surface-border-dark dark:bg-surface-card dark:text-slate-300 dark:hover:border-brand-500 dark:hover:text-brand-300"
 					>
 						<Icon name={open ? "close" : "menu"} className="h-5 w-5" />
 					</button>
@@ -119,7 +119,7 @@ export function Navigation() {
 						animate={{ height: "auto", opacity: 1 }}
 						exit={{ height: 0, opacity: 0 }}
 						transition={{ duration: 0.25, ease: "easeOut" }}
-						className="absolute inset-x-0 top-full z-50 overflow-hidden rounded-b-2xl border-b border-surface-border bg-white/95 shadow-2xl backdrop-blur-md md:hidden dark:border-slate-800 dark:bg-slate-900/95"
+						className="absolute inset-x-0 top-full z-50 overflow-hidden rounded-b-2xl border-b border-surface-border bg-[#f8f4ed]/95 shadow-2xl backdrop-blur-md md:hidden dark:border-surface-border-dark dark:bg-surface-dark/95"
 					>
 						<ul className="max-h-[calc(100vh-5rem)] space-y-1 overflow-y-auto px-4 py-3">
 							{links.map((link, i) => (
@@ -132,10 +132,10 @@ export function Navigation() {
 									<Link
 										href={link.href}
 										onClick={close}
-										className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
+										className={`focus-ring flex min-h-11 items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
 											isActive(link.href, pathname)
-												? "bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300"
-												: "text-ink-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+												? "bg-accent-50 text-accent-600 dark:bg-brand-950 dark:text-brand-300"
+												: "text-ink-600 hover:bg-[#eee8de] dark:text-slate-300 dark:hover:bg-[#192228]"
 										}`}
 									>
 										{link.label}

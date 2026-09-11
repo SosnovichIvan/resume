@@ -18,6 +18,7 @@ export interface PersonalProject {
 		name: string;
 		description: string;
 		readmeUrl: string;
+		highlights: Array<{ value: string; label: string; tone?: "positive" | "tradeoff" }>;
 		statistics: { title: string; caption?: string; rows: Array<{ metric: string; result: string }> };
 	}>;
 }
@@ -53,16 +54,18 @@ export const personalProjects: PersonalProject[] = [
 			name: "Execution State",
 			description: "Ведёт компактное проверяемое состояние длинной агентной задачи, снижая повторную передачу истории между контекстами.",
 			readmeUrl: "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md",
+			highlights: [
+				{ value: "−73,88%", label: "total tokens" },
+				{ value: "16/16", label: "задач завершено" },
+				{ value: "+76,14%", label: "trade-off по времени", tone: "tradeoff" },
+			],
 			statistics: {
-				title: "Ключевые результаты candidate против AI-only",
+				title: "Дополнительные результаты candidate против AI-only",
 				caption: "16 задач",
 				rows: [
-				{ metric: "Total tokens", result: "−73,88%" },
-				{ metric: "Output tokens", result: "−59,60%" },
-				{ metric: "Uncached input", result: "−15,82%" },
-				{ metric: "Время выполнения", result: "+76,14%" },
-				{ metric: "Repair tokens", result: "0 против 2 296 689" },
-				{ metric: "Завершено задач", result: "16/16 у candidate и AI-only" },
+					{ metric: "Output tokens", result: "−59,60%" },
+					{ metric: "Uncached input", result: "−15,82%" },
+					{ metric: "Repair tokens", result: "0 против 2 296 689" },
 			],
 			},
 		}],
