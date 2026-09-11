@@ -44,7 +44,7 @@ src/
 
 Данные резюме находятся в `src/entities/*/model/data.ts`.
 
-Описание текущего продуктового изменения, принятых решений и критериев готовности находится в [`changes/frontend-first-portfolio/CHANGE.md`](changes/frontend-first-portfolio/CHANGE.md).
+Описание текущего визуального редизайна, принятых решений и критериев готовности находится в [`changes/portfolio-visual-redesign/CHANGE.md`](changes/portfolio-visual-redesign/CHANGE.md). Предыдущая итерация позиционирования сохранена в [`changes/frontend-first-portfolio/CHANGE.md`](changes/frontend-first-portfolio/CHANGE.md).
 
 ## Docker
 
