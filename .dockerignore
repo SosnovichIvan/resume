@@ -33,3 +33,11 @@ GIGACODE.md
 # Кэши и временные файлы
 .DS_Store
 *.tsbuildinfo
+
+# Local review and browser artifacts
+.next-dev/
+playwright-report/
+test-results/
+tmp/
+output/
+coverage/

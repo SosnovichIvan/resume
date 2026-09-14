@@ -40,6 +40,8 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+	// Serve local portfolio assets directly; the container filesystem is read-only.
+	images: { unoptimized: true },
 	output: "standalone",
 	// Не позволяем параллельному `next build` перезаписать чанки работающего dev-сервера.
 	distDir: isDevelopment ? ".next-dev" : ".next",

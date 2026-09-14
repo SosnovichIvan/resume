@@ -11,19 +11,19 @@ export function Header() {
 			<div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-400 to-transparent dark:via-brand-400" />
 			<div aria-hidden="true" className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full bg-accent-400/10 blur-3xl dark:bg-brand-400/10" />
 
-			<div className="relative grid lg:grid-cols-[1.3fr_0.7fr]">
+			<div className="relative grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr]">
 				<div className="flex flex-col justify-between p-6 sm:p-9 lg:p-12">
 					<div>
 						<div className="mb-6 flex flex-wrap items-center gap-3">
 							<span className="eyebrow inline-flex items-center gap-2 text-success-600 dark:text-brand-300"><span className="h-2 w-2 animate-pulse rounded-full bg-success-500" />{profile.availability}</span>
 							<span className="eyebrow text-slate-500 dark:text-slate-400">Frontend-first · AI-assisted</span>
 						</div>
-						<h1 className="max-w-3xl text-[clamp(2.55rem,7vw,5.4rem)] font-extrabold leading-[0.96] tracking-[-0.065em] text-slate-950 dark:text-white">Я нахожу, где интерфейс теряет секунды — и <span className="text-accent-500 dark:text-brand-300">возвращаю их.</span></h1>
+						<h1 className="max-w-3xl text-[clamp(2rem,10vw,3.8rem)] font-extrabold leading-[0.96] tracking-[-0.065em] text-slate-950 dark:text-white">{profile.headline}</h1>
 						<p className="mt-7 max-w-2xl text-base font-medium leading-relaxed text-slate-600 sm:text-lg dark:text-slate-300">{profile.tagline}</p>
 					</div>
 					<div className="mt-8 flex flex-wrap items-center gap-3">
 						<Link href="#cases" className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 dark:bg-brand-300 dark:text-brand-950">Ключевые кейсы <Icon name="arrow-right" className="h-4 w-4" /></Link>
-						<Link href="/experience#print" className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-slate-600 transition-colors hover:bg-accent-50 hover:text-accent-600 dark:text-slate-300 dark:hover:bg-brand-950 dark:hover:text-brand-300"><Icon name="article" className="h-4 w-4" />Версия для PDF</Link>
+						<a href="/resume.pdf" download="Соснович Иван Владимирович.pdf" className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-slate-600 transition-colors hover:bg-accent-50 hover:text-accent-600 dark:text-slate-300 dark:hover:bg-brand-950 dark:hover:text-brand-300"><Icon name="article" className="h-4 w-4" />Скачать резюме PDF</a>
 					</div>
 				</div>
 

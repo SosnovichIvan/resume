@@ -4,12 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { profile } from "@/entities/profile/model/data";
 import { Icon } from "@/shared/ui";
 
-const contactActions: Record<string, { icon: string; action: (v: string) => void }> = {
-	Email: { icon: "mail", action: (v) => window.location.assign(`mailto:${v}`) },
-	Телефон: { icon: "phone", action: (v) => (window.location.href = `tel:${v.replace(/[^\d+]/g, "")}`) },
-	Telegram: { icon: "telegram", action: (v) => window.open(`https://t.me/${v.replace(/^@/, "")}`, "_blank") },
-	GitHub: { icon: "github", action: (v) => window.open(`https://github.com/${v}`, "_blank") },
-};
 
 interface ContactDropdownProps {
 	/** Рендерить кнопку без собственного фона (для встраивания в группу действий). */
@@ -20,6 +14,10 @@ export function ContactDropdown({ bare = false }: ContactDropdownProps) {
 	const [open, setOpen] = useState(false);
 	const [copied, setCopied] = useState<string | null>(null);
 	const ref = useRef<HTMLDivElement>(null);
+ const triggerRef = useRef<HTMLButtonElement>(null);
+ const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+ const [error, setError] = useState(false);
+ useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
 	useEffect(() => {
 		if (!open) return;
@@ -28,8 +26,10 @@ export function ContactDropdown({ bare = false }: ContactDropdownProps) {
 				setOpen(false);
 			}
 		};
-		document.addEventListener("mousedown", onPointerDown);
-		return () => document.removeEventListener("mousedown", onPointerDown);
+		const onKeyDown = (e: KeyboardEvent) => { if (e.key === "Escape") { setOpen(false); triggerRef.current?.focus(); } };
+ document.addEventListener("mousedown", onPointerDown);
+ document.addEventListener("keydown", onKeyDown);
+ return () => { document.removeEventListener("mousedown", onPointerDown); document.removeEventListener("keydown", onKeyDown); };
 	}, [open]);
 
 	useEffect(() => {
@@ -40,15 +40,19 @@ export function ContactDropdown({ bare = false }: ContactDropdownProps) {
 		try {
 			await navigator.clipboard.writeText(value);
 			setCopied(label);
-			setTimeout(() => setCopied(null), 1500);
+ setError(false);
+ if (timerRef.current) clearTimeout(timerRef.current);
+ timerRef.current = setTimeout(() => setCopied(null), 1500);
 		} catch {
-			/* clipboard unavailable */
+			setError(true);
 		}
 	};
 
 	return (
 		<div ref={ref} className="relative">
 			<button
+ ref={triggerRef}
+ type="button"
 				onClick={() => setOpen((o) => !o)}
 				aria-label="Связаться"
 				aria-expanded={open}
@@ -70,7 +74,8 @@ export function ContactDropdown({ bare = false }: ContactDropdownProps) {
 
 			{open && (
 				<div className="absolute right-0 z-20 mt-2 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-surface-border bg-[#fffdf9] shadow-xl dark:border-surface-border-dark dark:bg-surface-card">
-					{profile.contacts.map((c) => (
+					<p role="status" className={error ? "p-3 text-sm text-red-700 dark:text-red-300" : "sr-only"}>{error ? "Не удалось скопировать. Выделите и скопируйте контакт вручную." : copied ? `${copied} скопирован` : ""}</p>
+ {profile.contacts.map((c) => (
 						<div
 							key={c.label}
 							className="flex items-center gap-3 border-b border-slate-100 px-4 py-3 last:border-0 dark:border-slate-700"
@@ -80,13 +85,15 @@ export function ContactDropdown({ bare = false }: ContactDropdownProps) {
 							</span>
 							<div className="min-w-0 flex-1">
 								<p className="text-xs text-slate-400 dark:text-slate-500">{c.label}</p>
-								<button
-									onClick={() => contactActions[c.label]?.action(c.value)}
+								<a
+ href={c.href}
+ target={c.href.startsWith("https:") ? "_blank" : undefined}
+ rel={c.href.startsWith("https:") ? "noopener noreferrer" : undefined}
 									title={c.value}
 									className="block max-w-full cursor-pointer truncate text-sm font-medium text-slate-700 transition-colors hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-slate-200 dark:hover:text-brand-300"
 								>
 									{c.value}
-								</button>
+								</a>
 							</div>
 							<button
 								onClick={() => copy(c.label, c.value)}

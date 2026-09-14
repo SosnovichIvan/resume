@@ -10,7 +10,7 @@ export function Badge({ children, variant = "accent" }: BadgeProps) {
 			: "bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700";
 	return (
 		<span
-			className={`inline-flex items-center whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium ${styles}`}
+			className={`inline-flex items-center max-w-full whitespace-normal break-words rounded-full px-3 py-1 text-xs font-medium ${styles}`}
 		>
 			{children}
 		</span>

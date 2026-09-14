@@ -28,7 +28,7 @@ vi.mock("framer-motion", () => ({
 describe("portfolio pages", () => {
 	it("renders the home page sections", () => {
 		render(<HomePage />);
-		expect(screen.getByRole("heading", { name: /Я нахожу, где интерфейс теряет секунды/ })).toBeVisible();
+		expect(screen.getByRole("heading", { name: /Делаю сложные интерфейсы быстрее/ })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "Где я приношу наибольшую пользу" })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "Ключевые кейсы" })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "Как росла зона ответственности" })).toBeVisible();
