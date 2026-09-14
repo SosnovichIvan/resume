@@ -84,6 +84,20 @@ describe("portfolio interactions", () => {
 		expect(screen.getByRole("group", { name: "Главные достижения One" })).toHaveTextContent("−10%");
 	});
 
+	it("shows a skill without unverified metrics", async () => {
+		const user = userEvent.setup();
+		const skills = [
+			{ name: "Measured", description: "Measured description", readmeUrl: "https://example.com/measured", highlights: [{ value: "−10%", label: "tokens" }], statistics: { title: "Measured", rows: [{ metric: "Tokens", result: "−10%" }] } },
+			{ name: "Guidance", description: "Guidance description", readmeUrl: "https://example.com/guidance", highlights: [] },
+		];
+		render(<ProjectSkillCarousel skills={skills} projectName="Lab" />);
+		await user.click(screen.getByRole("button", { name: "Следующий skill" }));
+		expect(screen.getByRole("heading", { name: "Guidance" })).toBeVisible();
+		expect(screen.getByText("Guidance description")).toBeVisible();
+		expect(screen.queryByRole("group", { name: "Главные достижения Guidance" })).not.toBeInTheDocument();
+		expect(screen.queryByRole("table", { name: "Статистика Guidance" })).not.toBeInTheDocument();
+	});
+
 	it("opens print flow from a direct link and button", async () => {
 		const print = vi.spyOn(window, "print").mockImplementation(() => undefined);
 		window.history.replaceState({}, "", "/experience#print");
