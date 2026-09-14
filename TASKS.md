@@ -19,7 +19,7 @@
 - [x] Вёрстка проверена на desktop/mobile в светлой и тёмной теме.
 
 ## Завершение интеграции
-- [ ] Проверить CI на GitHub после публикации рабочей ветки.
+- [x] CI на GitHub прошёл полностью для коммита 096fb5b: check, coverage, build, 26 E2E-проверок и Docker healthcheck. Результат: https://github.com/SosnovichIvan/resume/actions/runs/34859207972
 
 ## Отложено
 - [ ] Интеграция в develop/main и публичный релиз.
