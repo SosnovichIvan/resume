@@ -42,8 +42,9 @@ export default function RootLayout({
 				<script dangerouslySetInnerHTML={{ __html: themeScript }} />
 			</head>
 			<body>
+				<a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:p-3 focus:text-slate-900">К содержимому</a>
 				<Navigation />
-				{children}
+				<main id="main-content" tabIndex={-1}>{children}</main>
 			</body>
 		</html>
 	);

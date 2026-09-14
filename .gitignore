@@ -40,3 +40,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local review and browser artifacts
+.next-dev/
+playwright-report/
+test-results/
+tmp/
+output/

@@ -10,9 +10,9 @@ import { About } from "@/widgets/about/ui/About";
 import { Header } from "@/widgets/header/ui/Header";
 
 const impactMetrics = [
-	{ label: "Загрузка приложения", before: "2 минуты", after: "30 секунд", width: "25%" },
-	{ label: "Рендер больших списков", before: "30 секунд", after: "5 секунд", width: "17%" },
-	{ label: "Нагрузка интерфейса", before: "real-time данные", after: "5000+ объектов", width: "82%" },
+	{ label: "Загрузка приложения", before: "2 минуты", after: "30 секунд" },
+	{ label: "Рендер больших списков", before: "30 секунд", after: "5 секунд" },
+	{ label: "Нагрузка интерфейса", before: "одновременно, с обновлением в реальном времени", after: "5000+ объектов" },
 ];
 
 const experienceFocus: Record<string, string> = {
@@ -44,7 +44,7 @@ export default function HomePage() {
 						<SectionHeader icon="briefcase" title="Ключевые кейсы" viewAllHref="/projects" viewAllLabel="Все коммерческие кейсы" />
 
 						<Card className="mb-10 overflow-hidden p-0">
-							<div className="grid lg:grid-cols-[1.08fr_0.92fr]">
+							<div className="grid grid-cols-1 lg:grid-cols-[1.08fr_0.92fr]">
 								<div className="p-6 sm:p-8 lg:p-10">
 									<div className="flex flex-wrap items-center gap-3"><span className="eyebrow text-accent-600 dark:text-brand-300">{commercialCase.company}</span><span className="h-1 w-1 rounded-full bg-slate-400" /><span className="eyebrow text-slate-500 dark:text-slate-400">Architecture · Performance · Team Lead</span></div>
 									<h3 className="mt-5 max-w-xl break-words text-3xl font-extrabold leading-[1.04] tracking-[-0.045em] text-slate-950 sm:text-5xl sm:tracking-[-0.055em] dark:text-white">{commercialCase.name} — производительность сложного интерфейса</h3>
@@ -55,10 +55,14 @@ export default function HomePage() {
 
 								<div className="border-t border-surface-border bg-[#f7f2ea] p-6 sm:p-8 lg:border-l lg:border-t-0 dark:border-surface-border-dark dark:bg-[#0d1418]">
 									<div className="mb-7 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between"><span className="eyebrow break-all text-slate-500 dark:text-slate-400">impact.snapshot</span><span className="font-mono text-[11px] text-success-600 dark:text-brand-300">verified outcomes</span></div>
-									<div className="space-y-7">{impactMetrics.map((metric) => <div key={metric.label}>
-										<div className="mb-2 flex items-end justify-between gap-4"><div><p className="eyebrow text-slate-500 dark:text-slate-400">{metric.label}</p><p className="mt-1 text-xs text-slate-400">{metric.before}</p></div><strong className="font-mono text-sm text-accent-600 dark:text-brand-300">{metric.after}</strong></div>
-										<div className="h-2 overflow-hidden rounded-full bg-surface-track dark:bg-surface-track-dark"><div className="h-full rounded-full bg-accent-500 dark:bg-brand-300" style={{ width: metric.width }} /></div>
-									</div>)}</div>
+									<dl className="divide-y divide-surface-border dark:divide-surface-border-dark">{impactMetrics.map((metric, index) => <div key={metric.label} className="py-5 first:pt-0 last:pb-0">
+ <dt className="text-sm text-slate-600 dark:text-slate-400">{metric.label}</dt>
+ <dd className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+ {index < 2 && <span className="text-sm text-slate-500 dark:text-slate-400">{metric.before} <span aria-hidden="true">→</span><span className="sr-only">сокращено до</span></span>}
+ <strong className="font-mono text-xl text-accent-600 dark:text-brand-300">{metric.after}</strong>
+ {index === 2 && <span className="text-sm text-slate-500 dark:text-slate-400">{metric.before}</span>}
+ </dd>
+ </div>)}</dl>
 								</div>
 							</div>
 						</Card>
@@ -69,10 +73,10 @@ export default function HomePage() {
 				</FadeInSection>
 
 				<FadeInSection delay={0.05}>
-					<section className="mb-16 overflow-hidden rounded-[1.5rem] bg-accent-500 text-white dark:bg-brand-300 dark:text-brand-950">
+					<section className="mb-16 overflow-hidden rounded-[1.5rem] border border-surface-border bg-[#fffdf9] text-slate-950 dark:border-surface-border-dark dark:bg-surface-card dark:text-white">
 						<div className="grid gap-8 p-7 sm:p-10 lg:grid-cols-[1.25fr_0.75fr] lg:items-end">
-							<div><p className="eyebrow opacity-75">03 · публикации · {article.topic}</p><h2 className="mt-3 max-w-2xl text-3xl font-extrabold leading-tight tracking-[-0.045em] sm:text-4xl">Пишу о решениях, проверенных на практике</h2><p className="mt-4 max-w-2xl text-base font-bold leading-snug">Монолит больше не приговор</p><p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/80 dark:text-brand-950/75">{article.takeaway}</p></div>
-							<div className="lg:text-right"><a href={article.href} target="_blank" rel="noopener noreferrer" className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-accent-600 transition-transform hover:-translate-y-0.5 dark:bg-brand-950 dark:text-brand-100">Читать на Хабре <Icon name="external-link" className="h-4 w-4" /></a><Link href="/publications" className="focus-ring ml-2 inline-flex min-h-11 items-center rounded-xl px-3 py-3 text-sm font-semibold">Все статьи</Link></div>
+							<div><p className="eyebrow text-accent-600 dark:text-brand-300">03 · публикации · {article.topic}</p><h2 className="mt-3 max-w-2xl text-3xl font-extrabold leading-tight tracking-[-0.045em] sm:text-4xl">Пишу о решениях, проверенных на практике</h2><p className="mt-4 max-w-2xl text-base font-bold leading-snug">Монолит больше не приговор</p><p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">{article.takeaway}</p></div>
+							<div className="lg:text-right"><a href={article.href} target="_blank" rel="noopener noreferrer" className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-xl border border-surface-border px-5 py-3 text-sm font-bold text-accent-600 transition-colors hover:bg-accent-50 dark:border-surface-border-dark dark:text-brand-300 dark:hover:bg-brand-950">Читать на Хабре <Icon name="external-link" className="h-4 w-4" /></a><Link href="/publications" className="focus-ring ml-2 inline-flex min-h-11 items-center rounded-xl px-3 py-3 text-sm font-semibold">Все статьи</Link></div>
 						</div>
 					</section>
 				</FadeInSection>

@@ -31,17 +31,18 @@ describe("navigation and layout", () => {
 
 	it("renders the animated logo and header actions", async () => {
 		render(<><Logo className="brand-logo" /><HeaderActions /></>);
-		expect(document.querySelector("svg.brand-logo")).toBeInTheDocument();
+		expect(document.querySelector(".brand-logo img")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Связаться" })).toBeVisible();
 		expect(await screen.findByRole("button", { name: /включить .* тему/i })).toBeVisible();
 	});
+
 
 	it("opens and closes mobile navigation by link and Escape", async () => {
 		const user = userEvent.setup();
 		render(<Navigation />);
 		const toggle = screen.getByRole("button", { name: "Открыть меню" });
 		await user.click(toggle);
-		expect(document.body.style.overflow).toBe("hidden");
+		expect(document.documentElement.style.overflow).toBe("hidden");
 		expect(screen.getByRole("button", { name: "Закрыть меню" })).toBeVisible();
 		fireEvent.keyDown(document, { key: "Escape" });
 		expect(screen.getByRole("button", { name: "Открыть меню" })).toBeVisible();

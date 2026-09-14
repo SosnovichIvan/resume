@@ -92,3 +92,30 @@ PR из `develop` в `main` нельзя создавать до ручной п
 
 Найденный блокирующий дефект сначала исправляется в `develop`; только затем
 можно открывать PR в `main`.
+
+### PDF и общие данные
+
+Сайт и скачиваемое резюме используют `src/entities/*/model/data.json`.
+После изменения данных выполните `npm run pdf` (Python 3.12+, ReportLab и
+Pillow; Arial на macOS или DejaVu Sans на Linux). Другой Python можно указать
+через `RESUME_PYTHON`. Генератор обновляет `public/resume.pdf` и
+`scripts/resume-pdf-manifest.json`. `npm run check:pdf` проверяет соответствие
+PDF исходным данным; эта проверка также входит в `npm run check` и CI.
+Индексы `pdfAchievementIndices` и `pdfDetailIndices` выбирают пункты для
+компактной версии резюме, не дублируя текст.
+
+### Логотип
+
+`public/logo-loop.svg` — выбранный знак с циклом сборки 5 секунд,
+`public/logo-static.svg` — статичный вариант, `src/app/icon.svg` — иконка вкладки.
+Кнопок управления анимацией нет. При `prefers-reduced-motion`
+анимация отключается внутри SVG автоматически. Внешних зависимостей на
+каталог с дизайнерскими исходниками нет.
+
+### Дополнительные проверки
+
+`npm run check` запускает линтер, TypeScript, компонентные тесты и проверку PDF.
+После `npm run build` команда `npm run test:e2e` проверяет desktop/mobile в
+Chromium, включая маршруты личных проектов, скачивание PDF и управление
+анимацией. `Site checks` запускается для веток и PR. Публикация рабочей ветки
+не запускает production: отдельный Deploy release реагирует только на теги `v*`.
