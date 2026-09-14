@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
 import { Icon, Logo } from "@/shared/ui";
 import { HeaderActions } from "@/widgets/header-actions/ui/HeaderActions";
 
@@ -51,17 +51,19 @@ export function Navigation() {
 		};
 	}, [open]);
 
-	// Блокировать прокрутку страницы, пока меню открыто
-	useEffect(() => {
-		if (open) {
-			document.body.style.overflow = "hidden";
-		} else {
-			document.body.style.overflow = "";
-		}
-		return () => {
-			document.body.style.overflow = "";
-		};
-	}, [open]);
+ // Lock the document without turning body into a new sticky containing block.
+ useEffect(() => {
+  if (!open) return;
+  const root = document.documentElement;
+  const previousRoot = root.style.overflow;
+  root.style.overflow = "hidden";
+  const closeOnDesktop = () => { if (window.innerWidth >= 768) setOpen(false); };
+  window.addEventListener("resize", closeOnDesktop);
+  return () => {
+   root.style.overflow = previousRoot;
+   window.removeEventListener("resize", closeOnDesktop);
+  };
+ }, [open]);
 
 	const close = () => setOpen(false);
 
@@ -107,6 +109,7 @@ export function Navigation() {
 						onClick={() => setOpen((o) => !o)}
 						aria-label={open ? "Закрыть меню" : "Открыть меню"}
 						aria-expanded={open}
+ aria-controls="mobile-navigation"
 						className="focus-ring flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-surface-border bg-[#fffdf9] text-slate-600 transition-colors hover:border-accent-400 hover:text-accent-600 md:hidden dark:border-surface-border-dark dark:bg-surface-card dark:text-slate-300 dark:hover:border-brand-500 dark:hover:text-brand-300"
 					>
 						<Icon name={open ? "close" : "menu"} className="h-5 w-5" />
@@ -114,45 +117,21 @@ export function Navigation() {
 				</div>
 			</div>
 
-			{/* Мобильное меню-оверлей (полупрозрачное, поверх контента, не сдвигает страницу) */}
-			<AnimatePresence>
-				{open && (
-					<motion.div
-						ref={panelRef}
-						initial={{ height: 0, opacity: 0 }}
-						animate={{ height: "auto", opacity: 1 }}
-						exit={{ height: 0, opacity: 0 }}
-						transition={{ duration: 0.25, ease: "easeOut" }}
-						className="absolute inset-x-0 top-full z-50 overflow-hidden rounded-b-2xl border-b border-surface-border bg-[#f8f4ed]/95 shadow-2xl backdrop-blur-md md:hidden dark:border-surface-border-dark dark:bg-surface-dark/95"
-					>
-						<ul className="max-h-[calc(100vh-5rem)] space-y-1 overflow-y-auto px-4 py-3">
-							{links.map((link, i) => (
-								<motion.li
-									key={link.href}
-									initial={{ opacity: 0, x: -8 }}
-									animate={{ opacity: 1, x: 0 }}
-									transition={{ duration: 0.2, delay: i * 0.04 }}
-								>
-									<Link
-										href={link.href}
-										onClick={close}
-										className={`focus-ring flex min-h-11 items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-											isActive(link.href, pathname)
-												? "bg-accent-50 text-accent-600 dark:bg-brand-950 dark:text-brand-300"
-												: "text-ink-600 hover:bg-[#eee8de] dark:text-slate-300 dark:hover:bg-[#192228]"
-										}`}
-									>
-										{link.label}
-										{isActive(link.href, pathname) && (
-											<Icon name="arrow-right" className="h-4 w-4" />
-										)}
-									</Link>
-								</motion.li>
-							))}
-						</ul>
-					</motion.div>
-				)}
-			</AnimatePresence>
-		</nav>
-	);
+   {/* Portal avoids the sticky header's backdrop-filter containing block. */}
+   {open && createPortal(
+    <div className="fixed inset-x-0 bottom-0 top-[71px] z-30 overflow-hidden md:hidden" id="mobile-navigation">
+     <div aria-hidden="true" onClick={close} className="absolute inset-0 bg-slate-950/20" />
+     <div ref={panelRef} className="relative max-h-full overflow-y-auto overscroll-contain rounded-b-2xl border-b border-surface-border bg-[#f8f4ed] shadow-xl dark:border-surface-border-dark dark:bg-surface-dark">
+      <ul className="space-y-1 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+       {links.map(link => <li key={link.href}>
+        <Link href={link.href} onClick={close} aria-current={isActive(link.href, pathname) ? "page" : undefined} className={`focus-ring flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${isActive(link.href, pathname) ? "bg-accent-50 text-accent-600 dark:bg-brand-950 dark:text-brand-300" : "text-ink-600 hover:bg-[#eee8de] dark:text-slate-300 dark:hover:bg-[#192228]"}`}>
+         {link.label}{isActive(link.href, pathname) && <Icon name="arrow-right" className="h-4 w-4 shrink-0" />}
+        </Link>
+       </li>)}
+      </ul>
+     </div>
+    </div>, document.body
+   )}
+  </nav>
+ );
 }

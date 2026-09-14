@@ -10,7 +10,6 @@ export function Logo({ className = "h-11 w-11", animated = true }: LogoProps) {
    <picture className="block h-full w-full">
     <source media="(prefers-reduced-motion: reduce)" srcSet="/logo-static.svg" />
    {/* SVG содержит собственный prefers-reduced-motion, размер зарезервирован. */}
-   {/* eslint-disable-next-line @next/next/no-img-element */}
    <img src={animated ? "/logo-loop.svg" : "/logo-static.svg"} alt="" width="36" height="36" className="h-full w-full object-contain" />
    </picture>
   </span>

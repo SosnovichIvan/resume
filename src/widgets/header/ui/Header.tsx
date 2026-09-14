@@ -11,14 +11,14 @@ export function Header() {
 			<div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-400 to-transparent dark:via-brand-400" />
 			<div aria-hidden="true" className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full bg-accent-400/10 blur-3xl dark:bg-brand-400/10" />
 
-			<div className="relative grid lg:grid-cols-[1.3fr_0.7fr]">
+			<div className="relative grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr]">
 				<div className="flex flex-col justify-between p-6 sm:p-9 lg:p-12">
 					<div>
 						<div className="mb-6 flex flex-wrap items-center gap-3">
 							<span className="eyebrow inline-flex items-center gap-2 text-success-600 dark:text-brand-300"><span className="h-2 w-2 animate-pulse rounded-full bg-success-500" />{profile.availability}</span>
 							<span className="eyebrow text-slate-500 dark:text-slate-400">Frontend-first · AI-assisted</span>
 						</div>
-						<h1 className="max-w-3xl text-[clamp(2.55rem,5vw,3.8rem)] font-extrabold leading-[0.96] tracking-[-0.065em] text-slate-950 dark:text-white">{profile.headline}</h1>
+						<h1 className="max-w-3xl text-[clamp(2rem,10vw,3.8rem)] font-extrabold leading-[0.96] tracking-[-0.065em] text-slate-950 dark:text-white">{profile.headline}</h1>
 						<p className="mt-7 max-w-2xl text-base font-medium leading-relaxed text-slate-600 sm:text-lg dark:text-slate-300">{profile.tagline}</p>
 					</div>
 					<div className="mt-8 flex flex-wrap items-center gap-3">

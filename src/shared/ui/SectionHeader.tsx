@@ -15,7 +15,7 @@ export function SectionHeader({
 	viewAllLabel = "Смотреть все",
 }: SectionHeaderProps) {
 	return (
-		<div className="mb-6 flex items-end justify-between gap-4 border-b border-surface-border pb-4 dark:border-surface-border-dark">
+		<div className="mb-6 flex flex-col items-start sm:flex-row sm:items-end justify-between gap-4 border-b border-surface-border pb-4 dark:border-surface-border-dark">
 			<h2 className="flex items-center gap-3 text-2xl font-extrabold tracking-[-0.03em] text-slate-950 sm:text-3xl dark:text-white">
 				<span className="flex h-9 w-9 items-center justify-center rounded-lg border border-accent-300/70 bg-accent-50 text-accent-600 dark:border-brand-800 dark:bg-brand-950 dark:text-brand-300">
 					<Icon name={icon} className="h-5 w-5" />

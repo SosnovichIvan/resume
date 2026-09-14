@@ -93,3 +93,28 @@ test("logo animation can be stopped and favicon is available", async ({ page }) 
  await expect(page.getByRole("button", { name: "Остановить анимацию логотипа" })).toBeHidden();
  await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.currentSrc)).toContain("/logo-static.svg");
 });
+
+test("mobile menu stays within the viewport without resizing the page", async ({ page }) => {
+ for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 280 }]) {
+  await page.setViewportSize(viewport);
+  await page.goto("/");
+  await page.evaluate(() => window.scrollTo({ top: 450, behavior: "instant" }));
+  const before = await page.evaluate(() => ({ width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight, scroll: window.scrollY }));
+  const menuButton = page.getByRole("button", {name: "Открыть меню"});
+  const triggerBox = await menuButton.boundingBox();
+  // Direct pointer input avoids Playwright scrolling a sticky button into view.
+  await page.mouse.click(triggerBox!.x + triggerBox!.width / 2, triggerBox!.y + triggerBox!.height / 2);
+  expect(before.width).toBeLessThanOrEqual(viewport.width);
+  const menu = page.locator("#mobile-navigation");
+  await expect(menu).toBeVisible();
+  expect(await page.evaluate(() => ({ width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight, scroll: window.scrollY }))).toEqual(before);
+  const box = await menu.boundingBox();
+  expect(box!.x).toBeGreaterThanOrEqual(0);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height);
+  await menu.getByRole("link", { name: "Публикации" }).click();
+  await expect(page).toHaveURL(/\/publications$/);
+  await expect(menu).toHaveCount(0);
+  expect(await page.locator("html").evaluate(el => el.style.overflow)).toBe("");
+ }
+});

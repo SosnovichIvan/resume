@@ -49,7 +49,7 @@ describe("navigation and layout", () => {
 		render(<Navigation />);
 		const toggle = screen.getByRole("button", { name: "Открыть меню" });
 		await user.click(toggle);
-		expect(document.body.style.overflow).toBe("hidden");
+		expect(document.documentElement.style.overflow).toBe("hidden");
 		expect(screen.getByRole("button", { name: "Закрыть меню" })).toBeVisible();
 		fireEvent.keyDown(document, { key: "Escape" });
 		expect(screen.getByRole("button", { name: "Открыть меню" })).toBeVisible();
