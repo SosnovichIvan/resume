@@ -2,7 +2,7 @@ services:
   resume:
     build:
       context: .
-    image: resume-site:latest
+    image: ${RESUME_IMAGE:-resume-site:local}
     container_name: resume-site
     restart: unless-stopped
     init: true # правильная обработка сигналов (graceful shutdown)

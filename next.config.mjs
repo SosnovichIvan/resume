@@ -35,6 +35,8 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+	// Single local photo is served directly; no writable image cache in the container.
+	images: { unoptimized: true },
 	output: "standalone",
 	async headers() {
 		return [

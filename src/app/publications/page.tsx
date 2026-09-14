@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { publications } from "@/entities/publication/model/data";
-import { Card, Icon, PageTransition } from "@/shared/ui";
-import { BackLink } from "@/shared/ui/BackLink";
+import { Card, Icon, PageShell, PageHeader } from "@/shared/ui";
 
 export const metadata: Metadata = {
 	title: "Публикации — Соснович Иван",
@@ -9,19 +8,8 @@ export const metadata: Metadata = {
 
 export default function PublicationsPage() {
 	return (
-		<PageTransition>
-			<div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-				<BackLink />
-				<h1 className="mb-2 flex items-center gap-3 text-3xl font-bold">
-					<span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300">
-						<Icon name="book-open" className="h-6 w-6" />
-					</span>
-					Публикации
-				</h1>
-				<p className="mb-8 text-slate-500 dark:text-slate-400">
-					Статьи и технические публикации
-				</p>
-
+  <PageShell>
+   <PageHeader title="Публикации" description="Статьи и технические публикации" icon="book-open" />
 				<div className="space-y-4">
 					{publications.map((p) => (
 						<a
@@ -44,7 +32,7 @@ export default function PublicationsPage() {
 									<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
 										{p.description}
 									</p>
-									<p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+									<p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
 										{p.source}
 									</p>
 								</div>
@@ -56,7 +44,6 @@ export default function PublicationsPage() {
 						</a>
 					))}
 				</div>
-			</div>
-		</PageTransition>
+  </PageShell>
 	);
 }

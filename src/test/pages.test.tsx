@@ -9,35 +9,25 @@ import ProjectsPage from "@/app/projects/page";
 import PublicationsPage from "@/app/publications/page";
 
 vi.mock("next/image", () => ({
-	default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => createElement("img", props),
+	default: ({ priority: _priority, unoptimized: _unoptimized, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { priority?: boolean; unoptimized?: boolean }) => createElement("img", props),
 }));
 
-vi.mock("framer-motion", () => ({
-	AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
-	motion: {
-		div: ({ children, initial: _initial, animate: _animate, transition: _transition, ...props }: React.HTMLAttributes<HTMLDivElement> & Record<string, unknown>) =>
-			createElement("div", props, children),
-		section: ({ children, initial: _initial, whileInView: _whileInView, viewport: _viewport, transition: _transition, ...props }: React.HTMLAttributes<HTMLElement> & Record<string, unknown>) =>
-			createElement("section", props, children),
-		li: ({ children, ...props }: React.LiHTMLAttributes<HTMLLIElement>) =>
-			createElement("li", props, children),
-	},
-}));
+
 
 describe("portfolio pages", () => {
 	it("renders the home page sections", () => {
 		render(<HomePage />);
 		expect(screen.getByRole("heading", { name: "Соснович Иван" })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "Опыт работы" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Проекты" })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Свои проекты" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Коммерческие проекты" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Личные проекты" })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "Публикации" })).toBeVisible();
 	});
 
 	it.each([
 		["experience", <ExperiencePage />, "Опыт и образование"],
-		["projects", <ProjectsPage />, "Проекты"],
-		["personal projects", <MyProjectsPage />, "Свои проекты"],
+		["projects", <ProjectsPage />, "Коммерческие проекты"],
+		["personal projects", <MyProjectsPage />, "Личные проекты"],
 		["publications", <PublicationsPage />, "Публикации"],
 	])("renders the %s page", (_name, page, heading) => {
 		render(page);

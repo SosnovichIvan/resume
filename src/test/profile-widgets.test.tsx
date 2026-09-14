@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createElement } from "react";
@@ -8,7 +9,7 @@ import { Header } from "@/widgets/header/ui/Header";
 import { ThemeToggle } from "@/widgets/theme-toggle/ui/ThemeToggle";
 
 vi.mock("next/image", () => ({
-	default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => createElement("img", props),
+	default: ({ priority: _priority, unoptimized: _unoptimized, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { priority?: boolean; unoptimized?: boolean }) => createElement("img", props),
 }));
 
 describe("profile widgets", () => {
@@ -16,20 +17,17 @@ describe("profile widgets", () => {
 		render(<Header />);
 		expect(screen.getByText("Соснович Иван")).toBeVisible();
 		expect(
-			screen.getByText("Senior Frontend / Fullstack Engineer · AI Engineering & Developer Automation"),
+			screen.getByText("Senior Frontend / Fullstack Engineer"),
 		).toBeVisible();
 		expect(screen.getByAltText("Фото Ивана Сосновича")).toBeVisible();
 	});
 
-	it("expands and collapses role details", async () => {
-		const user = userEvent.setup();
-		render(<About />);
-		const buttons = screen.getAllByRole("button", { name: "Раскрыть все" });
-		await user.click(buttons[0]);
-		expect(screen.getByText(/Проектирую агентные системы/)).toBeVisible();
-		await user.click(screen.getByRole("button", { name: "Свернуть" }));
-		expect(screen.queryByText(/Проектирую агентные системы/)).not.toBeInTheDocument();
-	});
+	it("provides native disclosure for role details", () => {
+  render(<About />);
+  const summary = screen.getByText("Подробнее: AI Engineering & Developer Automation");
+  expect(summary.tagName).toBe("SUMMARY");
+  expect(summary.parentElement?.tagName).toBe("DETAILS");
+ });
 
 	it("toggles and persists the theme", async () => {
 		const user = userEvent.setup();
@@ -71,18 +69,26 @@ describe("profile widgets", () => {
 		expect(screen.queryByText("@ivanSVladimirovich")).not.toBeInTheDocument();
 	});
 
-	it("runs contact actions for email, phone, Telegram, and GitHub", async () => {
-		const user = userEvent.setup();
-		const open = vi.spyOn(window, "open").mockImplementation(() => null);
-		const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
-		render(<ContactDropdown />);
-		await user.click(screen.getByRole("button", { name: "Связаться" }));
-		await user.click(screen.getByRole("button", { name: "isosnovich@yandex.ru" }));
-		await user.click(screen.getByRole("button", { name: "+7 (999) 591-00-23" }));
-		await user.click(screen.getByRole("button", { name: "@ivanSVladimirovich" }));
-		await user.click(screen.getByRole("button", { name: "SosnovichIvan" }));
-		expect(open).toHaveBeenNthCalledWith(1, "https://t.me/ivanSVladimirovich", "_blank");
-		expect(open).toHaveBeenNthCalledWith(2, "https://github.com/SosnovichIvan", "_blank");
-		consoleError.mockRestore();
-	});
+ it("exposes real contact links and closes with Escape", async () => {
+  const user = userEvent.setup();
+  render(<ContactDropdown />);
+  const trigger = screen.getByRole("button", { name: "Связаться" });
+  await user.click(trigger);
+  expect(screen.getByRole("link", { name: "isosnovich@yandex.ru" })).toHaveAttribute("href", "mailto:isosnovich@yandex.ru");
+  expect(screen.getByRole("link", { name: "+7 (999) 591-00-23" })).toHaveAttribute("href", "tel:+79995910023");
+  expect(screen.getByRole("link", { name: "@ivanSVladimirovich" })).toHaveAttribute("href", "https://t.me/ivanSVladimirovich");
+  expect(screen.getByRole("link", { name: "SosnovichIvan" })).toHaveAttribute("href", "https://github.com/SosnovichIvan");
+  await user.tab();
+  await user.keyboard("{Escape}");
+  expect(trigger).toHaveAttribute("aria-expanded", "false");
+  expect(trigger).toHaveFocus();
+ });
+ it("announces clipboard failure", async () => {
+  const user = userEvent.setup();
+  vi.spyOn(navigator.clipboard, "writeText").mockRejectedValue(new Error("Denied"));
+  render(<ContactDropdown />);
+  await user.click(screen.getByRole("button", { name: "Связаться" }));
+  await user.click(screen.getByRole("button", { name: "Скопировать Email" }));
+  expect(screen.getByRole("status")).toHaveTextContent("Не удалось скопировать");
+ });
 });

@@ -5,7 +5,7 @@ const config: Config = {
 	content: [
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/widgets/**/*.{js,ts,jsx,tsx,mdx}",
-		"./src/entities/**/*.{js,ts,jsx,tsx,mdx}",
+		"./src/entities/**/*.{js,ts,jsx,tsx,mdx,json}",
 		"./src/shared/**/*.{js,ts,jsx,tsx,mdx}",
 	],
 	theme: {
@@ -15,6 +15,7 @@ const config: Config = {
 				brand: {
 					50: "#eef2ff",
 					100: "#e0e7ff",
+					200: "#c7d2fe",
 					300: "#a5b4fc",
 					400: "#818cf8",
 					500: "#6366f1",
@@ -49,6 +50,7 @@ const config: Config = {
 					400: "#94a3b8",
 					500: "#64748b",
 					600: "#475569",
+					800: "#1e293b",
 					900: "#0f172a",
 				},
 				// Индикаторы успеха

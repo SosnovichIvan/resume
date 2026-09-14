@@ -1,7 +1,5 @@
-/* eslint-disable react/display-name, @typescript-eslint/no-unused-vars */
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createElement, forwardRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import RootLayout, { metadata } from "@/app/layout";
 import { Logo } from "@/shared/ui/Logo";
@@ -10,17 +8,7 @@ import { Navigation } from "@/widgets/navigation/ui/Navigation";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/projects" }));
 
-vi.mock("framer-motion", () => ({
-	AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
-	motion: {
-		div: forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & Record<string, unknown>>(
-			({ children, initial: _initial, animate: _animate, exit: _exit, transition: _transition, ...props }, ref) =>
-				createElement("div", { ...props, ref }, children as React.ReactNode),
-		),
-		li: ({ children, initial: _initial, animate: _animate, transition: _transition, ...props }: React.LiHTMLAttributes<HTMLLIElement> & Record<string, unknown>) =>
-			createElement("li", props, children),
-	},
-}));
+
 
 describe("navigation and layout", () => {
 	it("builds the root layout and exposes the updated metadata", () => {
@@ -54,7 +42,7 @@ describe("navigation and layout", () => {
 		fireEvent.mouseDown(document.body);
 		expect(screen.getByRole("button", { name: "Открыть меню" })).toBeVisible();
 		await user.click(screen.getByRole("button", { name: "Открыть меню" }));
-		const projectLinks = screen.getAllByRole("link", { name: "Проекты" });
+		const projectLinks = screen.getAllByRole("link", { name: "Коммерческие" });
 		const mobileProjectLink = projectLinks[projectLinks.length - 1];
 		mobileProjectLink.addEventListener("click", (event) => event.preventDefault());
 		await user.click(mobileProjectLink);

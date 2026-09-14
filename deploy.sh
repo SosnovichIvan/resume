@@ -75,6 +75,39 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
+step "Чтение параметров из ${config_file}"
+domain=""
+acme_email=""
+repo_url=""
+read_config
+
+domain="$(trim "${domain}" | tr '[:upper:]' '[:lower:]')"
+acme_email="$(trim "${acme_email}" | tr '[:upper:]' '[:lower:]')"
+repo_url="$(trim "${repo_url}")"
+
+if [[ -z "${repo_url}" ]]; then
+	error "REPOSITORY_URL в ${config_file} не может быть пустым."
+	exit 1
+fi
+if [[ -z "${domain}" ]]; then
+	error "DOMAIN в ${config_file} не может быть пустым."
+	exit 1
+fi
+if [[ ! "${domain}" =~ ^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,63}$ ]]; then
+	error "Некорректный домен: ${domain}"
+	exit 1
+fi
+if [[ ! "${acme_email}" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)+$ ]]; then
+	error "Некорректный ACME_EMAIL: ${acme_email}"
+	exit 1
+fi
+if [[ "${domain}" == "resume.example.com" || "${acme_email}" == "admin@example.com" ]]; then
+	error "Замените демонстрационные DOMAIN и ACME_EMAIL в ${config_file} на реальные значения."
+	exit 1
+fi
+info "Домен: ${domain} | ACME email: ${acme_email} | Репозиторий: ${repo_url}"
+
+
 if ! command -v lsb_release >/dev/null 2>&1; then
 	apt-get update -qq && apt-get install -y -qq lsb-release >/dev/null
 fi
@@ -150,7 +183,8 @@ if ! command -v caddy >/dev/null 2>&1; then
 
 	install -m 0755 -d /etc/apt/keyrings
 	curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/gpg.key |
-		gpg --dearmor --yes -o /etc/apt/keyrings/caddy-stable-archive-keyring.gpg
+		gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+	chmod a+r /usr/share/keyrings/caddy-stable-archive-keyring.gpg
 	curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt \
 		> /etc/apt/sources.list.d/caddy-stable.list
 
@@ -166,38 +200,6 @@ info "Caddy: $(caddy version | head -1)"
 # ─────────────────────────────────────────────────────────────────────────────
 # 4. Чтение и проверка параметров развёртывания
 # ─────────────────────────────────────────────────────────────────────────────
-step "Чтение параметров из ${config_file}"
-domain=""
-acme_email=""
-repo_url=""
-read_config
-
-domain="$(trim "${domain}" | tr '[:upper:]' '[:lower:]')"
-acme_email="$(trim "${acme_email}" | tr '[:upper:]' '[:lower:]')"
-repo_url="$(trim "${repo_url}")"
-
-if [[ -z "${repo_url}" ]]; then
-	error "REPOSITORY_URL в ${config_file} не может быть пустым."
-	exit 1
-fi
-if [[ -z "${domain}" ]]; then
-	error "DOMAIN в ${config_file} не может быть пустым."
-	exit 1
-fi
-if [[ ! "${domain}" =~ ^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,63}$ ]]; then
-	error "Некорректный домен: ${domain}"
-	exit 1
-fi
-if [[ ! "${acme_email}" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)+$ ]]; then
-	error "Некорректный ACME_EMAIL: ${acme_email}"
-	exit 1
-fi
-if [[ "${domain}" == "resume.example.com" || "${acme_email}" == "admin@example.com" ]]; then
-	error "Замените демонстрационные DOMAIN и ACME_EMAIL в ${config_file} на реальные значения."
-	exit 1
-fi
-info "Домен: ${domain} | ACME email: ${acme_email} | Репозиторий: ${repo_url}"
-
 # ─────────────────────────────────────────────────────────────────────────────
 # 4.1 DNS, публичные адреса, порты и firewall
 # ─────────────────────────────────────────────────────────────────────────────
@@ -258,7 +260,10 @@ if [[ -d "${app_dir}/.git" ]]; then
 	warn "Репозиторий уже существует в ${app_dir}. Обновляю (git pull)..."
 	git -C "${app_dir}" pull --ff-only
 else
-	rm -rf "${app_dir}"
+	if [[ -e "${app_dir}" ]]; then
+		error "Каталог ${app_dir} существует и не является Git-репозиторием; проверьте его вручную."
+		exit 1
+	fi
 	git clone --depth 1 "${repo_url}" "${app_dir}"
 fi
 
@@ -304,7 +309,7 @@ ${domain} {
 
 	# Гарантируем только HTTPS (HTTP-запросы Caddy сам редиректит на HTTPS)
 	encode zstd gzip
-	# Логи доступа: access.log; ошибки Caddy уходят в syslog/error.log (см. logrotate)
+	# Логи доступа: access.log; ошибки Caddy уходят в syslog/error.log
 	log {
 		output file /var/log/caddy/access.log {
 			roll_size 10mb
@@ -344,53 +349,8 @@ fi
 info "Caddy настроен. HTTP ➜ HTTPS и публичный ACME-сертификат включены автоматически."
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 6.1 Настройка logrotate — логи за последние 72 часа
-# ─────────────────────────────────────────────────────────────────────────────
-# Цель: на VM хранить логи ровно за последние 72 часа, не давая им расти в бесконечность.
-# Решение: systemd-таймер logrotate (daily) + rotate 3 (= 3 суток = 72 часа),
-# сжатие (compress) и copytruncate (без потери записей открытых файлов).
-step "Настройка logrotate (хранение логов за последние 72 часа)"
+# Ротацией управляют Caddy и Docker. Внешний logrotate не меняет их файлы.
 
-apt-get install -y -qq logrotate > /dev/null
-install -d -o caddy -g caddy -m 0750 /var/log/caddy
-
-# a) Caddy access log
-cat > /etc/logrotate.d/resume-caddy <<EOF
-/var/log/caddy/access.log {
-	daily
-	rotate 3
-	compress
-	delaycompress
-	copytruncate
-	missingok
-	notifempty
-	su caddy caddy
-}
-EOF
-
-# b) Docker-json-логи контейнера (ротация по времени, а не только по размеру)
-cat > /etc/logrotate.d/resume-docker <<EOF
-/var/lib/docker/containers/*/*-json.log {
-	daily
-	rotate 3
-	compress
-	delaycompress
-	copytruncate
-	missingok
-	notifempty
-}
-EOF
-
-# Убеждаемся, что logrotate запускается ежедневно (systemd timer или cron.daily)
-if command -v systemctl >/dev/null 2>&1 && systemctl list-timers "logrotate*" >/dev/null 2>&1; then
-	systemctl enable --now logrotate.timer >/dev/null 2>&1 || true
-	info "logrotate запускается ежедневно по systemd-таймеру (logrotate.timer)."
-else
-	info "logrotate будет запускаться daily через cron.daily (штатно для Ubuntu)."
-fi
-info "Логи Caddy и Docker ротируются: история за последние 72 часа (rotate 3 x daily), сжатие включено."
-
-# ─────────────────────────────────────────────────────────────────────────────
 # 7. Сборка и запуск Docker-образа сайта
 # ─────────────────────────────────────────────────────────────────────────────
 step "Сборка и запуск Docker-контейнера сайта"
@@ -399,7 +359,27 @@ cd "${app_dir}"
 if docker compose ps >/dev/null 2>&1; then
 	warn "Контейнер уже существует. Пересобираю/перезапускаю..."
 fi
-docker compose up -d --build
+# Save the running image before replacing the container. Build failures leave it running.
+previous_image="$(docker inspect --format '{{.Image}}' resume-site 2>/dev/null || true)"
+export RESUME_IMAGE="resume-site:$(git rev-parse HEAD)"
+docker compose build
+
+rollback() {
+ local failure=$?
+ trap - EXIT
+ if (( failure != 0 )) && [[ -n "${previous_image}" ]]; then
+  warn "Обновление не прошло проверку; восстанавливаю предыдущий образ."
+  local rollback_tag="resume-site:rollback-$(date +%s)"
+  if docker image tag "${previous_image}" "${rollback_tag}" && RESUME_IMAGE="${rollback_tag}" docker compose up -d --no-build --wait --wait-timeout 90; then
+   warn "Предыдущий образ восстановлен. Проверьте HTTPS и конфигурацию reverse proxy."
+  else
+   error "Автоматический откат не удался; требуется ручное восстановление."
+  fi
+ fi
+ exit "${failure}"
+}
+trap rollback EXIT
+docker compose up -d --no-build
 
 info "Ожидание готовности healthcheck контейнера..."
 for i in $(seq 1 30); do
@@ -471,7 +451,7 @@ echo
 printf "Мониторинг и обслуживание:\n"
 printf "  docker compose -f %s/docker-compose.yml ps      # статус служб\n" "${app_dir}"
 printf "  docker compose -f %s/docker-compose.yml logs -f # поток логов контейнера\n" "${app_dir}"
-printf "  tail -f /var/log/caddy/access.log               # access-лог сайта (72 ч)\n"
+printf "  tail -f /var/log/caddy/access.log               # access-лог сайта (ротация по размеру)\n"
 printf "  journalctl -u caddy -f                          # лог службы caddy\n"
 printf "  docker inspect resume-site --format '{{.RestartCount}}'        # счётчик перезапусков\n"
 printf "  docker inspect resume-site --format '{{.State.Health.Status}}' # health контейнера\n"
@@ -479,11 +459,10 @@ printf "  docker inspect resume-site --format '{{.HostConfig.LogConfig.Type}}' #
 printf "  docker events --filter container=resume-site     # события (старт/стоп/падение)\n"
 printf "  caddy config    # текущий конфиг reverse-proxy\n"
 echo
-printf "Логирование (72 часа):\n"
-printf "  /var/log/caddy/access.log              # HTTP-запросы (ротация 72 ч)\n"
+printf "Логирование:\n"
+printf "  /var/log/caddy/access.log              # HTTP-запросы (ротация по размеру)\n"
 printf "  /var/log/caddy/access.log.*.gz         # сжатые ротированные файлы\n"
-printf "  docker logs resume-site                # stdout приложения (ротация 72 ч)\n"
-printf "  logrotate --force /etc/logrotate.d/resume-caddy  # принудительная ротация\n"
+printf "  docker logs resume-site                # stdout приложения (ротация по размеру)\n"
 echo
 printf "Надёжность (в docker-compose.yml):\n"
 printf "  restart: unless-stopped  # автоперезапуск при падении/ребуте\n"
@@ -493,3 +472,6 @@ printf "  logging: json-file 10m x5 # ротация docker-логов по ра
 printf "${c_green}==================================================${c_reset}\n"
 
 exit 0
+
+# All application and HTTPS checks have passed.
+trap - EXIT

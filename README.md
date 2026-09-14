@@ -4,10 +4,10 @@
 
 ## Стек
 
-- Next.js 14 (App Router, standalone output)
-- React 18 и TypeScript
+- Next.js 16 (App Router, standalone output)
+- React 19 и TypeScript
 - Tailwind CSS
-- Framer Motion
+- CSS-анимации с поддержкой reduced motion
 - Feature-Sliced Design
 
 ## Запуск
@@ -64,3 +64,32 @@ docker compose ps
 npm test
 npm run test:coverage
 ```
+
+## Проверка изменений
+
+Используйте Node.js из `.nvmrc`, затем `npm ci` и `npm run check`.
+Для браузерных проверок: `npm run build`, `npx playwright install chromium`,
+`npm run test:e2e`. Тесты стартуют production-сервер на порту 3100.
+
+План улучшений и открытые вопросы: [TASKS.md](TASKS.md).
+
+## Общие данные сайта и PDF
+
+Тексты хранятся в `src/entities/*/model/data.json`. Файлы `data.ts` добавляют
+типы для приложения; генератор PDF читает те же JSON-файлы напрямую.
+Главный блок редактируется в `profile/model/data.json` → `hero`.
+
+PDF показывает избранные пункты из общих массивов: `pdfAchievementIndices` и
+`pdfDetailIndices` — индексы пунктов с нуля. При перестановке пунктов проверьте
+эти списки. Тексты для PDF отдельно не переписываются.
+
+После изменения данных:
+
+1. Выполните `npm run pdf` (нужен Python с `reportlab` и `Pillow`).
+2. Проверьте страницы PDF визуально. На macOS используется Arial, на Linux — DejaVu Sans.
+3. Сохраните `public/resume.pdf` и `scripts/resume-pdf-manifest.json` вместе с данными.
+
+Для выбора Python используйте `RESUME_PYTHON=/path/to/python3 npm run pdf`.
+`npm run check:pdf` сверяет хеши данных, генератора, фотографии и PDF;
+CI завершится ошибкой, если PDF не обновлён после правки источников.
+Исходное пользовательское резюме в `output/pdf` не перезаписывается.

@@ -7,15 +7,17 @@
 - Docker 24+
 - Docker Compose 2.20+
 - reverse proxy с TLS для публичного стенда
-- Node.js 20+ только для локальной сборки
+- Node.js 22 LTS (см. `.nvmrc`) только для локальной сборки
 
 ## Локальная проверка
 
 ```bash
 npm ci
 npm run lint
-npx tsc --noEmit
+npm run typecheck
+npm test
 npm run build
+npm run test:e2e
 npm start
 ```
 
@@ -93,3 +95,27 @@ sudo bash deploy.sh
 - security headers присутствуют;
 - порт 3000 доступен только локально;
 - в Git и Docker image нет `.env`, токенов, ключей или сертификатов.
+
+## Проверки и обновления
+
+CI выполняет чистую установку, ESLint, TypeScript, unit-тесты и coverage,
+production build, E2E в Chromium (desktop/mobile) и запуск Docker с healthcheck.
+Перед локальным E2E выполните `npx playwright install chromium`.
+
+При обновлении `deploy.sh` собирает образ `resume-site:<commit SHA>` до замены
+работающего контейнера. При ошибке запуска, healthcheck или HTTPS-проверок он
+пытается восстановить предыдущий образ. Откат использует текущий Compose-файл:
+изменения инфраструктурной конфигурации и Caddy требуют отдельной проверки.
+При первой установке предыдущего образа ещё нет.
+
+Caddy и Docker сами ротируют журналы по размеру. Это ограничивает объём хранения,
+но не обещает хранение ровно за 72 часа. Старые конфигурации logrotate,
+созданные прежней версией deploy.sh (`resume-caddy`, `resume-docker`), следует
+проверить и отключить вручную перед обновлением существующей VM.
+
+Фотография обслуживается как локальный статический файл: runtime-кэш
+оптимизатора изображений не нужен, корневая ФС контейнера остаётся read-only.
+
+Production-сборка использует webpack (`next build --webpack`) одинаково локально и в CI/Docker.
+
+`npm start` запускает `.next/standalone/server.js` через `scripts/start.mjs`, предварительно копируя статику и public как в Docker. По умолчанию слушает 127.0.0.1:3000; для другого адреса используйте `npm start -- --hostname 127.0.0.1 --port 3100`.

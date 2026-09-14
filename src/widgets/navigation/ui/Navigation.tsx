@@ -3,15 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
 import { Icon, Logo } from "@/shared/ui";
 import { HeaderActions } from "@/widgets/header-actions/ui/HeaderActions";
 
 const links = [
 	{ href: "/", label: "Главная" },
 	{ href: "/experience", label: "Опыт" },
-	{ href: "/projects", label: "Проекты" },
-	{ href: "/my-projects", label: "Свои проекты" },
+	{ href: "/projects", label: "Коммерческие" },
+	{ href: "/my-projects", label: "Личные" },
 	{ href: "/publications", label: "Публикации" },
 ];
 
@@ -20,15 +19,14 @@ function isActive(href: string, pathname: string): boolean {
 }
 
 export function Navigation() {
-	const pathname = usePathname();
+ const pathname = usePathname();
+ return <NavigationMenu key={pathname} pathname={pathname} />;
+}
+
+function NavigationMenu({ pathname }: { pathname: string }) {
 	const [open, setOpen] = useState(false);
 	const panelRef = useRef<HTMLDivElement>(null);
 	const toggleRef = useRef<HTMLButtonElement>(null);
-
-	// Закрывать мобильное меню при смене страницы
-	useEffect(() => {
-		setOpen(false);
-	}, [pathname]);
 
 	// Закрывать по клику вне меню (кроме самой кнопки-гамбургера) и по Escape
 	useEffect(() => {
@@ -40,7 +38,7 @@ export function Navigation() {
 			if (!insidePanel && !onToggle) setOpen(false);
 		};
 		const onKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "Escape") setOpen(false);
+			if (e.key === "Escape") { setOpen(false); toggleRef.current?.focus(); }
 		};
 		document.addEventListener("mousedown", onPointerDown);
 		document.addEventListener("keydown", onKeyDown);
@@ -81,6 +79,7 @@ export function Navigation() {
 						<li key={link.href}>
 							<Link
 								href={link.href}
+        aria-current={isActive(link.href, pathname) ? "page" : undefined}
 								className={`inline-flex items-center whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
 									isActive(link.href, pathname)
 										? "bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300"
@@ -103,7 +102,8 @@ export function Navigation() {
 						onClick={() => setOpen((o) => !o)}
 						aria-label={open ? "Закрыть меню" : "Открыть меню"}
 						aria-expanded={open}
-						className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:border-brand-400 hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 md:hidden dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-brand-500 dark:hover:text-brand-300 dark:focus-visible:ring-offset-slate-900"
+      aria-controls="mobile-navigation"
+						className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:border-brand-400 hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 md:hidden dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-brand-500 dark:hover:text-brand-300 dark:focus-visible:ring-offset-slate-900"
 					>
 						<Icon name={open ? "close" : "menu"} className="h-5 w-5" />
 					</button>
@@ -111,26 +111,21 @@ export function Navigation() {
 			</div>
 
 			{/* Мобильное меню-оверлей (полупрозрачное, поверх контента, не сдвигает страницу) */}
-			<AnimatePresence>
+			<>
 				{open && (
-					<motion.div
-						ref={panelRef}
-						initial={{ height: 0, opacity: 0 }}
-						animate={{ height: "auto", opacity: 1 }}
-						exit={{ height: 0, opacity: 0 }}
-						transition={{ duration: 0.25, ease: "easeOut" }}
+					<div
+						id="mobile-navigation"
+      ref={panelRef}
 						className="absolute inset-x-0 top-full z-50 overflow-hidden rounded-b-2xl border-b border-surface-border bg-white/95 shadow-2xl backdrop-blur-md md:hidden dark:border-slate-800 dark:bg-slate-900/95"
 					>
 						<ul className="max-h-[calc(100vh-5rem)] space-y-1 overflow-y-auto px-4 py-3">
-							{links.map((link, i) => (
-								<motion.li
+							{links.map((link) => (
+								<li
 									key={link.href}
-									initial={{ opacity: 0, x: -8 }}
-									animate={{ opacity: 1, x: 0 }}
-									transition={{ duration: 0.2, delay: i * 0.04 }}
 								>
 									<Link
 										href={link.href}
+        aria-current={isActive(link.href, pathname) ? "page" : undefined}
 										onClick={close}
 										className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
 											isActive(link.href, pathname)
@@ -143,12 +138,12 @@ export function Navigation() {
 											<Icon name="arrow-right" className="h-4 w-4" />
 										)}
 									</Link>
-								</motion.li>
+								</li>
 							))}
 						</ul>
-					</motion.div>
+					</div>
 				)}
-			</AnimatePresence>
+			</>
 		</nav>
 	);
 }

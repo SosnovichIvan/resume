@@ -1,0 +1,11 @@
+{
+  "src/entities/profile/model/data.json": "9b9abef6491824d519e0b3a7629c90aedbd2516d13f7deb48520f5a3541ee5a5",
+  "src/entities/experience/model/data.json": "2c0ebfdf09c8fc5d029d66254008e123a009bf219538e42e536a4f9840b14f33",
+  "src/entities/project/model/data.json": "74a1915c87dda62d6df8c1eab00b2ba521617ee81c7d3f56f0d773f093428e5c",
+  "src/entities/personal-project/model/data.json": "dba1b460183f89275c2d02e7a87f3de447efb158a7a06eafb1f6539a9b727c43",
+  "src/entities/education/model/data.json": "25e0cc48daa234cc57ec1c77eba351b358e6bd3ceac7c76cd396749069ab037f",
+  "src/entities/publication/model/data.json": "a03169ee84e080af9fb3fa1fc2312128776bc59bef8cf4db67769ba482e19d47",
+  "scripts/generate_resume_pdf.py": "5c912b4808ab7ca824bbd18ee7eb291c49dd7b293b31d499e72f7a995cf0ba2a",
+  "public/avatar.jpg": "905e39cdc1fbb4f5127aea3e6929542abb7bc6818396075a5cc8fddd5200fd05",
+  "public/resume.pdf": "d2d3b96e29a9852eef7632115660980857a94fbb2bf799e77d33f3b64b5a22f3"
+}
