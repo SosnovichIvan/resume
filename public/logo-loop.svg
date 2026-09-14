@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="300 80 650 720" role="img" aria-label="Иван Соснович — архитектура интерфейсов"><style>
-.fit-piece{transform-box:fill-box;transform-origin:center;animation:var(--fit-name,fit-loop) var(--fit-duration,10s) cubic-bezier(.22,1,.36,1) var(--fit-count,infinite) both;animation-delay:var(--delay)}
+.fit-piece{transform-box:fill-box;transform-origin:center;animation:var(--fit-name,fit-loop) var(--fit-duration,5s) cubic-bezier(.22,1,.36,1) var(--fit-count,infinite) both;animation-delay:var(--delay)}
 .fit-signal{animation:fit-breathe 9s ease-in-out 2s infinite}
 @keyframes fit-assemble{from{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.94)}to{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}}
 @keyframes fit-loop{0%,2%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.94)}18%,82%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(calc(var(--x) * .4),calc(var(--y) * .4)) rotate(var(--r)) scale(.97)}}

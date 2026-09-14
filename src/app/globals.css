@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 html {
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
 }

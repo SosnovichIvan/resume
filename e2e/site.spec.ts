@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, chromium } from "@playwright/test";
 
 const routes = [
  ["/", "Делаю сложные интерфейсы быстрее, а разработку — предсказуемее."],
@@ -78,19 +78,16 @@ test("downloads the published resume PDF", async ({ page }) => {
  expect(await download.failure()).toBeNull();
 });
 
-test("logo animation can be stopped and favicon is available", async ({ page }) => {
+test("logo loops every five seconds without controls and respects reduced motion", async ({ page }) => {
  await page.goto("/");
  const logo = page.getByRole("link", { name: "Соснович Иван — на главную" }).locator("img");
  await expect(logo).toHaveAttribute("src", "/logo-loop.svg");
- await page.getByRole("button", { name: "Остановить анимацию логотипа" }).click();
- await expect(logo).toHaveAttribute("src", "/logo-static.svg");
- await page.getByRole("button", { name: "Включить анимацию логотипа" }).click();
- await expect(logo).toHaveAttribute("src", "/logo-loop.svg");
+ await expect(page.getByRole("button", { name: /анимацию логотипа/ })).toHaveCount(0);
+ const svg = await page.request.get("/logo-loop.svg");
+ expect(await svg.text()).toContain("var(--fit-duration,5s)");
  const icon = await page.request.get("/icon.svg");
  expect(icon.status()).toBe(200);
- expect(await icon.text()).toContain("#72E5CA");
  await page.emulateMedia({ reducedMotion: "reduce" });
- await expect(page.getByRole("button", { name: "Остановить анимацию логотипа" })).toBeHidden();
  await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.currentSrc)).toContain("/logo-static.svg");
 });
 
@@ -117,4 +114,19 @@ test("mobile menu stays within the viewport without resizing the page", async ({
   await expect(menu).toHaveCount(0);
   expect(await page.locator("html").evaluate(el => el.style.overflow)).toBe("");
  }
+});
+
+test("menu preserves content width with a visible classic scrollbar", async () => {
+ const browser = await chromium.launch({ ignoreDefaultArgs: ["--hide-scrollbars"], args: ["--disable-features=OverlayScrollbar"] });
+ try {
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: false, hasTouch: false });
+  await page.goto("http://127.0.0.1:3100/");
+  const measure = () => page.evaluate(() => ({ body: document.body.getBoundingClientRect().width, header: document.querySelector("header")!.getBoundingClientRect().width, left: document.querySelector("header")!.getBoundingClientRect().left }));
+  await expect.poll(async () => (await measure()).body).toBeLessThan(390);
+  const before = await measure();
+  await page.getByRole("button", { name: "Открыть меню" }).click();
+  await expect.poll(measure).toEqual(before);
+  await page.getByRole("button", { name: "Закрыть меню" }).click();
+  await expect.poll(measure).toEqual(before);
+ } finally { await browser.close(); }
 });

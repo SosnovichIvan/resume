@@ -36,13 +36,6 @@ describe("navigation and layout", () => {
 		expect(await screen.findByRole("button", { name: /включить .* тему/i })).toBeVisible();
 	});
 
- it("lets visitors stop and restart the logo animation", async () => {
- const user = userEvent.setup(); render(<Navigation />);
- await user.click(screen.getByRole("button", {name: "Остановить анимацию логотипа"}));
- expect(document.querySelector('img[src="/logo-static.svg"]')).toBeInTheDocument();
- await user.click(screen.getByRole("button", {name: "Включить анимацию логотипа"}));
- expect(document.querySelector('img[src="/logo-loop.svg"]')).toBeInTheDocument();
- });
 
 	it("opens and closes mobile navigation by link and Escape", async () => {
 		const user = userEvent.setup();

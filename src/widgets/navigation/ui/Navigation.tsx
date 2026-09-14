@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
@@ -22,7 +22,6 @@ function isActive(href: string, pathname: string): boolean {
 export function Navigation() {
 	const pathname = usePathname();
 	const [open, setOpen] = useState(false);
- const [logoAnimated, setLogoAnimated] = useState(true);
 	const panelRef = useRef<HTMLDivElement>(null);
 	const toggleRef = useRef<HTMLButtonElement>(null);
 
@@ -51,16 +50,23 @@ export function Navigation() {
 		};
 	}, [open]);
 
- // Lock the document without turning body into a new sticky containing block.
- useEffect(() => {
+ // Apply scroll lock and width compensation together, before the browser paints.
+ useLayoutEffect(() => {
   if (!open) return;
   const root = document.documentElement;
   const previousRoot = root.style.overflow;
+  const previousPadding = root.style.paddingRight;
+  const widthBefore = document.body.getBoundingClientRect().width;
+  const paddingBefore = Number.parseFloat(getComputedStyle(root).paddingRight) || 0;
   root.style.overflow = "hidden";
+  // Some browsers ignore stable gutters for styled scrollbars when overflow is hidden.
+  const widthChange = document.body.getBoundingClientRect().width - widthBefore;
+  if (widthChange > 0) root.style.paddingRight = `${paddingBefore + widthChange}px`;
   const closeOnDesktop = () => { if (window.innerWidth >= 768) setOpen(false); };
   window.addEventListener("resize", closeOnDesktop);
   return () => {
    root.style.overflow = previousRoot;
+   root.style.paddingRight = previousPadding;
    window.removeEventListener("resize", closeOnDesktop);
   };
  }, [open]);
@@ -76,9 +82,8 @@ export function Navigation() {
 					aria-label="Соснович Иван — на главную"
 					className="focus-ring inline-flex items-center text-accent-600 transition-colors hover:text-accent-500 dark:text-brand-300 dark:hover:text-brand-200"
 				>
-					<Logo animated={logoAnimated} />
+					<Logo />
 				</Link>
- <button type="button" onClick={() => setLogoAnimated(value => !value)} aria-label={logoAnimated ? "Остановить анимацию логотипа" : "Включить анимацию логотипа"} title={logoAnimated ? "Остановить анимацию логотипа" : "Включить анимацию логотипа"} className="focus-ring flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 hover:bg-black/5 dark:text-slate-400 dark:hover:bg-white/5 motion-reduce:hidden"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d={logoAnimated ? "M2 1h3v10H2zM7 1h3v10H7z" : "M2 1l9 5-9 5z"} /></svg></button>
  </div>
 
 				{/* Десктопная навигация (md и выше) */}
