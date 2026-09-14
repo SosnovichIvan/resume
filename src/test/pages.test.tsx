@@ -62,7 +62,7 @@ describe("portfolio pages", () => {
 		);
 	});
 
-	it("shows benchmark statistics instead of a gallery for a repository-only project", async () => {
+	it("shows skills with metrics only where they are verified for a repository-only project", async () => {
 		render(await PersonalProjectPage({ params: Promise.resolve({ slug: "agent-skills-lab" }) }));
 		expect(screen.getByRole("heading", { name: "Agent Skills Lab", level: 1 })).toBeVisible();
 		expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
@@ -71,7 +71,8 @@ describe("portfolio pages", () => {
 		);
 		expect(screen.queryByRole("link", { name: "Открыть сайт" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("heading", { name: "Экраны проекта" })).not.toBeInTheDocument();
-		expect(screen.getByRole("heading", { name: "Skills с подтверждённой пользой" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Skills: назначение и практическая польза" })).toBeVisible();
+		expect(screen.getByText("01 / 13")).toBeVisible();
 		expect(screen.getByRole("link", { name: "Методика и README" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md");
 		const skillRegion = screen.getByRole("region", { name: "Полезные skills: Agent Skills Lab" });
 		expect(within(skillRegion).getByRole("group", { name: "Главные достижения Execution State" })).toBeVisible();
@@ -81,7 +82,7 @@ describe("portfolio pages", () => {
 		expect(within(statistics).queryByText("Total tokens")).not.toBeInTheDocument();
 		expect(within(statistics).queryByText("Время выполнения")).not.toBeInTheDocument();
 		expect(screen.getByText("0 против 2 296 689")).toBeVisible();
-		expect(screen.queryByRole("button", { name: "Предыдущий skill" })).not.toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Предыдущий skill" })).toBeVisible();
 		expect(within(skillRegion).getByText(/trade-off по времени/)).toBeVisible();
 	});
 });

@@ -7,12 +7,12 @@ export interface BenefitSkill {
 	name: string;
 	description: string;
 	readmeUrl: string;
-	highlights: Array<{
+	highlights?: Array<{
 		value: string;
 		label: string;
 		tone?: "positive" | "tradeoff";
 	}>;
-	statistics: {
+	statistics?: {
 		title: string;
 		caption?: string;
 		rows: Array<{ metric: string; result: string }>;
@@ -41,9 +41,7 @@ export function ProjectSkillCarousel({
 							<p className="eyebrow text-brand-600 dark:text-brand-300">Skill {String(current + 1).padStart(2, "0")}</p>
 							<h3 className="mt-2 text-xl font-semibold">{skill.name}</h3>
 							<p className="mt-2 text-slate-600 dark:text-slate-300">{skill.description}</p>
-							<p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-								Benchmark: candidate против AI-only · {skill.statistics.caption}
-							</p>
+							{skill.statistics && <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">Проверенные результаты: {skill.statistics.caption ?? "см. README"}</p>}
 						</div>
 						<a
 							href={skill.readmeUrl}
@@ -56,7 +54,7 @@ export function ProjectSkillCarousel({
 						</a>
 					</div>
 
-					<div role="group" aria-label={`Главные достижения ${skill.name}`} className="mt-5 grid gap-3 sm:grid-cols-3">
+					{skill.highlights && skill.highlights.length > 0 && <div role="group" aria-label={`Главные достижения ${skill.name}`} className="mt-5 grid gap-3 sm:grid-cols-3">
 						{skill.highlights.map((highlight) => {
 							const isTradeoff = highlight.tone === "tradeoff";
 							return (
@@ -66,10 +64,10 @@ export function ProjectSkillCarousel({
 								</div>
 							);
 						})}
-					</div>
+					</div>}
 				</header>
 
-				<div className="overflow-x-auto">
+				{skill.statistics && <div className="overflow-x-auto">
 					<table aria-label={`Статистика ${skill.name}`} className="w-full text-left text-sm">
 						<caption className="sr-only">{skill.statistics.title}{skill.statistics.caption ? `, ${skill.statistics.caption}` : ""}</caption>
 						<thead className="bg-slate-50 text-slate-600 dark:bg-slate-800/60 dark:text-slate-300">
@@ -87,7 +85,7 @@ export function ProjectSkillCarousel({
 							))}
 						</tbody>
 					</table>
-				</div>
+				</div>}
 			</article>
 
 			{skills.length > 1 && (

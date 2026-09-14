@@ -20,8 +20,8 @@ export interface PersonalProject {
 		name: string;
 		description: string;
 		readmeUrl: string;
-		highlights: Array<{ value: string; label: string; tone?: "positive" | "tradeoff" }>;
-		statistics: { title: string; caption?: string; rows: Array<{ metric: string; result: string }> };
+		highlights?: Array<{ value: string; label: string; tone?: "positive" | "tradeoff" }>;
+		statistics?: { title: string; caption?: string; rows: Array<{ metric: string; result: string }> };
 	}>;
 }
 
