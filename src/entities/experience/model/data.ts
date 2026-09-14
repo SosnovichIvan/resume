@@ -6,7 +6,7 @@ export interface ExperienceProject {
 }
 
 export interface Experience {
- pdfAchievementIndices?: number[];
+	pdfAchievementIndices?: number[];
 	id: string;
 	company: string;
 	position: string;
@@ -15,6 +15,7 @@ export interface Experience {
 	summary: string;
 	achievements: string[];
 	stack: string[];
+	keyResults: string[];
 }
 
 export const experiences: Experience[] = data as Experience[];

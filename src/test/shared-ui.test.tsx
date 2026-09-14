@@ -21,7 +21,7 @@ describe("shared UI", () => {
 		const { rerender } = render(<Card className="custom">Card</Card>);
 		expect(screen.getByText("Card")).toHaveClass("custom");
 		rerender(<Card hover>Hover card</Card>);
-		expect(screen.getByText("Hover card")).toHaveClass("hover:border-brand-400");
+		expect(screen.getByText("Hover card")).toHaveClass("hover:border-accent-400");
 	});
 
 	it("renders known icons and ignores unknown names", () => {

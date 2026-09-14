@@ -1,5 +1,7 @@
+/* eslint-disable react/display-name, @typescript-eslint/no-unused-vars */
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createElement, forwardRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import RootLayout, { metadata } from "@/app/layout";
 import { Logo } from "@/shared/ui/Logo";
@@ -8,21 +10,39 @@ import { Navigation } from "@/widgets/navigation/ui/Navigation";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/projects" }));
 
-
+vi.mock("framer-motion", () => ({
+	AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
+	motion: {
+		div: forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & Record<string, unknown>>(
+			({ children, initial: _initial, animate: _animate, exit: _exit, transition: _transition, ...props }, ref) =>
+				createElement("div", { ...props, ref }, children as React.ReactNode),
+		),
+		li: ({ children, initial: _initial, animate: _animate, transition: _transition, ...props }: React.LiHTMLAttributes<HTMLLIElement> & Record<string, unknown>) =>
+			createElement("li", props, children),
+	},
+}));
 
 describe("navigation and layout", () => {
 	it("builds the root layout and exposes the updated metadata", () => {
 		const layout = RootLayout({ children: <main>Content</main> });
 		expect(layout.type).toBe("html");
-		expect(metadata.title).toBe("Соснович Иван — Senior Frontend / Fullstack Engineer");
+		expect(metadata.title).toBe("Соснович Иван — Senior Frontend Engineer / Team Lead · AI Engineering");
 	});
 
 	it("renders the animated logo and header actions", async () => {
 		render(<><Logo className="brand-logo" /><HeaderActions /></>);
-		expect(document.querySelector("svg.brand-logo")).toBeInTheDocument();
+		expect(document.querySelector(".brand-logo img")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Связаться" })).toBeVisible();
 		expect(await screen.findByRole("button", { name: /включить .* тему/i })).toBeVisible();
 	});
+
+ it("lets visitors stop and restart the logo animation", async () => {
+ const user = userEvent.setup(); render(<Navigation />);
+ await user.click(screen.getByRole("button", {name: "Остановить анимацию логотипа"}));
+ expect(document.querySelector('img[src="/logo-static.svg"]')).toBeInTheDocument();
+ await user.click(screen.getByRole("button", {name: "Включить анимацию логотипа"}));
+ expect(document.querySelector('img[src="/logo-loop.svg"]')).toBeInTheDocument();
+ });
 
 	it("opens and closes mobile navigation by link and Escape", async () => {
 		const user = userEvent.setup();
@@ -42,7 +62,7 @@ describe("navigation and layout", () => {
 		fireEvent.mouseDown(document.body);
 		expect(screen.getByRole("button", { name: "Открыть меню" })).toBeVisible();
 		await user.click(screen.getByRole("button", { name: "Открыть меню" }));
-		const projectLinks = screen.getAllByRole("link", { name: "Коммерческие" });
+		const projectLinks = screen.getAllByRole("link", { name: "Коммерческие кейсы" });
 		const mobileProjectLink = projectLinks[projectLinks.length - 1];
 		mobileProjectLink.addEventListener("click", (event) => event.preventDefault());
 		await user.click(mobileProjectLink);

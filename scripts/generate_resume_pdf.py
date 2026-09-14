@@ -333,7 +333,7 @@ def project_content(item):
 
 
 def build_story() -> list[Flowable]:
-    hero = PROFILE["hero"]
+    hero = {"title": PROFILE["position"], "headline": PROFILE["headline"], "summary": PROFILE["tagline"], "skills": PROFILE["coreSkills"] + PROFILE["aiSkills"], "results": PROFILE["proofs"]}
     avatar = RLImage(str(prepare_avatar()), width=36 * mm, height=36 * mm, mask="auto")
     intro = [p(escape(PROFILE["name"]), "name"), p(escape(hero["title"]), "role"),
              p(escape(PROFILE["location"]), "meta"), Spacer(1, 5),
@@ -347,9 +347,9 @@ def build_story() -> list[Flowable]:
     for result in hero["results"]:
         story.append(p(f'<b>{escape(clean(result["value"]))}</b> · {escape(result["label"])}'))
     story.extend([Spacer(1, 8), SectionRule("Компетенции")])
-    for role in PROFILE["experienceBlock"]["roles"]:
-        story.extend([p(escape(role["role"]), "subsection"),
-                      p(escape(role.get("summary", ""))), Spacer(1, 5)])
+    for role in PROFILE["competenceAreas"]:
+        story.extend([p(escape(role["title"]), "subsection"),
+                      p(escape(role["description"])), Spacer(1, 5)])
     story.extend([Spacer(1, 8), SectionRule("Контакты")])
     for contact in PROFILE["contacts"]:
         story.append(p(f'{escape(contact["label"])}: {link(contact["value"], contact["href"])}'))
@@ -376,7 +376,7 @@ def build_story() -> list[Flowable]:
     story.append(PageBreak())
     story.append(SectionRule("Личные проекты"))
     for item in DATA["personal-project"]:
-        story.extend([card(project_block(item["name"], "Личный проект", item["description"], item["details"], item["stack"], item["repo"])), Spacer(1, 10)])
+        story.extend([card(project_block(item["name"], "Личный проект", item["description"], item["architecture"][:2], item["technologies"], item["repositoryUrl"])), Spacer(1, 10)])
     story.append(SectionRule("Публикации"))
     for item in DATA["publication"]:
         story.extend([p(link(item["title"], item["href"]), "subsection"), p(escape(item["description"])), Spacer(1, 8)])
@@ -390,7 +390,7 @@ def main() -> None:
         str(OUTPUT), pagesize=A4,
         leftMargin=MARGIN_X, rightMargin=MARGIN_X,
         topMargin=MARGIN_TOP, bottomMargin=MARGIN_BOTTOM,
-        title=f"{PROFILE["name"]} - {PROFILE["hero"]["title"]}",
+        title=f"{PROFILE["name"]} - {PROFILE["position"]}",
         author=PROFILE["name"],
         subject="Резюме, актуализированное по сайту sosnovich-ivan.ru",
         creator="Codex",

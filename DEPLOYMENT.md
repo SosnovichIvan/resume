@@ -7,17 +7,15 @@
 - Docker 24+
 - Docker Compose 2.20+
 - reverse proxy с TLS для публичного стенда
-- Node.js 22 LTS (см. `.nvmrc`) только для локальной сборки
+- Node.js 20+ только для локальной сборки
 
 ## Локальная проверка
 
 ```bash
 npm ci
 npm run lint
-npm run typecheck
-npm test
+npx tsc --noEmit
 npm run build
-npm run test:e2e
 npm start
 ```
 
@@ -96,26 +94,17 @@ sudo bash deploy.sh
 - порт 3000 доступен только локально;
 - в Git и Docker image нет `.env`, токенов, ключей или сертификатов.
 
-## Проверки и обновления
+## GitHub Actions: release по тегу
 
-CI выполняет чистую установку, ESLint, TypeScript, unit-тесты и coverage,
-production build, E2E в Chromium (desktop/mobile) и запуск Docker с healthcheck.
-Перед локальным E2E выполните `npx playwright install chromium`.
+Workflow `.github/workflows/deploy.yml` запускается только для тегов формата `v*`.
+Перед развёртыванием он проверяет, что отмеченный коммит входит в историю `main`, и
+разворачивает на VPS именно этот тег. Для GitHub Actions создайте environment
+`production` и добавьте в него Secrets:
 
-При обновлении `deploy.sh` собирает образ `resume-site:<commit SHA>` до замены
-работающего контейнера. При ошибке запуска, healthcheck или HTTPS-проверок он
-пытается восстановить предыдущий образ. Откат использует текущий Compose-файл:
-изменения инфраструктурной конфигурации и Caddy требуют отдельной проверки.
-При первой установке предыдущего образа ещё нет.
+- `VPS_HOST` — IP или имя VPS;
+- `VPS_USERNAME` — SSH-пользователь;
+- `VPS_PASSWORD` — пароль этого пользователя.
 
-Caddy и Docker сами ротируют журналы по размеру. Это ограничивает объём хранения,
-но не обещает хранение ровно за 72 часа. Старые конфигурации logrotate,
-созданные прежней версией deploy.sh (`resume-caddy`, `resume-docker`), следует
-проверить и отключить вручную перед обновлением существующей VM.
-
-Фотография обслуживается как локальный статический файл: runtime-кэш
-оптимизатора изображений не нужен, корневая ФС контейнера остаётся read-only.
-
-Production-сборка использует webpack (`next build --webpack`) одинаково локально и в CI/Docker.
-
-`npm start` запускает `.next/standalone/server.js` через `scripts/start.mjs`, предварительно копируя статику и public как в Docker. По умолчанию слушает 127.0.0.1:3000; для другого адреса используйте `npm start -- --hostname 127.0.0.1 --port 3100`.
+Публичные параметры домена и ACME email находятся в workflow и `deploy.config`;
+не помещайте их в secrets. Для релиза после merge в `main` создайте и отправьте тег,
+например: `git tag v1.0.0 && git push origin v1.0.0`.

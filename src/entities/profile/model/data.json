@@ -1,97 +1,9 @@
 {
   "name": "Соснович Иван",
-  "position": "Senior Frontend / Fullstack Engineer · AI Engineering & Developer Automation",
+  "position": "Senior Frontend Engineer / Team Lead · AI Engineering",
+  "tagline": "Проектирую frontend-архитектуру, руковожу командой и внедряю ИИ в разработку, ревью и тестирование.",
   "location": "Красногорск (Московская область) · удалённо",
-  "birthDate": "16.01.1987",
-  "experienceBlock": {
-    "title": "Опыт",
-    "roles": [
-      {
-        "role": "AI Engineering & Developer Automation",
-        "summary": "React, Next.js, NestJS, Go, TypeScript · LLM-интеграции, MCP, AI-скиллы, субагенты, промпт-инжиниринг",
-        "skills": [
-          "React",
-          "Next.js",
-          "NestJS",
-          "Go",
-          "TypeScript",
-          "LLM-интеграции",
-          "MCP",
-          "AI-скиллы",
-          "Субагенты",
-          "Промпт-инжиниринг",
-          "gRPC",
-          "PostgreSQL",
-          "Redis",
-          "NATS JetStream",
-          "Kubernetes",
-          "Docker",
-          "Микрофронтенды (ES-модули)",
-          "Vite",
-          "Tailwind CSS",
-          "Radix UI",
-          "TanStack Query",
-          "Zustand",
-          "OpenTelemetry",
-          "Envoy",
-          "Vitest",
-          "Playwright"
-        ],
-        "details": [
-          "Проектирую агентные системы на базе LLM: скиллы разработки, ревью и тестирования, MCP-серверы, субагенты.",
-          "Разработал AI-скиллы с едиными правилами кода, контекстом задачи и критериями готовности. После внедрения ИИ и параллельной работы объём выполненных задач вырос примерно с 10–13 до 30–35 за спринт. Отслеживал качество кода и количество дефектов после реализации.",
-          "AI-скилл ревью пул-реквестов: учитывает структуру проекта, контекст задачи и стиль кода — сократил время проверки PR.",
-          "Разработал AI-скилл тестирования со сверкой с QA-тестами на Python для проверки нового и существующего функционала.",
-          "Активно применяю ИИ-ассистентов (GigaCode, Copilot, ChatGPT) для кода, ревью, рефакторинга и генерации тестов.",
-          "Проектирую архитектуру приложений на FSD, добиваюсь покрытия тестами 90%+."
-        ]
-      },
-      {
-        "role": "Senior Frontend Developer / Team Lead",
-        "summary": "React, TypeScript, Next.js, FSD · Zustand, TanStack Query, uPlot, Chart.js, WebSockets",
-        "skills": [
-          "React",
-          "TypeScript",
-          "Next.js",
-          "FSD",
-          "Zustand",
-          "TanStack Query",
-          "uPlot",
-          "Chart.js",
-          "WebSockets",
-          "Jest",
-          "Vitest",
-          "Cypress"
-        ],
-        "details": [
-          "Руковожу командами до 3 фронтенд-инженеров: груминг, планирование, код-ревью, менторство.",
-          "Перевожу легаси-проекты на FSD — устранение хаотичных зависимостей, рост поддерживаемости.",
-          "Оптимизация рендера высоконагруженных дашбордов: виртуализация, мемоизация, ускорение загрузки.",
-          "Внедрение микрофронтенд-архитектуры через ES-модули для независимого деплоя сервисов.",
-          "Формирую техстандарт: стайлгайд, структура проекта, правила code review.",
-          "Покрытие тестами (Jest, Vitest, Cypress) на уровне 90%+."
-        ]
-      },
-      {
-        "role": "Junior Swift Developer",
-        "summary": "Swift · UIKit · встроенные протоколы · кастомные ячейки · работа с API",
-        "skills": [
-          "Swift",
-          "UIKit",
-          "Встроенные протоколы",
-          "Кастомные ячейки",
-          "Работа с API"
-        ],
-        "details": [
-          "Разработка интерфейса на языке Swift кодом.",
-          "Взаимодействие со встроенными протоколами, переопределение нативных методов.",
-          "Формирование кастомных ячеек.",
-          "Авторизация с разными сервисами.",
-          "Получение данных с платформы ВК."
-        ]
-      }
-    ]
-  },
+  "availability": "Открыт к продуктовым и R&D-командам",
   "contacts": [
     {
       "label": "Email",
@@ -118,51 +30,90 @@
       "icon": "github"
     }
   ],
-  "highlights": [
-    "Golang",
-    "FSD",
+  "coreSkills": [
     "React",
-    "Nest",
-    "Next",
-    "uPlot",
-    "Chart.js",
-    "REST API",
-    "TypeScript"
+    "TypeScript",
+    "Next.js",
+    "FSD",
+    "Performance",
+    "Team Lead"
   ],
-  "aiHighlights": [
-    "GigaCode",
+  "aiSkills": [
+    "AI-скилы",
     "MCP",
-    "Промпт-инжиниринг",
-    "Скиллы / Субагенты",
     "LLM-интеграции"
+  ],
+  "proofs": [
+    {
+      "value": "Legacy → FSD",
+      "label": "модернизирую проекты без остановки развития"
+    },
+    {
+      "value": "0 → Production",
+      "label": "проектирую и запускаю продукты с нуля"
+    },
+    {
+      "value": "2 мин → 30 сек",
+      "label": "ускоряю загрузку на слабых компьютерах"
+    },
+    {
+      "value": "30 сек → 5 сек",
+      "label": "оптимизирую рендер больших данных"
+    }
+  ],
+  "competenceAreas": [
+    {
+      "title": "Архитектура продукта",
+      "level": "System design",
+      "description": "Анализирую задачу и проектирую взаимодействие интерфейсов, API, данных, интеграций и процессов доставки.",
+      "skills": [
+        "API Contracts",
+        "BFF",
+        "REST",
+        "WebSocket",
+        "Microfrontends",
+        "CI/CD"
+      ]
+    },
+    {
+      "title": "Frontend-системы",
+      "level": "Core expertise",
+      "description": "Моя основная техническая глубина — архитектура и производительность сложных пользовательских интерфейсов.",
+      "skills": [
+        "React",
+        "TypeScript",
+        "FSD",
+        "Next.js",
+        "Zustand",
+        "TanStack Query"
+      ]
+    },
+    {
+      "title": "Техническое лидерство",
+      "level": "Team delivery",
+      "description": "Формирую технические решения и помогаю командам стабильно доводить их до production.",
+      "skills": [
+        "Planning",
+        "Architecture Review",
+        "Code Review",
+        "Mentoring",
+        "Tech Standards"
+      ]
+    },
+    {
+      "title": "AI-assisted engineering",
+      "level": "AI tooling",
+      "description": "Использую AI для разработки, анализа и автоматизации процессов, сохраняя за собой ответственность за архитектуру и проверку результата.",
+      "skills": [
+        "AI Skills",
+        "MCP",
+        "Task Engineering",
+        "Testing",
+        "Backend Delivery"
+      ]
+    }
   ],
   "siteUrl": "https://sosnovich-ivan.ru",
   "careerStartYear": 2021,
-  "hero": {
-    "title": "Senior Frontend / Fullstack Engineer",
-    "summary": "Проектирую frontend-архитектуру, руковожу командой и внедряю ИИ в разработку, ревью и тестирование.",
-    "skills": [
-      "React",
-      "TypeScript",
-      "Next.js",
-      "NestJS",
-      "FSD",
-      "AI Engineering"
-    ],
-    "results": [
-      {
-        "value": "120 → 30 секунд",
-        "label": "Загрузка Kintsugi на слабых компьютерах"
-      },
-      {
-        "value": "30 → 5 секунд",
-        "label": "Рендер больших списков"
-      },
-      {
-        "value": "3 инженера",
-        "label": "Руководство frontend-командой"
-      }
-    ],
-    "headline": "Делаю сложные интерфейсы быстрее, а разработку — предсказуемее."
-  }
+  "headline": "Делаю сложные интерфейсы быстрее, а разработку — предсказуемее."
 }

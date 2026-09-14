@@ -2,12 +2,14 @@
 
 Персональный сайт-резюме на Next.js. Проект содержит только frontend: данные резюме хранятся локально, backend и переменные окружения не требуются.
 
+Сайт позиционирует автора как Senior Frontend Engineer / Team Lead. Backend-опыт описывается отдельно как интеграция и AI-assisted delivery с явным указанием способов проверки результата.
+
 ## Стек
 
 - Next.js 16 (App Router, standalone output)
-- React 19 и TypeScript
+- React 18 и TypeScript
 - Tailwind CSS
-- CSS-анимации с поддержкой reduced motion
+- Framer Motion
 - Feature-Sliced Design
 
 ## Запуск
@@ -42,6 +44,8 @@ src/
 
 Данные резюме находятся в `src/entities/*/model/data.ts`.
 
+Описание текущего визуального редизайна, принятых решений и критериев готовности находится в [`changes/portfolio-visual-redesign/CHANGE.md`](changes/portfolio-visual-redesign/CHANGE.md). Предыдущая итерация позиционирования сохранена в [`changes/frontend-first-portfolio/CHANGE.md`](changes/frontend-first-portfolio/CHANGE.md).
+
 ## Docker
 
 ```bash
@@ -50,6 +54,11 @@ docker compose ps
 ```
 
 Контейнер публикует порт только на `127.0.0.1:3000`. Для публичного стенда нужен reverse proxy с TLS. Подробности приведены в [DEPLOYMENT.md](DEPLOYMENT.md).
+
+Release-деплой собирает образ в отдельном BuildKit-builder `resume-site-builder`,
+удаляет Compose-orphans и прежний образ только после успешных healthcheck и
+HTTPS-проверки. Неиспользуемый кэш этого builder старше 7 дней очищается;
+Docker-ресурсы других приложений на VPS не затрагиваются.
 
 ## AI-инструменты
 
@@ -65,31 +74,48 @@ npm test
 npm run test:coverage
 ```
 
-## Проверка изменений
+### Ручная приёмка перед `main`
 
-Используйте Node.js из `.nvmrc`, затем `npm ci` и `npm run check`.
-Для браузерных проверок: `npm run build`, `npx playwright install chromium`,
-`npm run test:e2e`. Тесты стартуют production-сервер на порту 3100.
+PR из `develop` в `main` нельзя создавать до ручной проверки release-кандидата.
+Автор PR запускает проект в production-режиме (через Docker или `npm run build`
+и `npm start`) и фиксирует в описании PR: URL/окружение, браузер и результат
+каждого пункта ниже.
 
-План улучшений и открытые вопросы: [TASKS.md](TASKS.md).
+- Главная страница и все маршруты: `/experience`, `/projects`, `/my-projects`,
+  `/publications`, а также страницы личных проектов открываются без ошибок.
+- Навигация, переключатель темы и выпадающее меню контактов работают; ссылки
+  ведут на ожидаемые адреса.
+- Карусели и интерактивные элементы личных проектов проверены мышью и
+  клавиатурой.
+- Верстка проверена как минимум в desktop- и mobile-ширине; нет обрезанного
+  текста, горизонтальной прокрутки или нечитаемого контраста.
 
-## Общие данные сайта и PDF
+Найденный блокирующий дефект сначала исправляется в `develop`; только затем
+можно открывать PR в `main`.
 
-Тексты хранятся в `src/entities/*/model/data.json`. Файлы `data.ts` добавляют
-типы для приложения; генератор PDF читает те же JSON-файлы напрямую.
-Главный блок редактируется в `profile/model/data.json` → `hero`.
+### PDF и общие данные
 
-PDF показывает избранные пункты из общих массивов: `pdfAchievementIndices` и
-`pdfDetailIndices` — индексы пунктов с нуля. При перестановке пунктов проверьте
-эти списки. Тексты для PDF отдельно не переписываются.
+Сайт и скачиваемое резюме используют `src/entities/*/model/data.json`.
+После изменения данных выполните `npm run pdf` (Python 3.12+, ReportLab и
+Pillow; Arial на macOS или DejaVu Sans на Linux). Другой Python можно указать
+через `RESUME_PYTHON`. Генератор обновляет `public/resume.pdf` и
+`scripts/resume-pdf-manifest.json`. `npm run check:pdf` проверяет соответствие
+PDF исходным данным; эта проверка также входит в `npm run check` и CI.
+Индексы `pdfAchievementIndices` и `pdfDetailIndices` выбирают пункты для
+компактной версии резюме, не дублируя текст.
 
-После изменения данных:
+### Логотип
 
-1. Выполните `npm run pdf` (нужен Python с `reportlab` и `Pillow`).
-2. Проверьте страницы PDF визуально. На macOS используется Arial, на Linux — DejaVu Sans.
-3. Сохраните `public/resume.pdf` и `scripts/resume-pdf-manifest.json` вместе с данными.
+`public/logo-loop.svg` — выбранный знак с циклом сборки 10 секунд,
+`public/logo-static.svg` — статичный вариант, `src/app/icon.svg` — иконка вкладки.
+Кнопка рядом с логотипом останавливает анимацию. При `prefers-reduced-motion`
+анимация отключается внутри SVG автоматически. Внешних зависимостей на
+каталог с дизайнерскими исходниками нет.
 
-Для выбора Python используйте `RESUME_PYTHON=/path/to/python3 npm run pdf`.
-`npm run check:pdf` сверяет хеши данных, генератора, фотографии и PDF;
-CI завершится ошибкой, если PDF не обновлён после правки источников.
-Исходное пользовательское резюме в `output/pdf` не перезаписывается.
+### Дополнительные проверки
+
+`npm run check` запускает линтер, TypeScript, компонентные тесты и проверку PDF.
+После `npm run build` команда `npm run test:e2e` проверяет desktop/mobile в
+Chromium, включая маршруты личных проектов, скачивание PDF и управление
+анимацией. `Site checks` запускается для веток и PR. Публикация рабочей ветки
+не запускает production: отдельный Deploy release реагирует только на теги `v*`.

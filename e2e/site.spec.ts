@@ -1,11 +1,13 @@
 import { test, expect } from "@playwright/test";
 
 const routes = [
- ["/", "Соснович Иван"],
+ ["/", "Делаю сложные интерфейсы быстрее, а разработку — предсказуемее."],
  ["/experience", "Опыт и образование"],
- ["/projects", "Коммерческие проекты"],
+ ["/projects", "Коммерческие кейсы"],
  ["/my-projects", "Личные проекты"],
  ["/publications", "Публикации"],
+ ["/my-projects/agent-skills-lab", "Agent Skills Lab"],
+ ["/my-projects/arhdesign", "arhDesign"],
 ];
 
 for (const [route, heading] of routes) {
@@ -46,17 +48,17 @@ test("navigation opens experience and returns home", async ({ page, isMobile }) 
  await page.getByRole("link", { name: "Опыт", exact: true }).filter({ visible: true }).click();
  await expect(page).toHaveURL(/\/experience$/);
  await page.getByRole("link", { name: "На главную", exact: true }).click();
- await expect(page.getByRole("heading", { name: "Соснович Иван", exact: true })).toBeVisible();
+ await expect(page.getByRole("heading", { name: "Делаю сложные интерфейсы быстрее, а разработку — предсказуемее.", exact: true })).toBeVisible();
 });
 
-test("resume and native details remain usable without JavaScript", async ({ browser }) => {
+test("resume and experience remain readable without JavaScript", async ({ browser }) => {
  const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: "reduce" });
  const page = await context.newPage();
  await page.goto("http://127.0.0.1:3100/");
- await expect(page.getByRole("heading", { name: "Соснович Иван", exact: true })).toBeVisible();
- await expect(page.getByRole("link", { name: "Связаться по email" })).toBeVisible();
- await page.getByText("Подробнее: AI Engineering & Developer Automation", { exact: true }).press("Enter");
- await expect(page.getByText(/Проектирую агентные системы/)).toBeVisible();
+ await expect(page.getByRole("heading", { name: "Делаю сложные интерфейсы быстрее, а разработку — предсказуемее.", exact: true })).toBeVisible();
+ await expect(page.getByRole("link", { name: "Скачать резюме PDF" })).toBeVisible();
+ await page.goto("http://127.0.0.1:3100/experience");
+ await expect(page.getByText("SberTech", {exact:true})).toBeVisible();
  await context.close();
 });
 
@@ -74,4 +76,20 @@ test("downloads the published resume PDF", async ({ page }) => {
  const download = await downloadEvent;
  expect(download.suggestedFilename()).toBe("Соснович Иван Владимирович.pdf");
  expect(await download.failure()).toBeNull();
+});
+
+test("logo animation can be stopped and favicon is available", async ({ page }) => {
+ await page.goto("/");
+ const logo = page.getByRole("link", { name: "Соснович Иван — на главную" }).locator("img");
+ await expect(logo).toHaveAttribute("src", "/logo-loop.svg");
+ await page.getByRole("button", { name: "Остановить анимацию логотипа" }).click();
+ await expect(logo).toHaveAttribute("src", "/logo-static.svg");
+ await page.getByRole("button", { name: "Включить анимацию логотипа" }).click();
+ await expect(logo).toHaveAttribute("src", "/logo-loop.svg");
+ const icon = await page.request.get("/icon.svg");
+ expect(icon.status()).toBe(200);
+ expect(await icon.text()).toContain("#72E5CA");
+ await page.emulateMedia({ reducedMotion: "reduce" });
+ await expect(page.getByRole("button", { name: "Остановить анимацию логотипа" })).toBeHidden();
+ await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.currentSrc)).toContain("/logo-static.svg");
 });

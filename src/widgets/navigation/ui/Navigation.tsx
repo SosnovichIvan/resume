@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import { Icon, Logo } from "@/shared/ui";
 import { HeaderActions } from "@/widgets/header-actions/ui/HeaderActions";
 
 const links = [
 	{ href: "/", label: "Главная" },
 	{ href: "/experience", label: "Опыт" },
-	{ href: "/projects", label: "Коммерческие" },
-	{ href: "/my-projects", label: "Личные" },
+	{ href: "/projects", label: "Коммерческие кейсы" },
+	{ href: "/my-projects", label: "Личные проекты" },
 	{ href: "/publications", label: "Публикации" },
 ];
 
@@ -19,14 +20,16 @@ function isActive(href: string, pathname: string): boolean {
 }
 
 export function Navigation() {
- const pathname = usePathname();
- return <NavigationMenu key={pathname} pathname={pathname} />;
-}
-
-function NavigationMenu({ pathname }: { pathname: string }) {
+	const pathname = usePathname();
 	const [open, setOpen] = useState(false);
+ const [logoAnimated, setLogoAnimated] = useState(true);
 	const panelRef = useRef<HTMLDivElement>(null);
 	const toggleRef = useRef<HTMLButtonElement>(null);
+
+	// Закрывать мобильное меню при смене страницы
+	useEffect(() => {
+		setOpen(false);
+	}, [pathname]);
 
 	// Закрывать по клику вне меню (кроме самой кнопки-гамбургера) и по Escape
 	useEffect(() => {
@@ -63,27 +66,29 @@ function NavigationMenu({ pathname }: { pathname: string }) {
 	const close = () => setOpen(false);
 
 	return (
-		<nav className="sticky top-0 z-40 border-b border-surface-border bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
-			<div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-				<Link
+		<nav className="sticky top-0 z-40 border-b border-surface-border bg-[#f3efe7]/90 backdrop-blur-xl dark:border-surface-border-dark dark:bg-surface-dark/90">
+			<div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+				<div className="flex shrink-0 items-center">
+ <Link
 					href="/"
 					aria-label="Соснович Иван — на главную"
-					className="inline-flex items-center text-brand-600 transition-colors hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:text-brand-300 dark:hover:text-brand-200 dark:focus-visible:ring-offset-slate-900"
+					className="focus-ring inline-flex items-center text-accent-600 transition-colors hover:text-accent-500 dark:text-brand-300 dark:hover:text-brand-200"
 				>
-					<Logo />
+					<Logo animated={logoAnimated} />
 				</Link>
+ <button type="button" onClick={() => setLogoAnimated(value => !value)} aria-label={logoAnimated ? "Остановить анимацию логотипа" : "Включить анимацию логотипа"} title={logoAnimated ? "Остановить анимацию логотипа" : "Включить анимацию логотипа"} className="focus-ring flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 hover:bg-black/5 dark:text-slate-400 dark:hover:bg-white/5 motion-reduce:hidden"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d={logoAnimated ? "M2 1h3v10H2zM7 1h3v10H7z" : "M2 1l9 5-9 5z"} /></svg></button>
+ </div>
 
 				{/* Десктопная навигация (md и выше) */}
-				<ul className="hidden items-center gap-1 md:flex md:flex-wrap md:justify-end">
+				<ul className="hidden items-center gap-1 rounded-xl border border-surface-border bg-[#fffdf9]/70 p-1 md:flex md:flex-wrap md:justify-end dark:border-surface-border-dark dark:bg-surface-card/70">
 					{links.map((link) => (
 						<li key={link.href}>
 							<Link
 								href={link.href}
-        aria-current={isActive(link.href, pathname) ? "page" : undefined}
-								className={`inline-flex items-center whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
+								className={`focus-ring inline-flex min-h-9 items-center whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
 									isActive(link.href, pathname)
-										? "bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300"
-										: "text-ink-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+										? "bg-accent-50 text-accent-600 dark:bg-brand-950 dark:text-brand-300"
+										: "text-ink-600 hover:bg-[#eee8de] dark:text-slate-300 dark:hover:bg-[#192228]"
 								}`}
 							>
 								{link.label}
@@ -102,8 +107,7 @@ function NavigationMenu({ pathname }: { pathname: string }) {
 						onClick={() => setOpen((o) => !o)}
 						aria-label={open ? "Закрыть меню" : "Открыть меню"}
 						aria-expanded={open}
-      aria-controls="mobile-navigation"
-						className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:border-brand-400 hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 md:hidden dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-brand-500 dark:hover:text-brand-300 dark:focus-visible:ring-offset-slate-900"
+						className="focus-ring flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-surface-border bg-[#fffdf9] text-slate-600 transition-colors hover:border-accent-400 hover:text-accent-600 md:hidden dark:border-surface-border-dark dark:bg-surface-card dark:text-slate-300 dark:hover:border-brand-500 dark:hover:text-brand-300"
 					>
 						<Icon name={open ? "close" : "menu"} className="h-5 w-5" />
 					</button>
@@ -111,26 +115,31 @@ function NavigationMenu({ pathname }: { pathname: string }) {
 			</div>
 
 			{/* Мобильное меню-оверлей (полупрозрачное, поверх контента, не сдвигает страницу) */}
-			<>
+			<AnimatePresence>
 				{open && (
-					<div
-						id="mobile-navigation"
-      ref={panelRef}
-						className="absolute inset-x-0 top-full z-50 overflow-hidden rounded-b-2xl border-b border-surface-border bg-white/95 shadow-2xl backdrop-blur-md md:hidden dark:border-slate-800 dark:bg-slate-900/95"
+					<motion.div
+						ref={panelRef}
+						initial={{ height: 0, opacity: 0 }}
+						animate={{ height: "auto", opacity: 1 }}
+						exit={{ height: 0, opacity: 0 }}
+						transition={{ duration: 0.25, ease: "easeOut" }}
+						className="absolute inset-x-0 top-full z-50 overflow-hidden rounded-b-2xl border-b border-surface-border bg-[#f8f4ed]/95 shadow-2xl backdrop-blur-md md:hidden dark:border-surface-border-dark dark:bg-surface-dark/95"
 					>
 						<ul className="max-h-[calc(100vh-5rem)] space-y-1 overflow-y-auto px-4 py-3">
-							{links.map((link) => (
-								<li
+							{links.map((link, i) => (
+								<motion.li
 									key={link.href}
+									initial={{ opacity: 0, x: -8 }}
+									animate={{ opacity: 1, x: 0 }}
+									transition={{ duration: 0.2, delay: i * 0.04 }}
 								>
 									<Link
 										href={link.href}
-        aria-current={isActive(link.href, pathname) ? "page" : undefined}
 										onClick={close}
-										className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
+										className={`focus-ring flex min-h-11 items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
 											isActive(link.href, pathname)
-												? "bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300"
-												: "text-ink-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+												? "bg-accent-50 text-accent-600 dark:bg-brand-950 dark:text-brand-300"
+												: "text-ink-600 hover:bg-[#eee8de] dark:text-slate-300 dark:hover:bg-[#192228]"
 										}`}
 									>
 										{link.label}
@@ -138,12 +147,12 @@ function NavigationMenu({ pathname }: { pathname: string }) {
 											<Icon name="arrow-right" className="h-4 w-4" />
 										)}
 									</Link>
-								</li>
+								</motion.li>
 							))}
 						</ul>
-					</div>
+					</motion.div>
 				)}
-			</>
+			</AnimatePresence>
 		</nav>
 	);
 }

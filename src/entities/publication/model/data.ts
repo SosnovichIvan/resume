@@ -7,6 +7,10 @@ export interface Publication {
 	href: string;
 	source: string;
 	gradient: string;
+	date: string;
+	readTime: string;
+	topic: string;
+	takeaway: string;
 }
 
 export const publications: Publication[] = data as Publication[];
