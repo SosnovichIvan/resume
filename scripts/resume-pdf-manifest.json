@@ -2,10 +2,10 @@
   "src/entities/profile/model/data.json": "dcab3c680cdfc2832f7eaff86c43abad583c832b4c315bf575c4fa178e8e9a06",
   "src/entities/experience/model/data.json": "77133e29d50bf6e07cd4754772eb252b6d54f3fd73f0541ac946d6c923948255",
   "src/entities/project/model/data.json": "0e2ffe489388b76c2bb7209331b8e4da013f5af05edb0d0fe7c608834dfe6fd4",
-  "src/entities/personal-project/model/data.json": "b4335ede2bb6db5bdd15b58f59fa6b3a897f87e535a705f3401edd1af5d088f8",
+  "src/entities/personal-project/model/data.json": "70a67bfc6153b64796cf421fbe566dfd0cc08773afaeee2579183d1d158858ed",
   "src/entities/education/model/data.json": "25e0cc48daa234cc57ec1c77eba351b358e6bd3ceac7c76cd396749069ab037f",
   "src/entities/publication/model/data.json": "f8dd228e5c3d5733a76981ba07c19e94fa8e124d5add658ee305ec2cbc7ac182",
-  "scripts/generate_resume_pdf.py": "4eeef8512322e72a725f4fee8cda7f958427d9b5bd274f5dc3fa747779b92c8e",
+  "scripts/generate_resume_pdf.py": "7b2f304a2761b23854af332de9772508f71ecf972129bd1da16a66503ff77113",
   "public/avatar.jpg": "905e39cdc1fbb4f5127aea3e6929542abb7bc6818396075a5cc8fddd5200fd05",
-  "public/resume.pdf": "392a4c6107d64c96b96d906e83d435dcc5889d3728169413bf0f9fed3a4abc1c"
+  "public/resume.pdf": "a16f091e16688ef31d67ae9fe4e9e5ffa77a6909ca1ebb9ae7d04d9e6a4fad4c"
 }
