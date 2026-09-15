@@ -8,7 +8,7 @@ const highlightSkills = [...profile.coreSkills.slice(0, 4), ...profile.aiSkills.
 export function Header() {
 	return (
 		<header className="relative mb-16 overflow-hidden rounded-[1.75rem] border border-surface-border bg-[#fffdf9] shadow-[0_24px_80px_rgba(62,23,15,0.08)] dark:border-surface-border-dark dark:bg-[#0e1519] dark:shadow-[0_24px_80px_rgba(0,0,0,0.3)]">
-			<div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-400 to-transparent dark:via-brand-400" />
+			<div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-10 h-px bg-accent-400/60 dark:bg-brand-400/60" />
 			<div aria-hidden="true" className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full bg-accent-400/10 blur-3xl dark:bg-brand-400/10" />
 
 			<div className="relative grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr]">
@@ -27,7 +27,7 @@ export function Header() {
 					</div>
 				</div>
 
-				<aside className="border-t border-surface-border bg-[#f7f2ea] p-6 sm:p-8 lg:border-l lg:border-t-0 dark:border-surface-border-dark dark:bg-[#111a1f]" aria-label="Профиль Ивана Сосновича">
+				<aside className="border-t border-surface-border bg-[#fffdf9] p-6 sm:p-8 lg:border-t-0 dark:border-surface-border-dark dark:bg-[#0e1519]" aria-label="Профиль Ивана Сосновича">
 					<div className="flex items-center gap-4">
 						<div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-surface-border bg-white dark:border-surface-border-dark dark:bg-surface-card"><Image src="/avatar.jpg" alt="Фото Ивана Сосновича" fill sizes="80px" priority className="object-cover" /></div>
 						<div><p className="text-xl font-extrabold tracking-[-0.03em] text-slate-950 dark:text-white">{profile.name}</p><p className="mt-1 text-sm font-semibold leading-snug text-accent-600 dark:text-brand-300">{profile.position}</p></div>
