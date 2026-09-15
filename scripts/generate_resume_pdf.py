@@ -390,7 +390,7 @@ def main() -> None:
         str(OUTPUT), pagesize=A4,
         leftMargin=MARGIN_X, rightMargin=MARGIN_X,
         topMargin=MARGIN_TOP, bottomMargin=MARGIN_BOTTOM,
-        title=f"{PROFILE["name"]} - {PROFILE["position"]}",
+        title=f"{PROFILE['name']} - {PROFILE['position']}",
         author=PROFILE["name"],
         subject="Резюме, актуализированное по сайту sosnovich-ivan.ru",
         creator="Codex",
