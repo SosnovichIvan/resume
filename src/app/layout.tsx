@@ -26,7 +26,7 @@ const themeScript = `
 (function() {
   try {
     var saved = localStorage.getItem("theme");
-    if (saved === "dark" || (!saved && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+    if (saved !== "light") {
       document.documentElement.classList.add("dark");
     }
   } catch (e) {}
