@@ -63,7 +63,7 @@ describe("portfolio pages", () => {
 		);
 	});
 
-	it("renders planerBot with five demo screens and no invented public website", async () => {
+	it("renders planerBot with five demo screens, a bot link and no invented public website", async () => {
 		expect(generateStaticParams()).toContainEqual({ slug: "planerbot" });
 		expect(await generateMetadata({ params: Promise.resolve({ slug: "planerbot" }) })).toMatchObject({ title: "planerBot — Соснович Иван" });
 		render(await PersonalProjectPage({ params: Promise.resolve({ slug: "planerbot" }) }));
@@ -73,6 +73,7 @@ describe("portfolio pages", () => {
 		expect(screen.getByText("01 / 05")).toBeVisible();
 		expect(screen.getByText(/Календарь и повестка нескольких чатов · демонстрационные данные/)).toBeVisible();
 		expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/planerBot");
+		expect(screen.getByRole("link", { name: "Открыть бота" })).toHaveAttribute("href", "https://t.me/my_meetings_and_tasks_bot");
 		expect(screen.queryByRole("link", { name: "Открыть сайт" })).not.toBeInTheDocument();
 	});
 

@@ -255,6 +255,7 @@
     "technologies": ["React", "TypeScript", "Tailwind CSS", "Python", "FastAPI", "aiogram", "PostgreSQL", "SQLAlchemy", "Alembic", "Docker Compose", "Nginx", "Telegram Bot API", "GitHub Actions", "Cypress", "Vitest"],
     "repositoryUrl": "https://github.com/SosnovichIvan/planerBot",
     "websiteUrl": null,
+    "botUrl": "https://t.me/my_meetings_and_tasks_bot",
     "logo": "/projects/planerbot/logo.png",
     "screenshots": [
       { "src": "/projects/planerbot/calendar-desktop.png", "alt": "Календарь planerBot и повестка нескольких чатов на демонстрационных данных", "caption": "Календарь и повестка нескольких чатов · демонстрационные данные", "fit": "contain" },
