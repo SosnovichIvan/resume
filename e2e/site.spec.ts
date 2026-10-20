@@ -43,6 +43,17 @@ test("planerBot card, logo and five demo screens work in both themes", async ({ 
  }
 });
 
+test("Agent Skills Lab shows CI Engineering without unverified metrics", async ({ page }) => {
+	await page.goto("/my-projects/agent-skills-lab");
+	await expect(page.getByText("01 / 14", { exact: true })).toBeVisible();
+	await page.getByRole("button", { name: "Следующий skill" }).click();
+	await expect(page.getByRole("heading", { name: "CI Engineering", exact: true, level: 3 })).toBeVisible();
+	await expect(page.getByText("02 / 14", { exact: true })).toBeVisible();
+	await expect(page.getByRole("link", { name: "Методика и README" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/ci-engineering/SKILL.md");
+	await expect(page.getByRole("group", { name: "Главные достижения CI Engineering" })).toHaveCount(0);
+	await expect(page.getByRole("table", { name: "Статистика CI Engineering" })).toHaveCount(0);
+});
+
 for (const [route, heading] of routes) {
  test(`${route}: readable and no horizontal overflow`, async ({ page }) => {
   const errors: string[] = [];
