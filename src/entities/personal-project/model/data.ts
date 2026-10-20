@@ -8,6 +8,7 @@ export interface PersonalProject {
 	technologies: string[];
 	repositoryUrl: string;
 	websiteUrl: string | null;
+	botUrl?: string;
 	logo: string;
 	screenshots: Array<{ src: string; alt: string; caption: string; fit?: "cover" | "contain" }>;
 	role: string;

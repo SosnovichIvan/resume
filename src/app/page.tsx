@@ -29,7 +29,7 @@ export default function HomePage() {
 		{ ...profileContact("Telegram"), primary: false },
 		{ ...profileContact("GitHub"), primary: false },
 	].filter((contact) => contact.href);
-	const orderedPersonalProjects = [...personalProjects].sort((a) => a.websiteUrl ? -1 : 1);
+	const orderedPersonalProjects = [...personalProjects].sort((a) => (a.websiteUrl || a.botUrl ? -1 : 1));
 
 	return (
 		<PageTransition>

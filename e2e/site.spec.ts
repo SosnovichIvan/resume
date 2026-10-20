@@ -12,10 +12,12 @@ const routes = [
 ];
 
 test("planerBot card, logo and five demo screens work in both themes", async ({ page }, testInfo) => {
- await page.goto("/my-projects");
- await page.getByRole("link", { name: "Открыть проект planerBot", exact: true }).click();
- await expect(page).toHaveURL(/\/my-projects\/planerbot$/);
- await expect(page.getByRole("heading", { name: "planerBot", exact: true, level: 1 })).toBeVisible();
+	await page.goto("/my-projects");
+	await expect(page.getByRole("link", { name: "Бот", exact: true })).toHaveAttribute("href", "https://t.me/my_meetings_and_tasks_bot");
+	await page.getByRole("link", { name: "Открыть проект planerBot", exact: true }).click();
+	await expect(page).toHaveURL(/\/my-projects\/planerbot$/);
+	await expect(page.getByRole("heading", { name: "planerBot", exact: true, level: 1 })).toBeVisible();
+	await expect(page.getByRole("link", { name: "Открыть бота", exact: true })).toHaveAttribute("href", "https://t.me/my_meetings_and_tasks_bot");
  const logo = page.getByRole("img", { name: "Логотип planerBot", exact: true });
  await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
  await expect(page.getByRole("link", { name: "Открыть сайт", exact: true })).toHaveCount(0);
