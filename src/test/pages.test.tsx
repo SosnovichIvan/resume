@@ -35,6 +35,7 @@ describe("portfolio pages", () => {
 		expect(screen.getByRole("heading", { name: "Пишу о решениях, проверенных на практике" })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "Давайте обсудим, что мешает продукту развиваться быстрее" })).toBeVisible();
 		expect(screen.getByRole("link", { name: "Открыть проект arhDesign" })).toHaveAttribute("href", "/my-projects/arhdesign");
+		expect(screen.getByRole("link", { name: "Открыть проект planerBot" })).toHaveAttribute("href", "/my-projects/planerbot");
 		expect(screen.queryByRole("link", { name: "Подробнее" })).not.toBeInTheDocument();
 	});
 
@@ -60,6 +61,19 @@ describe("portfolio pages", () => {
 			"href",
 			"https://github.com/SosnovichIvan/arhdesign",
 		);
+	});
+
+	it("renders planerBot with five demo screens and no invented public website", async () => {
+		expect(generateStaticParams()).toContainEqual({ slug: "planerbot" });
+		expect(await generateMetadata({ params: Promise.resolve({ slug: "planerbot" }) })).toMatchObject({ title: "planerBot — Соснович Иван" });
+		render(await PersonalProjectPage({ params: Promise.resolve({ slug: "planerbot" }) }));
+		expect(screen.getByRole("heading", { name: "planerBot", level: 1 })).toBeVisible();
+		expect(screen.getByRole("img", { name: "Логотип planerBot" })).toHaveAttribute("src", "/projects/planerbot/logo.png");
+		expect(screen.getByRole("region", { name: "Галерея: planerBot" })).toBeVisible();
+		expect(screen.getByText("01 / 05")).toBeVisible();
+		expect(screen.getByText(/Календарь и повестка нескольких чатов · демонстрационные данные/)).toBeVisible();
+		expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/planerBot");
+		expect(screen.queryByRole("link", { name: "Открыть сайт" })).not.toBeInTheDocument();
 	});
 
 	it("shows skills with metrics only where they are verified for a repository-only project", async () => {
