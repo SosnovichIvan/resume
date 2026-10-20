@@ -8,7 +8,40 @@ const routes = [
  ["/publications", "Публикации"],
  ["/my-projects/agent-skills-lab", "Agent Skills Lab"],
  ["/my-projects/arhdesign", "arhDesign"],
+ ["/my-projects/planerbot", "planerBot"],
 ];
+
+test("planerBot card, logo and five demo screens work in both themes", async ({ page }, testInfo) => {
+	await page.goto("/my-projects");
+	await expect(page.getByRole("link", { name: "Бот", exact: true })).toHaveAttribute("href", "https://t.me/my_meetings_and_tasks_bot");
+	await page.getByRole("link", { name: "Открыть проект planerBot", exact: true }).click();
+	await expect(page).toHaveURL(/\/my-projects\/planerbot$/);
+	await expect(page.getByRole("heading", { name: "planerBot", exact: true, level: 1 })).toBeVisible();
+	await expect(page.getByRole("link", { name: "Открыть бота", exact: true })).toHaveAttribute("href", "https://t.me/my_meetings_and_tasks_bot");
+ const logo = page.getByRole("img", { name: "Логотип planerBot", exact: true });
+ await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+ await expect(page.getByRole("link", { name: "Открыть сайт", exact: true })).toHaveCount(0);
+ const gallery = page.getByRole("region", { name: "Галерея: planerBot", exact: true });
+ for (const theme of ["light", "dark"]) {
+  if (await page.locator("html").evaluate(el => el.classList.contains("dark")) !== (theme === "dark")) await page.getByRole("button", { name: /Включить .* тему/ }).click();
+  for (let index = 1; index <= 5; index++) {
+   const thumbnail = gallery.getByRole("button", { name: new RegExp(`^Показать кадр ${index}:`) });
+   await thumbnail.click();
+   await expect(gallery.getByText(`0${index} / 05`, { exact: true })).toBeVisible();
+   const image = gallery.getByRole("img");
+   await expect.poll(() => image.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
+  }
+  await gallery.getByRole("button", { name: "Открыть изображение 5 на полный экран", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Полноэкранный просмотр: planerBot", exact: true })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await gallery.getByRole("button", { name: /^Показать кадр 1:/ }).click();
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await expect(page.getByRole("heading", { name: "planerBot", exact: true, level: 1 })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath(`planerbot-${theme}.png`), fullPage: true });
+ }
+});
 
 for (const [route, heading] of routes) {
  test(`${route}: readable and no horizontal overflow`, async ({ page }) => {

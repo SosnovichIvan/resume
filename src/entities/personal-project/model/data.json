@@ -240,5 +240,39 @@
       }
     ],
     "creationProcess": "Код и дизайн проекта созданы в AI-assisted процессе; решения, сценарии и production-проверка контролировались лично."
+  },
+  {
+    "slug": "planerbot",
+    "name": "planerBot",
+    "description": "Telegram-бот и Mini App для общего календаря событий из нескольких чатов с темами и без. Пользователь видит встречи только тех подключённых чатов, в которых состоит. Администраторы создают, редактируют и отменяют события, публикуют карточки в чат или тему; сообщения с настроенным тегом также распознаются как события. Реализованы ответы «Приду»/«Не приду», личные рассылки группам ответов, отметки изменений и техподдержка через бота.",
+    "architecture": [
+      "React + TypeScript Mini App организован по FSD; Tailwind CSS и общие компоненты обеспечивают адаптивный календарь, формы, модальные окна и две темы.",
+      "FastAPI проверяет Telegram initData, членство и права на уровне каждого чата. aiogram обрабатывает команды, подключение чатов, импорт событий из сообщений с тегами и обращения в поддержку.",
+      "PostgreSQL хранит чаты, события, версии, ответы и задания доставки. SQLAlchemy и Alembic управляют persistence и миграциями; намерение публикации создаётся транзакционно, а сетевой вызов выполняется отдельно worker-процессом.",
+      "Worker проверяет актуальные права, согласие на личные сообщения и ответы участников; различает отправленные, пропущенные, ошибочные и неизвестные исходы. Неизвестная доставка не повторяется автоматически.",
+      "Docker Compose разделяет API, polling-бота, worker, PostgreSQL и Nginx gateway; Telegram-доступ идёт через закрытый прокси. GitHub Actions проверяет PR, выпуск выполняется по неизменяемому версионному тегу из main."
+    ],
+    "technologies": ["React", "TypeScript", "Tailwind CSS", "Python", "FastAPI", "aiogram", "PostgreSQL", "SQLAlchemy", "Alembic", "Docker Compose", "Nginx", "Telegram Bot API", "GitHub Actions", "Cypress", "Vitest"],
+    "repositoryUrl": "https://github.com/SosnovichIvan/planerBot",
+    "websiteUrl": null,
+    "botUrl": "https://t.me/my_meetings_and_tasks_bot",
+    "logo": "/projects/planerbot/logo.png",
+    "screenshots": [
+      { "src": "/projects/planerbot/calendar-desktop.png", "alt": "Календарь planerBot и повестка нескольких чатов на демонстрационных данных", "caption": "Календарь и повестка нескольких чатов · демонстрационные данные", "fit": "contain" },
+      { "src": "/projects/planerbot/calendar-mobile.png", "alt": "Мобильный календарь planerBot с отметками событий и текущей даты", "caption": "Мобильный календарь · демонстрационные данные", "fit": "contain" },
+      { "src": "/projects/planerbot/event-create-desktop.png", "alt": "Форма создания события planerBot с выбором чата, темы и даты", "caption": "Создание встречи с выбором чата и темы · демонстрационные данные", "fit": "contain" },
+      { "src": "/projects/planerbot/event-details-mobile.png", "alt": "Мобильная карточка события planerBot с ответами участников", "caption": "Карточка встречи и ответы участников · демонстрационные данные", "fit": "contain" },
+      { "src": "/projects/planerbot/group-message-desktop.png", "alt": "Форма подготовки личной рассылки участникам с ответом Приду в planerBot", "caption": "Подготовка личной рассылки группе «Приду» · без отправки", "fit": "contain" }
+    ],
+    "role": "Продуктовые сценарии · AI-assisted разработка",
+    "status": "Работающий Telegram-бот · развитие продукта",
+    "featuredResult": "Единый календарь Telegram-чатов с проверкой доступа и ответами участников",
+    "architectureFlow": ["Telegram Mini App", "FastAPI / aiogram", "PostgreSQL", "Worker / Telegram API"],
+    "contribution": [
+      { "title": "Продуктовые сценарии", "description": "Требования к календарю нескольких чатов, доступам, публикации событий, ответам участников и личным рассылкам; обратная связь и приёмка сценариев." },
+      { "title": "AI-assisted реализация", "description": "Frontend, backend, интеграция Telegram и инфраструктура развиваются с поддержкой AI-инструментов; изменения оформляются через PR." },
+      { "title": "Проверка и эксплуатация", "description": "Демонстрационные browser-сценарии, unit- и интеграционные тесты, проверки CI, отдельные релизы и диагностика работы бота на VPS." }
+    ],
+    "creationProcess": "Проект развивается в AI-assisted процессе: требования, сценарии и приёмка задаются владельцем; изменения проходят PR, автоматические проверки и отдельный релиз."
   }
 ]
