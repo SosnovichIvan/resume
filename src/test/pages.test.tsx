@@ -2,6 +2,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { createElement } from "react";
 import { describe, expect, it, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
 import ExperiencePage from "@/app/experience/page";
 import HomePage from "@/app/page";
 import MyProjectsPage from "@/app/my-projects/page";
@@ -78,6 +79,7 @@ describe("portfolio pages", () => {
 	});
 
 	it("shows skills with metrics only where they are verified for a repository-only project", async () => {
+		const user = userEvent.setup();
 		render(await PersonalProjectPage({ params: Promise.resolve({ slug: "agent-skills-lab" }) }));
 		expect(screen.getByRole("heading", { name: "Agent Skills Lab", level: 1 })).toBeVisible();
 		expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
@@ -86,8 +88,9 @@ describe("portfolio pages", () => {
 		);
 		expect(screen.queryByRole("link", { name: "Открыть сайт" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("heading", { name: "Экраны проекта" })).not.toBeInTheDocument();
+		expect(screen.getByText(/15 навыков для разработки, ревью, архитектуры, текстов, дизайна и настройки CI/)).toBeVisible();
 		expect(screen.getByRole("heading", { name: "Skills: назначение и практическая польза" })).toBeVisible();
-		expect(screen.getByText("01 / 13")).toBeVisible();
+		expect(screen.getByText("01 / 14")).toBeVisible();
 		expect(screen.getByRole("link", { name: "Методика и README" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/execution-state/README.md");
 		const skillRegion = screen.getByRole("region", { name: "Полезные skills: Agent Skills Lab" });
 		expect(within(skillRegion).getByRole("group", { name: "Главные достижения Execution State" })).toBeVisible();
@@ -99,5 +102,11 @@ describe("portfolio pages", () => {
 		expect(screen.getByText("0 против 2 296 689")).toBeVisible();
 		expect(screen.getByRole("button", { name: "Предыдущий skill" })).toBeVisible();
 		expect(within(skillRegion).getByText(/trade-off по времени/)).toBeVisible();
+		await user.click(screen.getByRole("button", { name: "Следующий skill" }));
+		expect(screen.getByRole("heading", { name: "CI Engineering" })).toBeVisible();
+		expect(screen.getByText("02 / 14")).toBeVisible();
+		expect(screen.getByRole("link", { name: "Методика и README" })).toHaveAttribute("href", "https://github.com/SosnovichIvan/agent-skills-lab/blob/main/skills/ci-engineering/SKILL.md");
+		expect(within(skillRegion).queryByRole("group", { name: "Главные достижения CI Engineering" })).not.toBeInTheDocument();
+		expect(within(skillRegion).queryByRole("table", { name: "Статистика CI Engineering" })).not.toBeInTheDocument();
 	});
 });
