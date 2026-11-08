@@ -9,7 +9,42 @@ const routes = [
  ["/my-projects/agent-skills-lab", "Agent Skills Lab"],
  ["/my-projects/arhdesign", "arhDesign"],
  ["/my-projects/planerbot", "planerBot"],
+ ["/my-projects/severniy-chelovek", "Северный человек"],
 ];
+
+test("Severniy portal card opens the case with five production screens", async ({ page }, testInfo) => {
+ await page.goto("/my-projects");
+ await page.getByRole("link", { name: "Открыть проект Северный человек", exact: true }).click();
+ await expect(page).toHaveURL(/\/my-projects\/severniy-chelovek$/);
+ await expect(page.getByRole("heading", { name: "Северный человек", level: 1, exact: true })).toBeVisible();
+ await expect(page.getByRole("link", { name: "Открыть сайт", exact: true })).toHaveAttribute("href", "https://severniy.84.201.181.182.sslip.io/");
+ await expect(page.getByRole("link", { name: "GitHub", exact: true })).toHaveAttribute("href", "https://github.com/SosnovichIvan/severniySait");
+ await expect(page.getByText(/Публичный адрес на sslip.io временный/)).toBeVisible();
+ const logo = page.getByRole("img", { name: "Логотип Северный человек", exact: true });
+ await expect.poll(() => logo.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
+ const gallery = page.getByRole("region", { name: "Галерея: Северный человек", exact: true });
+ for (const theme of ["light", "dark"]) {
+  if (await page.locator("html").evaluate(el => el.classList.contains("dark")) !== (theme === "dark")) await page.getByRole("button", { name: /Включить .* тему/ }).click();
+  for (let index = 1; index <= 5; index++) {
+   await gallery.getByRole("button", { name: new RegExp(`^Показать кадр ${index}:`) }).click();
+   await expect(gallery.getByText(`0${index} / 05`, { exact: true })).toBeVisible();
+   await expect.poll(() => gallery.getByRole("img").evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
+  }
+  await gallery.focus();
+  await page.keyboard.press("Home");
+  await expect(gallery.getByText("01 / 05", { exact: true })).toBeVisible();
+  await page.keyboard.press("ArrowRight");
+  await expect(gallery.getByText("02 / 05", { exact: true })).toBeVisible();
+  await gallery.getByRole("button", { name: "Открыть изображение 2 на полный экран", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Полноэкранный просмотр: Северный человек", exact: true })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await gallery.getByRole("button", { name: /^Показать кадр 1:/ }).click();
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath(`severniy-${theme}.png`), fullPage: true });
+ }
+});
 
 test("planerBot card, logo and five demo screens work in both themes", async ({ page }, testInfo) => {
 	await page.goto("/my-projects");
