@@ -377,9 +377,10 @@ def build_story() -> list[Flowable]:
     story.append(SectionRule("Личные проекты"))
     for item in DATA["personal-project"]:
         story.extend([card(project_block(item["name"], "Личный проект", item["description"], item["architecture"][:2], item["technologies"], item["repositoryUrl"])), Spacer(1, 10)])
-    story.append(SectionRule("Публикации"))
+    publications = [SectionRule("Публикации")]
     for item in DATA["publication"]:
-        story.extend([p(link(item["title"], item["href"]), "subsection"), p(escape(item["description"])), Spacer(1, 8)])
+        publications.extend([p(link(item["title"], item["href"]), "subsection"), p(escape(item["description"])), Spacer(1, 8)])
+    story.append(KeepTogether(publications))
     story.extend([SectionRule("Связаться"), p(" · ".join(link(c["value"], c["href"]) for c in PROFILE["contacts"]), "small")])
     return story
 
